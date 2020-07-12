@@ -1,0 +1,43 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/home/ezgaoro/workspace/comm-libs/build/CMakeFiles/libfile"
+		},
+		{
+			"file" : "/home/ezgaoro/workspace/comm-libs/build/CMakeFiles/libfile.rule"
+		},
+		{
+			"file" : "/home/ezgaoro/workspace/comm-libs/build/CMakeFiles/libfile-complete.rule"
+		},
+		{
+			"file" : "/home/ezgaoro/workspace/comm-libs/build/libfile-prefix/src/libfile-stamp/libfile-install.rule"
+		},
+		{
+			"file" : "/home/ezgaoro/workspace/comm-libs/build/libfile-prefix/src/libfile-stamp/libfile-mkdir.rule"
+		},
+		{
+			"file" : "/home/ezgaoro/workspace/comm-libs/build/libfile-prefix/src/libfile-stamp/libfile-download.rule"
+		},
+		{
+			"file" : "/home/ezgaoro/workspace/comm-libs/build/libfile-prefix/src/libfile-stamp/libfile-update.rule"
+		},
+		{
+			"file" : "/home/ezgaoro/workspace/comm-libs/build/libfile-prefix/src/libfile-stamp/libfile-patch.rule"
+		},
+		{
+			"file" : "/home/ezgaoro/workspace/comm-libs/build/libfile-prefix/src/libfile-stamp/libfile-configure.rule"
+		},
+		{
+			"file" : "/home/ezgaoro/workspace/comm-libs/build/libfile-prefix/src/libfile-stamp/libfile-build.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"libfile"
+		],
+		"name" : "libfile"
+	}
+}

@@ -1,0 +1,13 @@
+# Target labels
+ libio
+# Source files and their labels
+/home/ezgaoro/workspace/comm-libs/build/CMakeFiles/libio
+/home/ezgaoro/workspace/comm-libs/build/CMakeFiles/libio.rule
+/home/ezgaoro/workspace/comm-libs/build/CMakeFiles/libio-complete.rule
+/home/ezgaoro/workspace/comm-libs/build/libio-prefix/src/libio-stamp/libio-install.rule
+/home/ezgaoro/workspace/comm-libs/build/libio-prefix/src/libio-stamp/libio-mkdir.rule
+/home/ezgaoro/workspace/comm-libs/build/libio-prefix/src/libio-stamp/libio-download.rule
+/home/ezgaoro/workspace/comm-libs/build/libio-prefix/src/libio-stamp/libio-update.rule
+/home/ezgaoro/workspace/comm-libs/build/libio-prefix/src/libio-stamp/libio-patch.rule
+/home/ezgaoro/workspace/comm-libs/build/libio-prefix/src/libio-stamp/libio-configure.rule
+/home/ezgaoro/workspace/comm-libs/build/libio-prefix/src/libio-stamp/libio-build.rule

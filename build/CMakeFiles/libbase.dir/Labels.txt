@@ -1,0 +1,13 @@
+# Target labels
+ libbase
+# Source files and their labels
+/home/ezgaoro/workspace/comm-libs/build/CMakeFiles/libbase
+/home/ezgaoro/workspace/comm-libs/build/CMakeFiles/libbase.rule
+/home/ezgaoro/workspace/comm-libs/build/CMakeFiles/libbase-complete.rule
+/home/ezgaoro/workspace/comm-libs/build/libbase-prefix/src/libbase-stamp/libbase-install.rule
+/home/ezgaoro/workspace/comm-libs/build/libbase-prefix/src/libbase-stamp/libbase-mkdir.rule
+/home/ezgaoro/workspace/comm-libs/build/libbase-prefix/src/libbase-stamp/libbase-download.rule
+/home/ezgaoro/workspace/comm-libs/build/libbase-prefix/src/libbase-stamp/libbase-update.rule
+/home/ezgaoro/workspace/comm-libs/build/libbase-prefix/src/libbase-stamp/libbase-patch.rule
+/home/ezgaoro/workspace/comm-libs/build/libbase-prefix/src/libbase-stamp/libbase-configure.rule
+/home/ezgaoro/workspace/comm-libs/build/libbase-prefix/src/libbase-stamp/libbase-build.rule

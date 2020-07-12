@@ -1,0 +1,1 @@
+cmd='/home/ezgaoro/workspace/tools/cmake-3.17.3/bin/cmake;-DBUILD_TEST=ON;-DBUILD_STATIC_LIBS=OFF;-DOUT=/home/ezgaoro/workspace/comm-libs/output;/home/ezgaoro/workspace/comm-libs/libbase'

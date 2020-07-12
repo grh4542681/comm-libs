@@ -1,0 +1,4 @@
+/home/ezgaoro/workspace/comm-libs/output/include/err_code.h
+/home/ezgaoro/workspace/comm-libs/output/include/return.h
+/home/ezgaoro/workspace/comm-libs/output/include/allocator.h
+/home/ezgaoro/workspace/comm-libs/output/test/test_allocator

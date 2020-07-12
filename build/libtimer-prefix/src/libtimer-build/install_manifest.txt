@@ -1,0 +1,2 @@
+/home/ezgaoro/workspace/comm-libs/output/lib/libgtimer.so
+/home/ezgaoro/workspace/comm-libs/output/test/test_time

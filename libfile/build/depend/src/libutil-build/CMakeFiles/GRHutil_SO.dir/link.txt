@@ -1,0 +1,1 @@
+/home/ezgaoro/workspace/gcc-8.2/bin/g++ -fPIC  -std=c++17 -Wall -Wl,--as-needed -O2 -g -ggdb  -shared -Wl,-soname,libgutil.so -o libgutil.so CMakeFiles/GRHutil_SO.dir/string_util.cc.o 

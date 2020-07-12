@@ -1,0 +1,43 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/home/ezgaoro/workspace/comm-libs/build/CMakeFiles/libbase"
+		},
+		{
+			"file" : "/home/ezgaoro/workspace/comm-libs/build/CMakeFiles/libbase.rule"
+		},
+		{
+			"file" : "/home/ezgaoro/workspace/comm-libs/build/CMakeFiles/libbase-complete.rule"
+		},
+		{
+			"file" : "/home/ezgaoro/workspace/comm-libs/build/libbase-prefix/src/libbase-stamp/libbase-install.rule"
+		},
+		{
+			"file" : "/home/ezgaoro/workspace/comm-libs/build/libbase-prefix/src/libbase-stamp/libbase-mkdir.rule"
+		},
+		{
+			"file" : "/home/ezgaoro/workspace/comm-libs/build/libbase-prefix/src/libbase-stamp/libbase-download.rule"
+		},
+		{
+			"file" : "/home/ezgaoro/workspace/comm-libs/build/libbase-prefix/src/libbase-stamp/libbase-update.rule"
+		},
+		{
+			"file" : "/home/ezgaoro/workspace/comm-libs/build/libbase-prefix/src/libbase-stamp/libbase-patch.rule"
+		},
+		{
+			"file" : "/home/ezgaoro/workspace/comm-libs/build/libbase-prefix/src/libbase-stamp/libbase-configure.rule"
+		},
+		{
+			"file" : "/home/ezgaoro/workspace/comm-libs/build/libbase-prefix/src/libbase-stamp/libbase-build.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"libbase"
+		],
+		"name" : "libbase"
+	}
+}

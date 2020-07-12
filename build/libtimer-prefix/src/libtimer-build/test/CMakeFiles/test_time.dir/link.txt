@@ -1,0 +1,1 @@
+/home/ezgaoro/workspace/gcc-8.2/bin/g++   -std=c++17 -Wall -Wl,--as-needed -O2 -g -ggdb   CMakeFiles/test_time.dir/test_time.cc.o  -o test_time 

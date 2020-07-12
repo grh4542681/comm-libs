@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../file_path.h
+string
+-
+vector
+-
+
+/home/ezgaoro/workspace/comm-libs/libfile/test/test_path.cc
+file_path.h
+/home/ezgaoro/workspace/comm-libs/libfile/test/file_path.h
+
