@@ -1,7 +1,0 @@
-/home/ezgaoro/workspace/comm-libs/build/CMakeFiles/rebuild_cache.dir
-/home/ezgaoro/workspace/comm-libs/build/CMakeFiles/edit_cache.dir
-/home/ezgaoro/workspace/comm-libs/build/CMakeFiles/libtimer.dir
-/home/ezgaoro/workspace/comm-libs/build/CMakeFiles/libio.dir
-/home/ezgaoro/workspace/comm-libs/build/CMakeFiles/libutil.dir
-/home/ezgaoro/workspace/comm-libs/build/CMakeFiles/libfile.dir
-/home/ezgaoro/workspace/comm-libs/build/CMakeFiles/libbase.dir
