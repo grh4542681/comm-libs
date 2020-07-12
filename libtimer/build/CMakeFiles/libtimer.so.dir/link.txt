@@ -1,1 +1,0 @@
-/home/ezgaoro/workspace/gcc-8.2/bin/g++ -fPIC  -std=c++17 -Wall -Wl,--as-needed -O2 -g -ggdb  -shared -Wl,-soname,libgtimer.so -o libgtimer.so CMakeFiles/libtimer.so.dir/timer_fd.cc.o 

@@ -1,1 +1,0 @@
-/home/ezgaoro/workspace/gcc-8.2/bin/g++ -fPIC  -std=c++17 -Wall -Wl,--as-needed -O2 -g -ggdb  -shared -Wl,-soname,libgfile.so -o libgfile.so CMakeFiles/libfile.so.dir/file_api.cc.o CMakeFiles/libfile.so.dir/file_fd.cc.o CMakeFiles/libfile.so.dir/file.cc.o CMakeFiles/libfile.so.dir/file_path.cc.o 

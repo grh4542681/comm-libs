@@ -1,1 +1,0 @@
-/home/ezgaoro/workspace/comm-libs/install/lib/libgutil.so

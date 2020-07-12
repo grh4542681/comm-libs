@@ -1,1 +1,0 @@
-/home/ezgaoro/workspace/gcc-8.2/bin/g++   -std=c++17 -Wall -Wl,--as-needed -O2 -g -ggdb   CMakeFiles/test_logger.dir/test_logger.cc.o  -o test_logger 

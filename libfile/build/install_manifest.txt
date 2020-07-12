@@ -1,3 +1,0 @@
-/home/ezgaoro/workspace/comm-libs/install/lib/libgfile.so
-/home/ezgaoro/workspace/comm-libs/install/test/test_file
-/home/ezgaoro/workspace/comm-libs/install/test/test_path
