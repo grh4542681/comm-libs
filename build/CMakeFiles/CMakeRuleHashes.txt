@@ -31,10 +31,10 @@ e3808acd9942343074fab28d4bf393bb libio-prefix/src/libio-stamp/libio-install
 0f08db8599aadd77c390cb65514410dd libio-prefix/src/libio-stamp/libio-patch
 889b399937d6cc0f6d71ca2e82f51264 libio-prefix/src/libio-stamp/libio-update
 224643f458af115e5c870c70adf65499 libtimer-prefix/src/libtimer-stamp/libtimer-build
-9e15e84c3c2f05e3c4d82b61bc73ac57 libtimer-prefix/src/libtimer-stamp/libtimer-configure
+8663e85a34eca6c390d5d6da4a9b79be libtimer-prefix/src/libtimer-stamp/libtimer-configure
 63313343da2a58af3cb04704d7ada091 libtimer-prefix/src/libtimer-stamp/libtimer-download
 54109dc846f490f3308dc21965034452 libtimer-prefix/src/libtimer-stamp/libtimer-install
-35a849045e868cbe31fa7bec4a37d57f libtimer-prefix/src/libtimer-stamp/libtimer-mkdir
+d92cc6015d6cae86f35d498a82787638 libtimer-prefix/src/libtimer-stamp/libtimer-mkdir
 7a3b3693b65d2c3603c9722fe2b06ed6 libtimer-prefix/src/libtimer-stamp/libtimer-patch
 b66b0736101d278b33a04cb417001457 libtimer-prefix/src/libtimer-stamp/libtimer-update
 2ffabfe460e6953b782866737f4348fb libutil-prefix/src/libutil-stamp/libutil-build

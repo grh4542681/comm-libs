@@ -68,7 +68,7 @@ RM = /home/ezgaoro/workspace/tools/cmake-3.17.3/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/ezgaoro/workspace/comm-libs/libtimer
+CMAKE_SOURCE_DIR = /home/ezgaoro/workspace/comm-libs/liblogger
 
 # The top-level build directory on which CMake was run.
 CMAKE_BINARY_DIR = /home/ezgaoro/workspace/comm-libs/build/libtimer-prefix/src/libtimer-build
@@ -177,32 +177,6 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named lib
-
-# Build rule for target.
-lib: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 lib
-.PHONY : lib
-
-# fast build rule for target.
-lib/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/lib.dir/build.make CMakeFiles/lib.dir/build
-.PHONY : lib/fast
-
-#=============================================================================
-# Target rules for targets named libtimer.so
-
-# Build rule for target.
-libtimer.so: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libtimer.so
-.PHONY : libtimer.so
-
-# fast build rule for target.
-libtimer.so/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/libtimer.so.dir/build.make CMakeFiles/libtimer.so.dir/build
-.PHONY : libtimer.so/fast
-
-#=============================================================================
 # Target rules for targets named test
 
 # Build rule for target.
@@ -216,44 +190,17 @@ test/fast:
 .PHONY : test/fast
 
 #=============================================================================
-# Target rules for targets named test_time
+# Target rules for targets named test_logger
 
 # Build rule for target.
-test_time: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_time
-.PHONY : test_time
+test_logger: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_logger
+.PHONY : test_logger
 
 # fast build rule for target.
-test_time/fast:
-	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/test_time.dir/build.make test/CMakeFiles/test_time.dir/build
-.PHONY : test_time/fast
-
-timer_fd.o: timer_fd.cc.o
-
-.PHONY : timer_fd.o
-
-# target to build an object file
-timer_fd.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/libtimer.so.dir/build.make CMakeFiles/libtimer.so.dir/timer_fd.cc.o
-.PHONY : timer_fd.cc.o
-
-timer_fd.i: timer_fd.cc.i
-
-.PHONY : timer_fd.i
-
-# target to preprocess a source file
-timer_fd.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/libtimer.so.dir/build.make CMakeFiles/libtimer.so.dir/timer_fd.cc.i
-.PHONY : timer_fd.cc.i
-
-timer_fd.s: timer_fd.cc.s
-
-.PHONY : timer_fd.s
-
-# target to generate assembly for a file
-timer_fd.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/libtimer.so.dir/build.make CMakeFiles/libtimer.so.dir/timer_fd.cc.s
-.PHONY : timer_fd.cc.s
+test_logger/fast:
+	$(MAKE) $(MAKESILENT) -f test/CMakeFiles/test_logger.dir/build.make test/CMakeFiles/test_logger.dir/build
+.PHONY : test_logger/fast
 
 # Help Target
 help:
@@ -267,13 +214,8 @@ help:
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
-	@echo "... lib"
 	@echo "... test"
-	@echo "... libtimer.so"
-	@echo "... test_time"
-	@echo "... timer_fd.o"
-	@echo "... timer_fd.i"
-	@echo "... timer_fd.s"
+	@echo "... test_logger"
 .PHONY : help
 
 

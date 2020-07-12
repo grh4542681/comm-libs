@@ -96,7 +96,7 @@ libtimer-prefix/src/libtimer-stamp/libtimer-install: libtimer-prefix/src/libtime
 
 libtimer-prefix/src/libtimer-stamp/libtimer-mkdir:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/ezgaoro/workspace/comm-libs/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Creating directories for 'libtimer'"
-	/home/ezgaoro/workspace/tools/cmake-3.17.3/bin/cmake -E make_directory /home/ezgaoro/workspace/comm-libs/libtimer
+	/home/ezgaoro/workspace/tools/cmake-3.17.3/bin/cmake -E make_directory /home/ezgaoro/workspace/comm-libs/liblogger
 	/home/ezgaoro/workspace/tools/cmake-3.17.3/bin/cmake -E make_directory /home/ezgaoro/workspace/comm-libs/build/libtimer-prefix/src/libtimer-build
 	/home/ezgaoro/workspace/tools/cmake-3.17.3/bin/cmake -E make_directory /home/ezgaoro/workspace/comm-libs/build/libtimer-prefix
 	/home/ezgaoro/workspace/tools/cmake-3.17.3/bin/cmake -E make_directory /home/ezgaoro/workspace/comm-libs/build/libtimer-prefix/tmp
@@ -124,7 +124,7 @@ libtimer-prefix/src/libtimer-stamp/libtimer-configure: libtimer-prefix/tmp/libti
 libtimer-prefix/src/libtimer-stamp/libtimer-configure: libtimer-prefix/src/libtimer-stamp/libtimer-update
 libtimer-prefix/src/libtimer-stamp/libtimer-configure: libtimer-prefix/src/libtimer-stamp/libtimer-patch
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/ezgaoro/workspace/comm-libs/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Performing configure step for 'libtimer'"
-	cd /home/ezgaoro/workspace/comm-libs/build/libtimer-prefix/src/libtimer-build && /home/ezgaoro/workspace/tools/cmake-3.17.3/bin/cmake -DBUILD_TEST=ON -DBUILD_STATIC_LIBS=OFF -DOUT=/home/ezgaoro/workspace/comm-libs/output /home/ezgaoro/workspace/comm-libs/libtimer
+	cd /home/ezgaoro/workspace/comm-libs/build/libtimer-prefix/src/libtimer-build && /home/ezgaoro/workspace/tools/cmake-3.17.3/bin/cmake -DBUILD_TEST=ON -DBUILD_STATIC_LIBS=OFF -DOUT=/home/ezgaoro/workspace/comm-libs/output /home/ezgaoro/workspace/comm-libs/liblogger
 	cd /home/ezgaoro/workspace/comm-libs/build/libtimer-prefix/src/libtimer-build && /home/ezgaoro/workspace/tools/cmake-3.17.3/bin/cmake -E touch /home/ezgaoro/workspace/comm-libs/build/libtimer-prefix/src/libtimer-stamp/libtimer-configure
 
 libtimer-prefix/src/libtimer-stamp/libtimer-build: libtimer-prefix/src/libtimer-stamp/libtimer-configure

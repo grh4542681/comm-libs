@@ -63,7 +63,7 @@ RM = /home/ezgaoro/workspace/tools/cmake-3.17.3/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/ezgaoro/workspace/comm-libs/libtimer
+CMAKE_SOURCE_DIR = /home/ezgaoro/workspace/comm-libs/liblogger
 
 # The top-level build directory on which CMake was run.
 CMAKE_BINARY_DIR = /home/ezgaoro/workspace/comm-libs/build/libtimer-prefix/src/libtimer-build
@@ -87,6 +87,6 @@ test/CMakeFiles/test.dir/clean:
 .PHONY : test/CMakeFiles/test.dir/clean
 
 test/CMakeFiles/test.dir/depend:
-	cd /home/ezgaoro/workspace/comm-libs/build/libtimer-prefix/src/libtimer-build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/ezgaoro/workspace/comm-libs/libtimer /home/ezgaoro/workspace/comm-libs/libtimer/test /home/ezgaoro/workspace/comm-libs/build/libtimer-prefix/src/libtimer-build /home/ezgaoro/workspace/comm-libs/build/libtimer-prefix/src/libtimer-build/test /home/ezgaoro/workspace/comm-libs/build/libtimer-prefix/src/libtimer-build/test/CMakeFiles/test.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/ezgaoro/workspace/comm-libs/build/libtimer-prefix/src/libtimer-build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/ezgaoro/workspace/comm-libs/liblogger /home/ezgaoro/workspace/comm-libs/liblogger/test /home/ezgaoro/workspace/comm-libs/build/libtimer-prefix/src/libtimer-build /home/ezgaoro/workspace/comm-libs/build/libtimer-prefix/src/libtimer-build/test /home/ezgaoro/workspace/comm-libs/build/libtimer-prefix/src/libtimer-build/test/CMakeFiles/test.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : test/CMakeFiles/test.dir/depend
 

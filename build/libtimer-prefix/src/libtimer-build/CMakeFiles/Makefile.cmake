@@ -12,8 +12,8 @@ set(CMAKE_MAKEFILE_DEPENDS
   "CMakeFiles/3.17.3/CMakeSystem.cmake"
   "CMakeFiles/feature_tests.cxx"
   "/home/ezgaoro/workspace/comm-libs/comm-libs.cmake"
-  "/home/ezgaoro/workspace/comm-libs/libtimer/CMakeLists.txt"
-  "/home/ezgaoro/workspace/comm-libs/libtimer/test/CMakeLists.txt"
+  "/home/ezgaoro/workspace/comm-libs/liblogger/CMakeLists.txt"
+  "/home/ezgaoro/workspace/comm-libs/liblogger/test/CMakeLists.txt"
   "/home/ezgaoro/workspace/tools/cmake-3.17.3/Modules/CMakeCCompiler.cmake.in"
   "/home/ezgaoro/workspace/tools/cmake-3.17.3/Modules/CMakeCCompilerABI.c"
   "/home/ezgaoro/workspace/tools/cmake-3.17.3/Modules/CMakeCInformation.cmake"
@@ -122,8 +122,6 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "CMakeFiles/lib.dir/DependInfo.cmake"
-  "CMakeFiles/libtimer.so.dir/DependInfo.cmake"
   "test/CMakeFiles/test.dir/DependInfo.cmake"
-  "test/CMakeFiles/test_time.dir/DependInfo.cmake"
+  "test/CMakeFiles/test_logger.dir/DependInfo.cmake"
   )

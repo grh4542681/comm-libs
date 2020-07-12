@@ -1,0 +1,16 @@
+/.settings/
+.cproject
+.nfs*
+.project
+*.swp
+*.a
+*.so
+/bin/
+/lib/
+/3pp/
+/build/*
+doc/
+tmp/
+/output/*
+build/*
+output/*

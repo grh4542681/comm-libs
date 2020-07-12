@@ -68,7 +68,7 @@ RM = /home/ezgaoro/workspace/tools/cmake-3.17.3/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/ezgaoro/workspace/comm-libs/libtimer
+CMAKE_SOURCE_DIR = /home/ezgaoro/workspace/comm-libs/liblogger
 
 # The top-level build directory on which CMake was run.
 CMAKE_BINARY_DIR = /home/ezgaoro/workspace/comm-libs/build/libtimer-prefix/src/libtimer-build
@@ -192,46 +192,46 @@ test/fast:
 .PHONY : test/fast
 
 # Convenience name for target.
-test/CMakeFiles/test_time.dir/rule:
-	cd /home/ezgaoro/workspace/comm-libs/build/libtimer-prefix/src/libtimer-build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/test_time.dir/rule
-.PHONY : test/CMakeFiles/test_time.dir/rule
+test/CMakeFiles/test_logger.dir/rule:
+	cd /home/ezgaoro/workspace/comm-libs/build/libtimer-prefix/src/libtimer-build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test/CMakeFiles/test_logger.dir/rule
+.PHONY : test/CMakeFiles/test_logger.dir/rule
 
 # Convenience name for target.
-test_time: test/CMakeFiles/test_time.dir/rule
+test_logger: test/CMakeFiles/test_logger.dir/rule
 
-.PHONY : test_time
+.PHONY : test_logger
 
 # fast build rule for target.
-test_time/fast:
-	cd /home/ezgaoro/workspace/comm-libs/build/libtimer-prefix/src/libtimer-build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test_time.dir/build.make test/CMakeFiles/test_time.dir/build
-.PHONY : test_time/fast
+test_logger/fast:
+	cd /home/ezgaoro/workspace/comm-libs/build/libtimer-prefix/src/libtimer-build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test_logger.dir/build.make test/CMakeFiles/test_logger.dir/build
+.PHONY : test_logger/fast
 
-test_time.o: test_time.cc.o
+test_logger.o: test_logger.cc.o
 
-.PHONY : test_time.o
+.PHONY : test_logger.o
 
 # target to build an object file
-test_time.cc.o:
-	cd /home/ezgaoro/workspace/comm-libs/build/libtimer-prefix/src/libtimer-build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test_time.dir/build.make test/CMakeFiles/test_time.dir/test_time.cc.o
-.PHONY : test_time.cc.o
+test_logger.cc.o:
+	cd /home/ezgaoro/workspace/comm-libs/build/libtimer-prefix/src/libtimer-build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test_logger.dir/build.make test/CMakeFiles/test_logger.dir/test_logger.cc.o
+.PHONY : test_logger.cc.o
 
-test_time.i: test_time.cc.i
+test_logger.i: test_logger.cc.i
 
-.PHONY : test_time.i
+.PHONY : test_logger.i
 
 # target to preprocess a source file
-test_time.cc.i:
-	cd /home/ezgaoro/workspace/comm-libs/build/libtimer-prefix/src/libtimer-build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test_time.dir/build.make test/CMakeFiles/test_time.dir/test_time.cc.i
-.PHONY : test_time.cc.i
+test_logger.cc.i:
+	cd /home/ezgaoro/workspace/comm-libs/build/libtimer-prefix/src/libtimer-build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test_logger.dir/build.make test/CMakeFiles/test_logger.dir/test_logger.cc.i
+.PHONY : test_logger.cc.i
 
-test_time.s: test_time.cc.s
+test_logger.s: test_logger.cc.s
 
-.PHONY : test_time.s
+.PHONY : test_logger.s
 
 # target to generate assembly for a file
-test_time.cc.s:
-	cd /home/ezgaoro/workspace/comm-libs/build/libtimer-prefix/src/libtimer-build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test_time.dir/build.make test/CMakeFiles/test_time.dir/test_time.cc.s
-.PHONY : test_time.cc.s
+test_logger.cc.s:
+	cd /home/ezgaoro/workspace/comm-libs/build/libtimer-prefix/src/libtimer-build && $(MAKE) $(MAKESILENT) -f test/CMakeFiles/test_logger.dir/build.make test/CMakeFiles/test_logger.dir/test_logger.cc.s
+.PHONY : test_logger.cc.s
 
 # Help Target
 help:
@@ -246,10 +246,10 @@ help:
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... test"
-	@echo "... test_time"
-	@echo "... test_time.o"
-	@echo "... test_time.i"
-	@echo "... test_time.s"
+	@echo "... test_logger"
+	@echo "... test_logger.o"
+	@echo "... test_logger.i"
+	@echo "... test_logger.s"
 .PHONY : help
 
 
