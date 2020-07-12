@@ -5,12 +5,7 @@
 *.swp
 *.a
 *.so
-/bin/
-/lib/
-/3pp/
-/build/*
-doc/
-tmp/
-/output/*
-build/*
+doc/*
+tmp/*
+*/build/*
 output/*
