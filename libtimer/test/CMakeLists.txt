@@ -1,6 +1,7 @@
 set(TEST_TARGETS)
 set(TEST_HRD "${PROJ_ROOT_PATH}"
              "${LIBBASE_SRC_TOP}"
+             "${LIBLOG_SRC_TOP}"
              )
 
 set(TEST_TIME_SRC test_time.cc)

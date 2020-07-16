@@ -34,7 +34,7 @@ TimerFD::TimerFD(int flag)
 
     fd_ = timerfd_create(clockid, flags);
     if (fd_ <= 0) {
-        TIMER_ERROR("Create timer fd error: %s", strerror(errno));
+        //TIMER_ERROR("Create timer fd error: %s", strerror(errno));
         init_flag_ = false;
     }
     init_flag_ = true;
@@ -66,7 +66,7 @@ TimerFD::TimerFD(int flag, Time& trigger_time, Time& interval_time)
 
     fd_ = timerfd_create(clockid, flags);
     if (fd_ <= 0) {
-        TIMER_ERROR("Create timer fd error: %s", strerror(errno));
+        //TIMER_ERROR("Create timer fd error: %s", strerror(errno));
         init_flag_ = false;
     }
     init_flag_ = true;
@@ -78,7 +78,7 @@ TimerFD::TimerFD(unsigned int fd, bool auto_close) : FD(fd, auto_close)
     struct stat fd_stat;
     if (fstat(fd, &fd_stat)) {
         temp_errno = errno;
-        TIMER_ERROR("%s", strerror(temp_errno));
+        //TIMER_ERROR("%s", strerror(temp_errno));
         init_flag_ = false;
     }
     init_flag_ = true;
@@ -110,7 +110,7 @@ base::Return TimerFD::SetFD(unsigned int fd, bool auto_close)
     struct stat fd_stat;
     if (fstat(fd, &fd_stat)) {
         temp_errno = errno;
-        TIMER_ERROR("%s", strerror(temp_errno));
+        //TIMER_ERROR("%s", strerror(temp_errno));
         init_flag_ = false;
         return temp_errno;
     }
@@ -140,7 +140,7 @@ void TimerFD::Close()
 
 ssize_t TimerFD::Write(const void* data, size_t datalen)
 {
-    TIMER_ERROR("Timer fd not support write.");
+    //TIMER_ERROR("Timer fd not support write.");
     return 0;
 }
 
@@ -191,7 +191,7 @@ Return TimerFD::Start()
 
     if (timerfd_settime(fd_, flags, &itime, NULL) < 0) {
         int tmp_errno = errno;
-        TIMER_ERROR("Start timer error: %s", strerror(tmp_errno));
+        //TIMER_ERROR("Start timer error: %s", strerror(tmp_errno));
         return tmp_errno;
     }
     return Return::SUCCESS;
@@ -209,7 +209,7 @@ Return TimerFD::Stop()
     
     if (timerfd_settime(fd_, flags, &itime, NULL) < 0) {
         int tmp_errno = errno;
-        TIMER_ERROR("Stop timer error: %s", strerror(tmp_errno));
+        //TIMER_ERROR("Stop timer error: %s", strerror(tmp_errno));
         return tmp_errno;
     }
     return Return::SUCCESS;

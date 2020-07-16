@@ -7,6 +7,7 @@
 
 int main()
 {
+    timer::Logger::Debug("test log int = ", 5);
 //    timer::TimeC::GetCurrTime().print();
     std::string now = timer::Time::Now().Format("%Y-%m-%d %H:%M:%S");
     printf("%s\n", now.c_str());
