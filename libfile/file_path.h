@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-namespace file {
+namespace infra {
 
 class FilePath {
 public:

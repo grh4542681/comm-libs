@@ -6,9 +6,9 @@
 #include "file_api.h"
 #include "file_log.h"
 
-namespace file {
+namespace infra {
 
-Return GetFileName(int fd, std::string& ofilename)
+FileReturn GetFileName(int fd, std::string& ofilename)
 {
     char buf[1024];
     char filename[1024];
@@ -25,7 +25,7 @@ Return GetFileName(int fd, std::string& ofilename)
     return Return::SUCCESS;
 }
 
-Return GetFileName(FILE* ffd, std::string& filename)
+FileReturn GetFileName(FILE* ffd, std::string& filename)
 {
     return GetFileName(fileno(ffd), filename);
 }
@@ -33,7 +33,7 @@ Return GetFileName(FILE* ffd, std::string& filename)
 std::string GetFileExtension(std::string filename)
 {
     std::vector<std::string> vec;
-    util::String::Split(filename, ".", vec);
+    StringUtil::Split(filename, ".", vec);
     return vec.back();
 }
 

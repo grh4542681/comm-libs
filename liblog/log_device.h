@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-namespace log {
+namespace infra {
 
 class LogDeviceInterface {
 public:

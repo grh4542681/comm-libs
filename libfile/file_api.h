@@ -3,10 +3,10 @@
 
 #include "file_return.h"
 
-namespace file {
+namespace infra {
 
-Return GetFileName(int fd, std::string& filename);
-Return GetFileName(FILE* ffd, std::string& filename);
+FileReturn GetFileName(int fd, std::string& filename);
+FileReturn GetFileName(FILE* ffd, std::string& filename);
 std::string GetFileExtension(std::string filename);
 bool IsExist(std::string filename);
 

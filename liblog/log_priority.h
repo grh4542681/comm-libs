@@ -1,7 +1,7 @@
 #ifndef __LOG_PRIORITY_H__
 #define __LOG_PRIORITY_H__
 
-namespace log {
+namespace infra {
 
 enum class LogPriority : int {
     Emergency = 0,

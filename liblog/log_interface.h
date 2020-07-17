@@ -13,7 +13,7 @@
 #include "log_format.h"
 #include "log_device.h"
 
-namespace log {
+namespace infra {
 
 class LogInterface {
 public:

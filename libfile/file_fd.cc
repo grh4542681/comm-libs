@@ -2,14 +2,14 @@
 #include "file_fd.h"
 #include "file_api.h"
 
-namespace file {
+namespace infra {
 
-FileFD::FileFD() : io::FD()
+FileFD::FileFD() : FD()
 {
     ffd_ = NULL;
 }
 
-FileFD::FileFD(unsigned int fd, bool auto_close) : io::FD(fd, auto_close)
+FileFD::FileFD(unsigned int fd, bool auto_close) : FD(fd, auto_close)
 {
     ffd_ = fdopen(fd, "w+");
     if (GetFileName(fd_, file_name_) != Return::SUCCESS) {
@@ -44,7 +44,7 @@ FileFD::FileFD(FILE* ffd, bool auto_close)
     }
 }
 
-FileFD::FileFD(FileFD& other) : io::FD(other)
+FileFD::FileFD(FileFD& other) : FD(other)
 {
     ffd_ = other.ffd_;
     file_name_ = other.file_name_;
@@ -58,7 +58,7 @@ FileFD::~FileFD()
     }
 }
 
-base::Return FileFD::SetFD(unsigned int fd, bool auto_close)
+Return FileFD::SetFD(unsigned int fd, bool auto_close)
 {
     if (fd_ > 0 && init_flag_ && auto_close_) {
         fclose(ffd_);
@@ -88,12 +88,12 @@ base::Return FileFD::SetFD(unsigned int fd, bool auto_close)
     return Return::SUCCESS;
 }
 
-base::Return FileFD::Dup(io::FD& new_fd)
+Return FileFD::Dup(FD& new_fd)
 {
     return Return::SUCCESS;
 }
 
-io::FD* FileFD::Clone()
+FD* FileFD::Clone()
 {
     return alloc_.Allocate<FileFD>(*this);
 }
@@ -125,7 +125,7 @@ std::string FileFD::GetName() const
     return file_name_;
 }
 
-Return FileFD::SetFD(FILE* ffd, bool auto_close)
+FileReturn FileFD::SetFD(FILE* ffd, bool auto_close)
 {
     if (fd_ > 0 && init_flag_ && auto_close_) {
         fclose(ffd_);

@@ -4,27 +4,27 @@
 #include <vector>
 #include <iterator>
 
-#define LOG_FORMAT_DEFAULT (log::LogFormat() << log::LogFormat::Field::LeftMidBrackets \
-                                             << log::LogFormat::Field::Year \
-                                             << log::LogFormat::Field::HorizontalLine \
-                                             << log::LogFormat::Field::Month \
-                                             << log::LogFormat::Field::HorizontalLine \
-                                             << log::LogFormat::Field::DayOfMonth \
-                                             << log::LogFormat::Field::Blank \
-                                             << log::LogFormat::Field::Hour \
-                                             << log::LogFormat::Field::Colon \
-                                             << log::LogFormat::Field::Minute \
-                                             << log::LogFormat::Field::Colon \
-                                             << log::LogFormat::Field::Second \
-                                             << log::LogFormat::Field::Dot \
-                                             << log::LogFormat::Field::Microsecond \
-                                             << log::LogFormat::Field::RightMidBrackets \
-                                             << log::LogFormat::Field::Blank \
-                                             << log::LogFormat::Field::Logschema \
-                                             << log::LogFormat::Field::Colon \
-                                             << log::LogFormat::Field::Blank)
+#define LOG_FORMAT_DEFAULT (infra::LogFormat() << infra::LogFormat::Field::LeftMidBrackets \
+                                               << infra::LogFormat::Field::Year \
+                                               << infra::LogFormat::Field::HorizontalLine \
+                                               << infra::LogFormat::Field::Month \
+                                               << infra::LogFormat::Field::HorizontalLine \
+                                               << infra::LogFormat::Field::DayOfMonth \
+                                               << infra::LogFormat::Field::Blank \
+                                               << infra::LogFormat::Field::Hour \
+                                               << infra::LogFormat::Field::Colon \
+                                               << infra::LogFormat::Field::Minute \
+                                               << infra::LogFormat::Field::Colon \
+                                               << infra::LogFormat::Field::Second \
+                                               << infra::LogFormat::Field::Dot \
+                                               << infra::LogFormat::Field::Microsecond \
+                                               << infra::LogFormat::Field::RightMidBrackets \
+                                               << infra::LogFormat::Field::Blank \
+                                               << infra::LogFormat::Field::Logschema \
+                                               << infra::LogFormat::Field::Colon \
+                                               << infra::LogFormat::Field::Blank)
 
-namespace log {
+namespace infra {
 
 class LogFormat {
 public:

@@ -2,7 +2,7 @@
 
 #include "file_path.h"
 
-namespace file {
+namespace infra {
 
 FilePath::FilePath()
 {
@@ -18,8 +18,8 @@ FilePath::FilePath(std::string raw) : raw_(raw)
     if (raw_.empty()) {
         return;
     } else {
-        util::String::Trim(raw_);
-        util::String::Distinct(raw_, '/');
+        StringUtil::Trim(raw_);
+        StringUtil::Distinct(raw_, '/');
         if (raw_[0] == '/') {
             abs_path_ = true;
             raw_.erase(0, 1);
@@ -28,7 +28,7 @@ FilePath::FilePath(std::string raw) : raw_(raw)
                 raw_ = "./" + raw_;
             }
         }
-        util::String::Split(raw_, "/", path_vector_);
+        StringUtil::Split(raw_, "/", path_vector_);
         depth_ = path_vector_.size() - 1;
     }
 }

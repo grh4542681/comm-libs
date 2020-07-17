@@ -3,12 +3,12 @@
 
 #include "return.h"
 
-namespace io {
+namespace infra {
 
 /**
 * @brief - IO return value.
 */
-class Return : public base::Return {
+class IoReturn : public Return {
 public:
     /**
     * @brief - Io return value.
@@ -30,7 +30,7 @@ public:
         IO_EERRCB,
     };
 public:
-    Return(int ecode) : base::Return(ecode) {
+    IoReturn(int ecode) : Return(ecode) {
         if (!_exception.ModuleExist(ErrCode::IO_EMODULE)) {
             _exception.Push(ErrCode::IO_EMODULE, {
                 { ErrCode::IO_EFDTYPE, "Bad file descriptor type" },
@@ -38,18 +38,18 @@ public:
             });
         }
     }
-    Return(Return& other) : base::Return(other) { }
-    ~Return() { };
+    IoReturn(IoReturn& other) : Return(other) { }
+    ~IoReturn() { };
 
-    Return& operator=(const int ecode) {
+    IoReturn& operator=(const int ecode) {
         Return::operator=(ecode);
         return *this;
     }   
-    Return& operator=(const Return& ret) {
+    IoReturn& operator=(const IoReturn& ret) {
         Return::operator=(ret);
         return *this;
     }   
-    Return& operator=(const Return&& ret) {
+    IoReturn& operator=(const IoReturn&& ret) {
         Return::operator=(ret);
         return *this;
     }

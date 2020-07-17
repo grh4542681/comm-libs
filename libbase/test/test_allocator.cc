@@ -2,6 +2,6 @@
 
 int main()
 {
-    base::Allocator alloc;
+    infra::Allocator alloc;
     return 0;
 }

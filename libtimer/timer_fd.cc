@@ -1,9 +1,9 @@
 #include <sys/timerfd.h>
 
 #include "timer_fd.h"
-#include "timer_logger.h"
+#include "timer_log.h"
 
-namespace timer {
+namespace infra {
 
 TimerFD::TimerFD() : FD()
 {
@@ -100,7 +100,7 @@ TimerFD::~TimerFD()
     }
 }
 
-base::Return TimerFD::SetFD(unsigned int fd, bool auto_close)
+Return TimerFD::SetFD(unsigned int fd, bool auto_close)
 {
     if (fd_ > 0 && init_flag_ && auto_close_) {
         close(fd_);
@@ -123,12 +123,12 @@ base::Return TimerFD::SetFD(unsigned int fd, bool auto_close)
     return Return::SUCCESS;
 }
 
-base::Return TimerFD::Dup(io::FD& new_fd)
+Return TimerFD::Dup(FD& new_fd)
 {
     return Return::SUCCESS;
 }
 
-io::FD* TimerFD::Clone()
+FD* TimerFD::Clone()
 {
     return alloc_.Allocate<TimerFD>(*this);
 }
@@ -164,7 +164,7 @@ int TimerFD::GetTriggerCounts()
     return 0;
 }
 
-Return TimerFD::Start(int flag, Time& trigger_time, Time& interval_time)
+TimerReturn TimerFD::Start(int flag, Time& trigger_time, Time& interval_time)
 {
     flag_ = flag;
     trigger_time_ = trigger_time;
@@ -173,7 +173,7 @@ Return TimerFD::Start(int flag, Time& trigger_time, Time& interval_time)
     return Start();
 }
 
-Return TimerFD::Start()
+TimerReturn TimerFD::Start()
 {
     int flags = 0;
     if (flag_ & Flag::Absolute) {
@@ -197,7 +197,7 @@ Return TimerFD::Start()
     return Return::SUCCESS;
 }
 
-Return TimerFD::Stop()
+TimerReturn TimerFD::Stop()
 {
     int flags = 0;
     if (flag_ & Flag::Absolute) {

@@ -9,7 +9,7 @@
 #include "allocator.h"
 #include "io_return.h"
 
-namespace io {
+namespace infra {
 
 /**
 * @brief - Base file descriptor class
@@ -19,7 +19,7 @@ public:
     /**
     * @brief FD - Default consturctor
     */
-    FD(base::Allocator&& alloc = base::Allocator()) : alloc_(alloc) {
+    FD(Allocator&& alloc = Allocator()) : alloc_(alloc) {
         fd_ = 0;
         init_flag_ = false;
         auto_close_ = false;
@@ -30,7 +30,7 @@ public:
     * @param [fd] - Linux file descriptor
     * @param [auto_close] - Auto close flag
     */
-    FD(unsigned int fd, bool auto_close = false, base::Allocator&& alloc = base::Allocator()) : fd_(fd), auto_close_(auto_close), alloc_(alloc){
+    FD(unsigned int fd, bool auto_close = false, Allocator&& alloc = Allocator()) : fd_(fd), auto_close_(auto_close), alloc_(alloc){
         struct stat fd_stat;
         if (fstat(fd, &fd_stat)) {
             fd_ = -1;
@@ -157,7 +157,7 @@ public:
         }
     }
 
-    virtual base::Return SetFD(unsigned int fd, bool auto_close) {
+    virtual Return SetFD(unsigned int fd, bool auto_close) {
         if (fd_ > 0 && init_flag_ && auto_close_) {
             Close();
             fd_ = 0;
@@ -173,7 +173,7 @@ public:
         return Return::SUCCESS;
     }
 
-    virtual base::Return Dup(FD& new_fd) {
+    virtual Return Dup(FD& new_fd) {
         int fd = dup(fd_);
         if (fd < 0) {
             return errno;
@@ -202,7 +202,7 @@ protected:
     int fd_ = 0;
     bool auto_close_ = false;
     bool init_flag_ = false;
-    base::Allocator& alloc_;
+    Allocator& alloc_;
 };
 
 }

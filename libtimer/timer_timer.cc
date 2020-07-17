@@ -1,6 +1,6 @@
 #include "timer_timer.h"
 
-namespace timer {
+namespace infra {
 
 Timer::Timer()
 {

@@ -4,7 +4,7 @@
 #include "file.h"
 #include "file_api.h"
 
-namespace file {
+namespace infra {
 
 std::map<File::Format, std::vector<std::string>> File::SupportFormat = {
     {File::Format::Ini, {"ini", "Initialization File"}},
@@ -95,40 +95,40 @@ std::string File::GetFileFormatDescribe()
     return File::SupportFormat.find(format_)->second[1];
 }
 
-Return File::Open(Mode mode, bool auto_close)
+FileReturn File::Open(Mode mode, bool auto_close)
 {
     return Open((int)mode, auto_close);
 }
 
-Return File::Open(int mode, bool auto_close)
+FileReturn File::Open(int mode, bool auto_close)
 {
     if (state_ == State::Invalid) {
-        return Return::EINIT;
+        return FileReturn::EINIT;
     } else if (state_ == State::Opened) {
-        return Return::SUCCESS;
+        return FileReturn::SUCCESS;
     } else if (state_ == State::Closed) {
         std::string smode;
         ModeConvert(mode, smode);
         FILE* ffd = fopen(file_name_.c_str(), smode.c_str());
         if (!ffd) {
-            return Return::ERROR;
+            return FileReturn::ERROR;
         }
         fd_.SetFD(ffd, auto_close);
         state_ = State::Opened;
-        return Return::SUCCESS;        
+        return FileReturn::SUCCESS;        
     } else {
-        return Return::FILE_ESTATE;
+        return FileReturn::FILE_ESTATE;
     }
 }
 
-Return File::Close()
+FileReturn File::Close()
 {
     fd_.Close();
     state_ = State::Closed;
-    return Return::SUCCESS;
+    return FileReturn::SUCCESS;
 }
 
-Return File::ModeConvert(int mode, std::string& smode) {
+FileReturn File::ModeConvert(int mode, std::string& smode) {
     char cmode[16];
     memset(cmode, 0x00, sizeof(cmode));
     if (mode == Mode::READ_ONLY) {
@@ -142,10 +142,10 @@ Return File::ModeConvert(int mode, std::string& smode) {
     } else if (mode == Mode::APPEND) {
         sprintf(cmode, "%s", "a+");
     } else {
-        return Return::FILE_EMODE;
+        return FileReturn::FILE_EMODE;
     }   
     smode.assign(cmode);
-    return Return::SUCCESS;
+    return FileReturn::SUCCESS;
 }
 
 }

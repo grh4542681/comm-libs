@@ -10,7 +10,7 @@
 #include "timer_log.h"
 #include "timer_fd.h"
 
-namespace timer {
+namespace infra {
 
 class Timer {
 public:

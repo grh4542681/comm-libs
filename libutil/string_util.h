@@ -4,9 +4,9 @@
 #include <string>
 #include <vector>
 
-namespace util {
+namespace infra {
 
-class String {
+class StringUtil {
 public:
 
     static void RTrim(std::string& str);
@@ -24,8 +24,8 @@ public:
     static void Split(const std::string& str, std::string&& sep, std::vector<std::string>& vec);
 
 private:
-    String();
-    ~String();
+    StringUtil();
+    ~StringUtil();
 };
 
 }

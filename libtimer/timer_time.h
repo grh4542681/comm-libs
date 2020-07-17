@@ -14,7 +14,7 @@
 #include <sys/time.h>
 #include <string>
 
-namespace timer {
+namespace infra {
 
 
 /**

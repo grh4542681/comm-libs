@@ -17,7 +17,7 @@
 
 #define FILE_MAX_LINE_LEN (1024)
 
-namespace file {
+namespace infra {
 
 class File {
 public:
@@ -70,11 +70,11 @@ public:
     Format GetFileFormat();
     std::string GetFileFormatDescribe();
 
-    Return Open(int mode, bool auto_close = false);
-    Return Open(Mode mode, bool auto_close = false);
-    Return Close();
+    FileReturn Open(int mode, bool auto_close = false);
+    FileReturn Open(Mode mode, bool auto_close = false);
+    FileReturn Close();
 
-    static Return ModeConvert(int mode, std::string& smode);
+    static FileReturn ModeConvert(int mode, std::string& smode);
 
 private:
     std::string file_name_;

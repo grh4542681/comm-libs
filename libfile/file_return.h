@@ -3,9 +3,9 @@
 
 #include "return.h"
 
-namespace file {
+namespace infra {
 
-class Return : public base::Return {
+class FileReturn : public Return {
 public:
     enum ErrCode{
         EDEFAULT,
@@ -23,7 +23,7 @@ public:
         FILE_EMODE,
     };
 public:
-    Return(int ecode) : base::Return(ecode) {
+    FileReturn(int ecode) : Return(ecode) {
         if (!_exception.ModuleExist(ErrCode::FILE_EMODULE)) {
             _exception.Push(ErrCode::FILE_EMODULE, {
                 { ErrCode::FILE_ESTATE, "File state error" },
@@ -31,18 +31,18 @@ public:
             });
         }
     }
-    Return(Return& other) : base::Return(other) { }
-    ~Return() { };
+    FileReturn(FileReturn& other) : Return(other) { }
+    ~FileReturn() { };
 
-    Return& operator=(const int ecode) {
+    FileReturn& operator=(const int ecode) {
         Return::operator=(ecode);
         return *this;
     }   
-    Return& operator=(const Return& ret) {
+    FileReturn& operator=(const FileReturn& ret) {
         Return::operator=(ret);
         return *this;
     }   
-    Return& operator=(const Return&& ret) {
+    FileReturn& operator=(const FileReturn&& ret) {
         Return::operator=(ret);
         return *this;
     }
