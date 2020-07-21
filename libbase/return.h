@@ -12,7 +12,7 @@
                  ERROR = -1, \
                  SUCCESS = 0
 
-namespace infra {
+namespace infra::base {
 
 class Exception {
 public:

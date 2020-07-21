@@ -2,96 +2,96 @@
 
 #include "process_id.h"
 
-namespace process {
+namespace infra::process {
 
-ProcessID::ProcessID()
+ID::ID()
 {
     pid_ = 0;
 }
-ProcessID::ProcessID(ProcessID_t pid)
+ID::ID(ID_t pid)
 {
     pid_ = pid;
 }
-ProcessID::ProcessID(ProcessID& other)
+ID::ID(ID& other)
 {
     pid_ = other.pid_;
 }
-ProcessID::ProcessID(const ProcessID& other)
+ID::ID(const ID& other)
 {
     pid_ = other.pid_;
 }
-ProcessID::~ProcessID()
+ID::~ID()
 {
 
 }
 
-const ProcessID& ProcessID::operator=(ProcessID other)
+const ID& ID::operator=(ID other)
 {
     pid_ = other.pid_;
     return *this;
 }
 
-bool ProcessID::operator==(ProcessID& other)
+bool ID::operator==(ID& other)
 {
     return (pid_ == other.pid_);
 }
 
-bool ProcessID::operator==(const ProcessID& other)
+bool ID::operator==(const ID& other)
 {
     return (pid_ == other.pid_);
 }
 
-bool ProcessID::operator<(ProcessID& other)
+bool ID::operator<(ID& other)
 {
     return (pid_ < other.pid_);
 }
 
-bool ProcessID::operator<(const ProcessID& other)
+bool ID::operator<(const ID& other)
 {
     return (pid_ < other.pid_);
 }
 
-bool ProcessID::operator>(ProcessID& other)
+bool ID::operator>(ID& other)
 {
     return (pid_ > other.pid_);
 }
 
-bool ProcessID::operator>(const ProcessID& other)
+bool ID::operator>(const ID& other)
 {
     return (pid_ > other.pid_);
 }
 
-ProcessID& ProcessID::SetID(ProcessID_t pid)
+ID& ID::SetInterID(ID_t pid)
 {
     pid_ = pid;
     return *this;
 }
 
-ProcessID::ProcessID_t ProcessID::GetID() const
+ID::ID_t ID::GetInterID() const
 {
     return pid_;
 }
 
-ProcessID ProcessID::GetProcessID()
+ID ID::GetID()
 {
-    ProcessID pid;
-    pid.SetID(getpid());
+    ID pid;
+    pid.SetInterID(getpid());
     return pid;
 }
 
-ProcessID ProcessID::GetProcessParentID()
+ID ID::GetParentID()
 {
-    ProcessID ppid;
-    ppid.SetID(getppid());
+    ID ppid;
+    ppid.SetInterID(getppid());
     return ppid;
 }
 
-bool operator<(const ProcessID& a, const ProcessID& b)
+bool operator<(const ID& a, const ID& b)
 {
-    return (a.GetID() < b.GetID());
+    return (a.GetInterID() < b.GetInterID());
 }
 
-std::ostream & operator<<(std::ostream &out, ProcessID& pid)
+std::ostream & operator<<(std::ostream &out, ID& pid)
 {
     out << pid.pid_;
     return out;

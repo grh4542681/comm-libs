@@ -5,64 +5,64 @@
 
 #define TIMER_LOG_FORMAT_DEFAULT LOG_FORMAT_DEFAULT
 
-namespace infra {
+namespace infra::timer {
 
-class TimerLog : public LogInterface {
+class Log : public log::Interface {
 public:
-    ~TimerLog() {
-        LogInterface::~LogInterface();
+    ~Log() {
+        log::Interface::~Interface();
     }
 
-    static TimerLog& Instance() {
-        static TimerLog instance;
+    static Log& Instance() {
+        static Log instance;
         return instance;
     }
 
     template <typename ... Args> static void Emergency(Args ... args) {
-        TimerLog::Instance().LogInterface::Emergency(std::forward<Args>(args)...);
+        Log::Instance().log::Interface::Emergency(std::forward<Args>(args)...);
     }
     template <typename ... Args> static void Alert(Args ... args) {
-        TimerLog::Instance().LogInterface::Alert(std::forward<Args>(args)...);
+        Log::Instance().log::Interface::Alert(std::forward<Args>(args)...);
     }
     template <typename ... Args> static void Critical(Args ... args) {
-        TimerLog::Instance().LogInterface::Critical(std::forward<Args>(args)...);
+        Log::Instance().log::Interface::Critical(std::forward<Args>(args)...);
     }
     template <typename ... Args> static void Error(Args ... args) {
-        TimerLog::Instance().LogInterface::Error(std::forward<Args>(args)...);
+        Log::Instance().log::Interface::Error(std::forward<Args>(args)...);
     }
     template <typename ... Args> static void Warning(Args ... args) {
-        TimerLog::Instance().LogInterface::Warning(std::forward<Args>(args)...);
+        Log::Instance().log::Interface::Warning(std::forward<Args>(args)...);
     }
     template <typename ... Args> static void Notice(Args ... args) {
-        TimerLog::Instance().LogInterface::Notice(std::forward<Args>(args)...);
+        Log::Instance().log::Interface::Notice(std::forward<Args>(args)...);
     }
     template <typename ... Args> static void Info(Args ... args) {
-        TimerLog::Instance().LogInterface::Info(std::forward<Args>(args)...);
+        Log::Instance().log::Interface::Info(std::forward<Args>(args)...);
     }
     template <typename ... Args> static void Debug(Args ... args) {
-        TimerLog::Instance().LogInterface::Debug(std::forward<Args>(args)...);
+        Log::Instance().log::Interface::Debug(std::forward<Args>(args)...);
     }
     template <typename ... Args> static void Debug2(Args ... args) {
-        TimerLog::Instance().LogInterface::Debug2(std::forward<Args>(args)...);
+        Log::Instance().log::Interface::Debug2(std::forward<Args>(args)...);
     }
     template <typename ... Args> static void Debug3(Args ... args) {
-        TimerLog::Instance().LogInterface::Debug3(std::forward<Args>(args)...);
+        Log::Instance().log::Interface::Debug3(std::forward<Args>(args)...);
     }
 private:
-    TimerLog() : LogInterface() {
+    Log() : log::Interface() {
         app_name_ = "TIMER";
         rule_map_.clear();
         rule_map_.insert({
-            {LogPriority::Emergency, TIMER_LOG_FORMAT_DEFAULT},
-            {LogPriority::Alert,     TIMER_LOG_FORMAT_DEFAULT},
-            {LogPriority::Critical,  TIMER_LOG_FORMAT_DEFAULT},
-            {LogPriority::Error,     TIMER_LOG_FORMAT_DEFAULT},
-            {LogPriority::Warning,   TIMER_LOG_FORMAT_DEFAULT},
-            {LogPriority::Notice,    TIMER_LOG_FORMAT_DEFAULT},
-            {LogPriority::Info,      TIMER_LOG_FORMAT_DEFAULT},
-            {LogPriority::Debug,     TIMER_LOG_FORMAT_DEFAULT},
-            {LogPriority::Debug2,    TIMER_LOG_FORMAT_DEFAULT},
-            {LogPriority::Debug3,    TIMER_LOG_FORMAT_DEFAULT},
+            {log::Priority::Emergency, TIMER_LOG_FORMAT_DEFAULT},
+            {log::Priority::Alert,     TIMER_LOG_FORMAT_DEFAULT},
+            {log::Priority::Critical,  TIMER_LOG_FORMAT_DEFAULT},
+            {log::Priority::Error,     TIMER_LOG_FORMAT_DEFAULT},
+            {log::Priority::Warning,   TIMER_LOG_FORMAT_DEFAULT},
+            {log::Priority::Notice,    TIMER_LOG_FORMAT_DEFAULT},
+            {log::Priority::Info,      TIMER_LOG_FORMAT_DEFAULT},
+            {log::Priority::Debug,     TIMER_LOG_FORMAT_DEFAULT},
+            {log::Priority::Debug2,    TIMER_LOG_FORMAT_DEFAULT},
+            {log::Priority::Debug3,    TIMER_LOG_FORMAT_DEFAULT},
         });
     }
 };

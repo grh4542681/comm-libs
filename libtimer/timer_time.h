@@ -12,9 +12,10 @@
 #define __TIMER_TIME_H__
 
 #include <sys/time.h>
+#include <cstring>
 #include <string>
 
-namespace infra {
+namespace infra::timer {
 
 
 /**

@@ -1,151 +1,151 @@
 #include "process_role.h"
 
-namespace process {
+namespace infra::process {
 
-unsigned int ProcessRole::Normal = 0x01;
+unsigned int Role::Normal = 0x01;
 
-unsigned int ProcessRole::Parent = ProcessRole::Normal << 1;
-unsigned int ProcessRole::Child = ProcessRole::Normal << 2;
+unsigned int Role::Parent = Role::Normal << 1;
+unsigned int Role::Child = Role::Normal << 2;
 
-unsigned int ProcessRole::PoolWorker = ProcessRole::Normal << 3;
-unsigned int ProcessRole::PoolKeeper = ProcessRole::Normal << 4;
+unsigned int Role::PoolWorker = Role::Normal << 3;
+unsigned int Role::PoolKeeper = Role::Normal << 4;
 
-ProcessRole::ProcessRole()
+Role::Role()
 {
     role_ = 0;
 }
 
-ProcessRole::ProcessRole(ProcessRole& other)
+Role::Role(Role& other)
 {
     role_ = other.role_;
 }
 
-ProcessRole::ProcessRole(unsigned int role)
+Role::Role(unsigned int role)
 {
     role_ = role;
 }
 
-ProcessRole::~ProcessRole()
+Role::~Role()
 {
 
 }
 
-ProcessRole& ProcessRole::Clean()
+Role& Role::Clean()
 {
     role_ = 0;
     return *this;
 }
 
-ProcessRole ProcessRole::operator~()
+Role Role::operator~()
 {
-    return ProcessRole(~role_);
+    return Role(~role_);
 }
 
-ProcessRole& ProcessRole::operator=(ProcessRole& a)
+Role& Role::operator=(Role& a)
 {
     role_ = a.role_;
     return *this;
 }
-ProcessRole& ProcessRole::operator=(ProcessRole&& a)
+Role& Role::operator=(Role&& a)
 {
     role_ = a.role_;
     return *this;
 }
 
-ProcessRole ProcessRole::operator|(ProcessRole& a)
+Role Role::operator|(Role& a)
 {
-    return ProcessRole(role_ | a.role_);
+    return Role(role_ | a.role_);
 }
-ProcessRole ProcessRole::operator|(ProcessRole&& a)
+Role Role::operator|(Role&& a)
 {
-    return ProcessRole(role_ | a.role_);
+    return Role(role_ | a.role_);
 }
 
-ProcessRole& ProcessRole::operator|=(ProcessRole& a)
+Role& Role::operator|=(Role& a)
 {
     role_ |= a.role_;
     return *this;
 }
-ProcessRole& ProcessRole::operator|=(ProcessRole&& a)
+Role& Role::operator|=(Role&& a)
 {
     role_ |= a.role_;
     return *this;
 }
 
-ProcessRole ProcessRole::operator&(ProcessRole& a)
+Role Role::operator&(Role& a)
 {
-    return ProcessRole(role_ & a.role_);
+    return Role(role_ & a.role_);
 }
-ProcessRole ProcessRole::operator&(ProcessRole&& a)
+Role Role::operator&(Role&& a)
 {
-    return ProcessRole(role_ & a.role_);
+    return Role(role_ & a.role_);
 }
 
-ProcessRole& ProcessRole::operator&=(ProcessRole& a)
+Role& Role::operator&=(Role& a)
 {
     role_ &= a.role_;
     return *this;
 }
-ProcessRole& ProcessRole::operator&=(ProcessRole&& a)
+Role& Role::operator&=(Role&& a)
 {
     role_ &= a.role_;
     return *this;
 }
 
-ProcessRole& ProcessRole::operator=(unsigned int& a)
+Role& Role::operator=(unsigned int& a)
 {
     role_ = a;
     return *this;
 }
-ProcessRole& ProcessRole::operator=(unsigned int&& a)
+Role& Role::operator=(unsigned int&& a)
 {
     role_ = a;
     return *this;
 }
-ProcessRole ProcessRole::operator|(unsigned int& a)
+Role Role::operator|(unsigned int& a)
 {
-    return ProcessRole(role_ | a);
+    return Role(role_ | a);
 }
-ProcessRole ProcessRole::operator|(unsigned int&& a)
+Role Role::operator|(unsigned int&& a)
 {
-    return ProcessRole(role_ | a);
+    return Role(role_ | a);
 }
-ProcessRole& ProcessRole::operator|=(unsigned int& a)
-{
-    role_ |= a;
-    return *this;
-}
-ProcessRole& ProcessRole::operator|=(unsigned int&& a)
+Role& Role::operator|=(unsigned int& a)
 {
     role_ |= a;
     return *this;
 }
-ProcessRole ProcessRole::operator&(unsigned int& a)
+Role& Role::operator|=(unsigned int&& a)
 {
-    return ProcessRole(role_ & a);
+    role_ |= a;
+    return *this;
 }
-ProcessRole ProcessRole::operator&(unsigned int&& a)
+Role Role::operator&(unsigned int& a)
 {
-    return ProcessRole(role_ & a);
+    return Role(role_ & a);
 }
-ProcessRole& ProcessRole::operator&=(unsigned int& a)
+Role Role::operator&(unsigned int&& a)
+{
+    return Role(role_ & a);
+}
+Role& Role::operator&=(unsigned int& a)
 {
     role_ &= a;
     return *this;
 }
-ProcessRole& ProcessRole::operator&=(unsigned int&& a)
+Role& Role::operator&=(unsigned int&& a)
 {
     role_ &= a;
     return *this;
 }
 
-ProcessRole& ProcessRole::AddRole(unsigned int role)
+Role& Role::AddRole(unsigned int role)
 {
     role_ |= role;
     return *this;
 }
 
-bool ProcessRole::HasRole(unsigned int role)
+bool Role::HasRole(unsigned int role)
 {
     return (role_ & role) ? true : false;
 }

@@ -15,19 +15,19 @@
 
 #define FILE_MAX_LINE_LEN1 1024
 
-namespace infra {
+namespace infra::file {
 
-class FileFD : public FD {
+class FD : public io::FD {
 public:
-    FileFD();
-    FileFD(unsigned int fd, bool auto_close = false);
-    FileFD(FILE* ffd, bool auto_close = false);
-    FileFD(FileFD& other);
-    ~FileFD();
+    FD();
+    FD(unsigned int fd, bool auto_close = false);
+    FD(FILE* ffd, bool auto_close = false);
+    FD(FD& other);
+    ~FD();
 
-    //Inherited from class FD.
-    Return SetFD(unsigned int fd, bool auto_close);
-    Return Dup(FD& new_fd);
+    //Inherited from class io::FD.
+    io::Return SetFD(unsigned int fd, bool auto_close);
+    io::Return Dup(FD& new_fd);
     FD* Clone();
     void Close();
     ssize_t Write(const void* data, size_t datalen);
@@ -35,7 +35,7 @@ public:
 
     std::string GetName() const;
 
-    FileReturn SetFD(FILE* ffd, bool auto_close);
+    io::Return SetFD(FILE* ffd, bool auto_close);
     template <typename ... Args>
     int ReadFmt(const char* fmt, Args&& ... args) {
         char line[FILE_MAX_LINE_LEN1];

@@ -13,45 +13,45 @@
 #include "log_format.h"
 #include "log_device.h"
 
-namespace infra {
+namespace infra::log {
 
-class LogInterface {
+class Interface {
 public:
-    LogInterface() : log_device_(LogDevice::Instance()) { }
-    virtual ~LogInterface() { }
+    Interface() : log_device_(Device::Instance()) { }
+    virtual ~Interface() { }
 
     template <typename ... Args> void Emergency(Args&& ... args) {
-        Log(LogPriority::Emergency, std::forward<Args>(args)...);
+        Log(Priority::Emergency, std::forward<Args>(args)...);
     }
     template <typename ... Args> void Alert(Args&& ... args) {
-        Log(LogPriority::Alert, std::forward<Args>(args)...);
+        Log(Priority::Alert, std::forward<Args>(args)...);
     }
     template <typename ... Args> void Critical(Args&& ... args) {
-        Log(LogPriority::Critical, std::forward<Args>(args)...);
+        Log(Priority::Critical, std::forward<Args>(args)...);
     }
     template <typename ... Args> void Error(Args&& ... args) {
-        Log(LogPriority::Error, std::forward<Args>(args)...);
+        Log(Priority::Error, std::forward<Args>(args)...);
     }
     template <typename ... Args> void Warning(Args&& ... args) {
-        Log(LogPriority::Warning, std::forward<Args>(args)...);
+        Log(Priority::Warning, std::forward<Args>(args)...);
     }
     template <typename ... Args> void Notice(Args&& ... args) {
-        Log(LogPriority::Notice, std::forward<Args>(args)...);
+        Log(Priority::Notice, std::forward<Args>(args)...);
     }
     template <typename ... Args> void Info(Args&& ... args) {
-        Log(LogPriority::Info, std::forward<Args>(args)...);
+        Log(Priority::Info, std::forward<Args>(args)...);
     }
     template <typename ... Args> void Debug(Args&& ... args) {
-        Log(LogPriority::Debug, std::forward<Args>(args)...);
+        Log(Priority::Debug, std::forward<Args>(args)...);
     }
     template <typename ... Args> void Debug2(Args&& ... args) {
-        Log(LogPriority::Debug2, std::forward<Args>(args)...);
+        Log(Priority::Debug2, std::forward<Args>(args)...);
     }
     template <typename ... Args> void Debug3(Args&& ... args) {
-        Log(LogPriority::Debug3, std::forward<Args>(args)...);
+        Log(Priority::Debug3, std::forward<Args>(args)...);
     }
 
-    template <typename ... Args> void Log(LogPriority&& priority, Args&& ... args) {
+    template <typename ... Args> void Log(Priority&& priority, Args&& ... args) {
         std::stringstream log_stream;
         _build_format(log_stream, std::move(priority));
         _build_log(log_stream, std::forward<Args>(args)...);
@@ -59,37 +59,37 @@ public:
     }
 
 protected:
-    void _build_priority(std::stringstream& log_stream, LogPriority&& priority) {
+    void _build_priority(std::stringstream& log_stream, Priority&& priority) {
         log_stream << app_name_;
         switch (priority) {
-            case LogPriority::Emergency:
+            case Priority::Emergency:
                 log_stream << "-EMERG";
                 break;
-            case LogPriority::Alert:
+            case Priority::Alert:
                 log_stream << "-ALERT";
                 break;
-            case LogPriority::Critical:
+            case Priority::Critical:
                 log_stream << "-CRIT";
                 break;
-            case LogPriority::Error:
+            case Priority::Error:
                 log_stream << "-ERR";
                 break;
-            case LogPriority::Warning:
+            case Priority::Warning:
                 log_stream << "-WARN";
                 break;
-            case LogPriority::Notice:
+            case Priority::Notice:
                 log_stream << "-NOTICE";
                 break;
-            case LogPriority::Info:
+            case Priority::Info:
                 log_stream << "-INFO";
                 break;
-            case LogPriority::Debug:
+            case Priority::Debug:
                 log_stream << "-DEBUG";
                 break;
-            case LogPriority::Debug2:
+            case Priority::Debug2:
                 log_stream << "-DEBUG2";
                 break;
-            case LogPriority::Debug3:
+            case Priority::Debug3:
                 log_stream << "-DEBUG3";
                 break;
             default:
@@ -97,13 +97,13 @@ protected:
                 break;
         }
     }
-    void _build_format(std::stringstream& log_stream, LogPriority&& priority) {
+    void _build_format(std::stringstream& log_stream, Priority&& priority) {
 
         auto timepoint = std::chrono::time_point_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now());
         std::time_t timestamp = std::chrono::system_clock::to_time_t(timepoint);
         std::tm* tm = std::localtime(&timestamp);
 
-        LogFormat& format = format_default_;
+        Format& format = format_default_;
         auto rule_map_it = rule_map_.find(priority);
         if (rule_map_it != rule_map_.end()) {
             format = rule_map_it->second;
@@ -111,142 +111,142 @@ protected:
 
         for (auto format_it : format) {
             switch(format_it) {
-                case LogFormat::Field::Pid:
+                case Format::Field::Pid:
                 {
                     log_stream << std::this_thread::get_id();
                     break;
                 }
-                case LogFormat::Field::Tid:
+                case Format::Field::Tid:
                 {
                     log_stream << std::this_thread::get_id();
                     break;
                 }
-                case LogFormat::Field::Function:
+                case Format::Field::Function:
                 {
                     log_stream << __func__;
                     break;
                 }
-                case LogFormat::Field::File:
+                case Format::Field::File:
                 {
                     log_stream << __FILE__;
                     break;
                 }
-                case LogFormat::Field::LineNo:
+                case Format::Field::LineNo:
                 {
                     log_stream << __LINE__;
                     break;
                 }
-                case LogFormat::Field::TimeStamp:
+                case Format::Field::TimeStamp:
                 {
                     log_stream << timestamp;
                     break;
                 }
-                case LogFormat::Field::Year:
+                case Format::Field::Year:
                 {
                     log_stream << (tm->tm_year + 1900);
                     break;
                 }
-                case LogFormat::Field::Month:
+                case Format::Field::Month:
                 {
                     log_stream << std::setw(2) << std::setfill('0') << (tm->tm_mon + 1);
                     break;
                 }
-                case LogFormat::Field::DayOfMonth:
+                case Format::Field::DayOfMonth:
                 {
                     log_stream << std::setw(2) << std::setfill('0') << tm->tm_mday;
                     break;
                 }
-                case LogFormat::Field::DayOfWeek:
+                case Format::Field::DayOfWeek:
                 {
                     log_stream << std::setw(2) << std::setfill('0') << ((tm->tm_wday == 0) ? 7 : tm->tm_wday);
                     break;
                 }
-                case LogFormat::Field::Hour:
+                case Format::Field::Hour:
                 {
                     log_stream << std::setw(2) << std::setfill('0') << tm->tm_hour;
                     break;
                 }
-                case LogFormat::Field::Minute:
+                case Format::Field::Minute:
                 {
                     log_stream << std::setw(2) << std::setfill('0') << tm->tm_min;
                     break;
                 }
-                case LogFormat::Field::Second:
+                case Format::Field::Second:
                 {
                     log_stream << std::setw(2) << std::setfill('0') << tm->tm_sec;
                     break;
                 }
-                case LogFormat::Field::Millisecond:
+                case Format::Field::Millisecond:
                 {
                     log_stream << std::setw(3) << std::setfill('0') << timepoint.time_since_epoch().count() % 1000000000 /1000000;
                     break;
                 }
-                case LogFormat::Field::Microsecond:
+                case Format::Field::Microsecond:
                 {
                     log_stream << std::setw(6) << std::setfill('0') << timepoint.time_since_epoch().count() % 1000000000 /1000;
                     break;
                 }
-                case LogFormat::Field::Nanosecond:
+                case Format::Field::Nanosecond:
                 {
                     log_stream << std::setw(9) << std::setfill('0') << timepoint.time_since_epoch().count() % 1000000000;
                     break;
                 }
-                case LogFormat::Field::Blank:
+                case Format::Field::Blank:
                 {
                     log_stream << " ";
                     break;
                 }
-                case LogFormat::Field::Dot:
+                case Format::Field::Dot:
                 {
                     log_stream << ".";
                     break;
                 }
-                case LogFormat::Field::Colon:
+                case Format::Field::Colon:
                 {
                     log_stream << ":";
                     break;
                 }
-                case LogFormat::Field::LeftBigBrackets:
+                case Format::Field::LeftBigBrackets:
                 {
                     log_stream << "{";
                     break;
                 }
-                case LogFormat::Field::RightBigBrackets:
+                case Format::Field::RightBigBrackets:
                 {
                     log_stream << "}";
                     break;
                 }
-                case LogFormat::Field::LeftMidBrackets:
+                case Format::Field::LeftMidBrackets:
                 {
                     log_stream << "[";
                     break;
                 }
-                case LogFormat::Field::RightMidBrackets:
+                case Format::Field::RightMidBrackets:
                 {
                     log_stream << "]";
                     break;
                 }
-                case LogFormat::Field::LeftSmallBrackets:
+                case Format::Field::LeftSmallBrackets:
                 {
                     log_stream << "(";
                     break;
                 }
-                case LogFormat::Field::RightSmallBrackets:
+                case Format::Field::RightSmallBrackets:
                 {
                     log_stream << ")";
                     break;
                 }
-                case LogFormat::Field::HorizontalLine:
+                case Format::Field::HorizontalLine:
                 {
                     log_stream << "-";
                     break;
                 }
-                case LogFormat::Field::VerticalLine:
+                case Format::Field::VerticalLine:
                 {
                     log_stream << "|";
                     break;
                 }
-                case LogFormat::Field::Logschema:
+                case Format::Field::Logschema:
                 {
                     _build_priority(log_stream, std::move(priority));
                     break;
@@ -264,21 +264,21 @@ protected:
         }
     }
 protected:
-    std::string app_name_ = "Log";
-    std::map<LogPriority, LogFormat> rule_map_ = {
-        {LogPriority::Emergency, LOG_FORMAT_DEFAULT},
-        {LogPriority::Alert,     LOG_FORMAT_DEFAULT},
-        {LogPriority::Critical,  LOG_FORMAT_DEFAULT},
-        {LogPriority::Error,     LOG_FORMAT_DEFAULT},
-        {LogPriority::Warning,   LOG_FORMAT_DEFAULT},
-        {LogPriority::Notice,    LOG_FORMAT_DEFAULT},
-        {LogPriority::Info,      LOG_FORMAT_DEFAULT},
-        {LogPriority::Debug,     LOG_FORMAT_DEFAULT},
-        {LogPriority::Debug2,    LOG_FORMAT_DEFAULT},
-        {LogPriority::Debug3,    LOG_FORMAT_DEFAULT},
+    std::string app_name_ = "LOG";
+    std::map<Priority, Format> rule_map_ = {
+        {Priority::Emergency, LOG_FORMAT_DEFAULT},
+        {Priority::Alert,     LOG_FORMAT_DEFAULT},
+        {Priority::Critical,  LOG_FORMAT_DEFAULT},
+        {Priority::Error,     LOG_FORMAT_DEFAULT},
+        {Priority::Warning,   LOG_FORMAT_DEFAULT},
+        {Priority::Notice,    LOG_FORMAT_DEFAULT},
+        {Priority::Info,      LOG_FORMAT_DEFAULT},
+        {Priority::Debug,     LOG_FORMAT_DEFAULT},
+        {Priority::Debug2,    LOG_FORMAT_DEFAULT},
+        {Priority::Debug3,    LOG_FORMAT_DEFAULT},
     };
-    LogDevice& log_device_;
-    LogFormat format_default_ = LOG_FORMAT_DEFAULT;
+    Device& log_device_;
+    Format format_default_ = LOG_FORMAT_DEFAULT;
 };
 
 }

@@ -4,7 +4,7 @@
 #include <string.h>
 #include <memory>
 
-namespace infra {
+namespace infra::base {
 
 class Allocator {
 public:

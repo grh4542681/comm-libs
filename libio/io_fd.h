@@ -9,7 +9,7 @@
 #include "allocator.h"
 #include "io_return.h"
 
-namespace infra {
+namespace infra::io {
 
 /**
 * @brief - Base file descriptor class
@@ -19,9 +19,8 @@ public:
     /**
     * @brief FD - Default consturctor
     */
-    FD(Allocator&& alloc = Allocator()) : alloc_(alloc) {
-        fd_ = 0;
-        init_flag_ = false;
+    FD(base::Allocator&& alloc = base::Allocator()) : alloc_(alloc) {
+        fd_ = -1;
         auto_close_ = false;
     }
     /**
@@ -30,14 +29,12 @@ public:
     * @param [fd] - Linux file descriptor
     * @param [auto_close] - Auto close flag
     */
-    FD(unsigned int fd, bool auto_close = false, Allocator&& alloc = Allocator()) : fd_(fd), auto_close_(auto_close), alloc_(alloc){
+    FD(unsigned int fd, bool auto_close = false, base::Allocator&& alloc = base::Allocator()) : fd_(fd), auto_close_(auto_close), alloc_(alloc){
         struct stat fd_stat;
         if (fstat(fd, &fd_stat)) {
             fd_ = -1;
-            this->init_flag_ = false;
         }
         auto_close_ = false;
-        init_flag_ = false;
     }
     /**
     * @brief FD - Copy constructor
@@ -45,13 +42,12 @@ public:
     * @param [other] -  Other instance
     */
     FD(FD& other) : alloc_(other.alloc_) {
-        if (fd_ > 0 && init_flag_ && auto_close_) {
+        if (fd_ > 0 && auto_close_) {
             Close();
             fd_ = 0;
         }
         fd_ = other.fd_;
         auto_close_ = other.auto_close_;
-        init_flag_ = other.init_flag_;
     }
     /**
     * @brief FD - Copy constructor
@@ -59,13 +55,12 @@ public:
     * @param [other] -  Other instance
     */
     FD(FD&& other) : alloc_(other.alloc_) {
-        if (fd_ > 0 && init_flag_ && auto_close_) {
+        if (fd_ > 0 && auto_close_) {
             Close();
             fd_ = 0;
         }
         fd_ = other.fd_;
         auto_close_ = other.auto_close_;
-        init_flag_ = other.init_flag_;
     }
     /**
     * @brief FD - Copy constructor
@@ -73,13 +68,12 @@ public:
     * @param [other] -  Other instance
     */
     FD(const FD& other) : alloc_(other.alloc_) {
-        if (fd_ > 0 && init_flag_ && auto_close_) {
+        if (fd_ > 0 && auto_close_) {
             Close();
             fd_ = 0;
         }
         fd_ = other.fd_;
         auto_close_ = other.auto_close_;
-        init_flag_ = other.init_flag_;
     }
     /**
     * @brief FD - Copy constructor
@@ -87,38 +81,39 @@ public:
     * @param [other] -  Other instance
     */
     FD(const FD&& other) : alloc_(other.alloc_) {
-        if (fd_ > 0 && init_flag_ && auto_close_) {
+        if (fd_ > 0 && auto_close_) {
             Close();
             fd_ = 0;
         }
         fd_ = other.fd_;
         auto_close_ = other.auto_close_;
-        init_flag_ = other.init_flag_;
     }
     /**
     * @brief ~FD - Destructor
     */
-    virtual ~FD() {}
+    virtual ~FD() {
+        if (auto_close_) {
+            Close();
+        }
+    }
 
     const FD& operator=(const FD& other) {
-        if (fd_ > 0 && init_flag_ && auto_close_) {
+        if (fd_ > 0 && auto_close_) {
             Close();
             fd_ = 0;
         }
         fd_ = other.fd_;
         auto_close_ = other.auto_close_;
-        init_flag_ = other.init_flag_;
         return *this;
     }
 
     const FD& operator=(const FD&& other) {
-        if (fd_ > 0 && init_flag_ && auto_close_) {
+        if (fd_ > 0 && auto_close_) {
             Close();
             fd_ = 0;
         }
         fd_ = other.fd_;
         auto_close_ = other.auto_close_;
-        init_flag_ = other.init_flag_;
         return *this;
     }
 
@@ -132,6 +127,47 @@ public:
         return (fd_ < other.fd_);
     }
 
+    bool Available() {
+        struct stat fd_stat;
+        if (fstat(fd_, &fd_stat)) {
+            return false;
+        }
+        return true;
+    }
+
+    Return SetNonBlock() {
+        if (Available()) {
+            int flags;
+            if((flags = fcntl(fd_, F_GETFL, 0)) < 0)
+            {
+                return errno;
+            }
+            flags |= O_NONBLOCK;
+            if(fcntl(fd_, F_SETFL, flags) < 0)
+            {
+                return errno;
+            }
+            return Return::SUCCESS;
+        }
+        return Return::IO_EAVALIABLE;
+    }
+
+    Return SetBlock() {
+        if (Available()) {
+            int flags;
+            if((flags = fcntl(fd_, F_GETFL, 0)) < 0)
+            {
+                return errno;
+            }
+            flags &= ~O_NONBLOCK;
+            if(fcntl(fd_, F_SETFL, flags) < 0)
+            {
+                return errno;
+            }
+            return Return::SUCCESS;
+        }
+    }
+
     bool GetAutoClose() {
         return auto_close_;
     }
@@ -141,35 +177,23 @@ public:
         return *this;
     }
 
-    bool Initalize() const {
-        return init_flag_;
-    }
-
-    bool Available() {
-        return true;
-    }
-
     int GetFD() const {
-        if (init_flag_) {
             return fd_;
-        } else {
-            return (-1);
-        }
     }
 
     virtual Return SetFD(unsigned int fd, bool auto_close) {
-        if (fd_ > 0 && init_flag_ && auto_close_) {
+        if (fd_ > 0) {
             Close();
-            fd_ = 0;
+            fd_ = -1;
         }
         struct stat fd_stat;
         if (fstat(fd, &fd_stat)) {
-            this->init_flag_ = false;
+            fd_ = -1;
+            auto_close_ = auto_close;
             return errno;
         }
         fd_ = fd;
         auto_close_ = auto_close;
-        init_flag_ = true;
         return Return::SUCCESS;
     }
 
@@ -184,9 +208,7 @@ public:
     }
 
     virtual void Close() {
-        if (init_flag_ && auto_close_){
-            close(fd_);
-        }
+        close(fd_);
     }
 
     virtual FD* Clone() {
@@ -201,8 +223,7 @@ public:
 protected:
     int fd_ = 0;
     bool auto_close_ = false;
-    bool init_flag_ = false;
-    Allocator& alloc_;
+    base::Allocator& alloc_;
 };
 
 }

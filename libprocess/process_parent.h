@@ -3,8 +3,8 @@
 
 #include <string>
 
+#include "io_fd.h"
 #include "timer_time.h"
-#include "sock_fd.h"
 
 #include "process_log.h"
 #include "process_return.h"
@@ -12,38 +12,34 @@
 #include "process_state.h"
 #include "process_role.h"
 
-#define ProcessParentSockFDIndex (0)
+#define ParentSockFDIndex (0)
 
-namespace process {
+namespace infra::process {
 
-class ProcessParent {
+class Parent : io::FD {
 public:
-    ProcessParent();
-    ProcessParent(std::string name, ProcessID& pid);
-    ProcessParent(std::string name, ProcessID&& pid);
-    ProcessParent(ProcessParent& other);
-    ~ProcessParent();
+    Parent();
+    Parent(std::string name, ID& pid);
+    Parent(std::string name, ID&& pid);
+    Parent(Parent& other);
+    ~Parent();
 
-    ProcessID& GetPid();
+    ssize_t Write(const void* data, size_t datalen);
+    ssize_t Read(void* data, size_t datalen);
+
+    ID& GetPid();
     std::string GetName();
-    sock::SockFD& GetFD();
+    Role GetRole();
+    State GetState();
 
-    ProcessParent& SetFD(sock::SockFD& fd);
-    ProcessParent& SetFD(sock::SockFD&& fd);
-
-    ProcessRet SetSendBlock(timer::Time* overtime);
-    ProcessRet SetRecvBlock(timer::Time* overtime);
-    ProcessRet SetNonBlock();
-
-    ProcessRet Send();
-    ProcessRet Recv();
+    Parent& SetRole(Role&& role);
+    Parent& SetState(State&& state);
 
 private:
-    ProcessID       pid_;
+    ID              pid_;
     std::string     name_;
-
-    bool init_flag_;
-    sock::SockFD fd_;
+    Role            role_;
+    State           state_;
 };
 
 }

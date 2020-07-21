@@ -2,28 +2,28 @@
 
 namespace process {
 
-ProcessChild::ProcessChild()
+Child::Child()
 {
     name_.clear();
-    role_ |= ProcessRole::Child;
-    state_ = ProcessState::Normal;
+    role_ |= Role::Child;
+    state_ = State::Normal;
 
     dead_callback_ = NULL;
     init_flag_ = false;
 }
 
-ProcessChild::ProcessChild(std::string name, ProcessID&& pid)
+Child::Child(std::string name, ID&& pid)
 {
     name_ = name;
     pid_ = pid;
-    role_ |= ProcessRole::Child;
-    state_ = ProcessState::Normal;
+    role_ |= Role::Child;
+    state_ = State::Normal;
 
     dead_callback_ = NULL;
     init_flag_ = true;
 }
 
-ProcessChild::ProcessChild(ProcessChild& other)
+Child::Child(Child& other)
 {
     pid_ = other.pid_;
     name_ = other.name_;
@@ -35,88 +35,51 @@ ProcessChild::ProcessChild(ProcessChild& other)
     init_flag_ = other.init_flag_;
 }
 
-ProcessChild::~ProcessChild()
+Child::~Child()
 {
 
 }
 
-ProcessID& ProcessChild::GetPid()
+ID& Child::GetPid()
 {
     return pid_;
 }
 
-std::string ProcessChild::GetName()
+std::string Child::GetName()
 {
     return name_;
 }
 
-ProcessRole& ProcessChild::GetRole()
+Role& Child::GetRole()
 {
     return role_;
 }
 
-ProcessState& ProcessChild::GetState()
+State& Child::GetState()
 {
     return state_;
 }
 
-void (*ProcessChild::GetDeadCallback())(int*)
+ChildDeadCallback_t Child::GetDeadCallback()
 {
     return dead_callback_;
 }
 
-sock::SockFD& ProcessChild::GetFD()
+sock::SockFD& Child::GetFD()
 {
     return fd_;
 }
 
-ProcessChild& ProcessChild::SetState(ProcessState state)
+Child& Child::SetState(State state)
 {
     state_ = state;
     return *this;
 }
 
-ProcessChild& ProcessChild::SetDeadCallback(void (*dead_callback)(int*))
+Child& Child::SetDeadCallback(ChildDeadCallback_t& dead_callback)
 {
     dead_callback_ = dead_callback;
     return *this;
-}
-
-ProcessChild& ProcessChild::SetFD(sock::SockFD& fd)
-{
-    return SetFD(std::move(fd));
-}
-ProcessChild& ProcessChild::SetFD(sock::SockFD&& fd)
-{
-    fd_.SetFD(fd.GetFD());
-    return *this;
-}
-
-ProcessRet ProcessChild::SetSendBlock(timer::Time* overtime)
-{
-    if (fd_.SetSendBlock(overtime) != sock::SockRet::SUCCESS) {
-        PROCESS_ERROR("Set Child sockfd in pair send block time failed");
-        return ProcessRet::ERROR;
-    }
-    return ProcessRet::SUCCESS;
-}
-
-ProcessRet ProcessChild::SetRecvBlock(timer::Time* overtime)
-{
-    if (fd_.SetRecvBlock(overtime) != sock::SockRet::SUCCESS) {
-        PROCESS_ERROR("Set Child sockfd in pair recv block time failed");
-        return ProcessRet::ERROR;
-    }
-    return ProcessRet::SUCCESS;
-}
-
-ProcessRet ProcessChild::SetNonBlock()
-{
-    if (fd_.SetNonBlock() != sock::SockRet::SUCCESS) {
-        PROCESS_ERROR("Set Child sockfd in pair non block failed");
-        return ProcessRet::ERROR;
-    }
-    return ProcessRet::SUCCESS;
 }
 
 }

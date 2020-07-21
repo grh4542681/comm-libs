@@ -2,9 +2,9 @@
 #include <regex>
 #include "string_util.h"
 
-namespace infra {
+namespace infra::util {
 
-void StringUtil::RTrim(std::string& str)
+void String::RTrim(std::string& str)
 {
     if (str.empty()) {
         return ;
@@ -12,7 +12,7 @@ void StringUtil::RTrim(std::string& str)
     str.erase(0, str.find_first_not_of(" "));
 }
 
-void StringUtil::LTrim(std::string& str)
+void String::LTrim(std::string& str)
 {
     if (str.empty()) {
         return;
@@ -20,7 +20,7 @@ void StringUtil::LTrim(std::string& str)
     str.erase(str.find_last_not_of(" ") + 1);
 }
 
-void StringUtil::Trim(std::string& str)
+void String::Trim(std::string& str)
 {
     if (str.empty()) {
         return;
@@ -29,12 +29,12 @@ void StringUtil::Trim(std::string& str)
     str.erase(0, str.find_first_not_of(" "));
 }
 
-void StringUtil::Reverse(std::string& str)
+void String::Reverse(std::string& str)
 {
 
 }
 
-void StringUtil::Distinct(std::string& str)
+void String::Distinct(std::string& str)
 {
     if (str.size() < 2) {
         return;
@@ -51,7 +51,7 @@ void StringUtil::Distinct(std::string& str)
     }
 }
 
-void StringUtil::Distinct(std::string& str, char target)
+void String::Distinct(std::string& str, char target)
 {
     if (str.size() < 2) {
         return;
@@ -68,22 +68,22 @@ void StringUtil::Distinct(std::string& str, char target)
     }
 }
 
-void StringUtil::Distinct(std::string& str, std::string& target)
+void String::Distinct(std::string& str, std::string& target)
 {
 
 }
 
-void StringUtil::Split(const std::string& str, std::vector<std::string>& vec)
+void String::Split(const std::string& str, std::vector<std::string>& vec)
 {
     std::string sep = " ";
     Split(str, sep, vec);
 }
 
-void StringUtil::Split(const std::string& str, std::string& sep, std::vector<std::string>& vec)
+void String::Split(const std::string& str, std::string& sep, std::vector<std::string>& vec)
 {
     Split(str, std::move(sep), vec);
 }
-void StringUtil::Split(const std::string& str, std::string&& sep, std::vector<std::string>& vec)
+void String::Split(const std::string& str, std::string&& sep, std::vector<std::string>& vec)
 {
     std::string expr = "[^" + sep + "]+";
     std::regex word_regex(expr);

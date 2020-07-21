@@ -1,42 +1,42 @@
 #ifndef __PROCESS_ROLE_H__
 #define __PROCESS_ROLE_H__
 
-namespace process {
+namespace infra::process {
 
-class ProcessRole {
+class Role {
 public:
-    ProcessRole();
-    ProcessRole(ProcessRole&);
-    ~ProcessRole();
+    Role();
+    Role(Role&);
+    ~Role();
 
-    ProcessRole& Clean();
+    Role& Clean();
 
-    ProcessRole operator~();
+    Role operator~();
 
-    ProcessRole& operator=(ProcessRole& a);
-    ProcessRole& operator=(ProcessRole&& a);
-    ProcessRole operator|(ProcessRole& a);
-    ProcessRole operator|(ProcessRole&& a);
-    ProcessRole& operator|=(ProcessRole& a);
-    ProcessRole& operator|=(ProcessRole&& a);
-    ProcessRole operator&(ProcessRole& a);
-    ProcessRole operator&(ProcessRole&& a);
-    ProcessRole& operator&=(ProcessRole& a);
-    ProcessRole& operator&=(ProcessRole&& a);
+    Role& operator=(Role& a);
+    Role& operator=(Role&& a);
+    Role operator|(Role& a);
+    Role operator|(Role&& a);
+    Role& operator|=(Role& a);
+    Role& operator|=(Role&& a);
+    Role operator&(Role& a);
+    Role operator&(Role&& a);
+    Role& operator&=(Role& a);
+    Role& operator&=(Role&& a);
 
-    ProcessRole& operator=(unsigned int& a);
-    ProcessRole& operator=(unsigned int&& a);
-    ProcessRole operator|(unsigned int& a);
-    ProcessRole operator|(unsigned int&& a);
-    ProcessRole& operator|=(unsigned int& a);
-    ProcessRole& operator|=(unsigned int&& a);
-    ProcessRole operator&(unsigned int& a);
-    ProcessRole operator&(unsigned int&& a);
-    ProcessRole& operator&=(unsigned int& a);
-    ProcessRole& operator&=(unsigned int&& a);
+    Role& operator=(unsigned int& a);
+    Role& operator=(unsigned int&& a);
+    Role operator|(unsigned int& a);
+    Role operator|(unsigned int&& a);
+    Role& operator|=(unsigned int& a);
+    Role& operator|=(unsigned int&& a);
+    Role operator&(unsigned int& a);
+    Role operator&(unsigned int&& a);
+    Role& operator&=(unsigned int& a);
+    Role& operator&=(unsigned int&& a);
 
-    ProcessRole& AddRole(unsigned int role);
-    ProcessRole& DelRole(unsigned int role);
+    Role& AddRole(unsigned int role);
+    Role& DelRole(unsigned int role);
     bool HasRole(unsigned int role);
 public:
     static unsigned int Normal;
@@ -45,7 +45,7 @@ public:
     static unsigned int PoolWorker;
     static unsigned int PoolKeeper;
 private:
-    ProcessRole(unsigned int role);
+    Role(unsigned int role);
     unsigned int role_;
 };
 

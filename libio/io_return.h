@@ -3,17 +3,18 @@
 
 #include "return.h"
 
-namespace infra {
+namespace infra::io {
 
 /**
 * @brief - IO return value.
 */
-class IoReturn : public Return {
+class Return : public base::Return {
 public:
     /**
     * @brief - Io return value.
     */
-    enum ErrCode{
+    enum ErrCode {
+        IO_EAVALIABLE,
         IO_EMODULE = IO_ERROR_CODE_MODULE,
         IO_EFDTYPE,
         IO_EUNKNOWFD,
@@ -30,7 +31,7 @@ public:
         IO_EERRCB,
     };
 public:
-    IoReturn(int ecode) : Return(ecode) {
+    Return(int ecode = 0) : base::Return(ecode) {
         if (!_exception.ModuleExist(ErrCode::IO_EMODULE)) {
             _exception.Push(ErrCode::IO_EMODULE, {
                 { ErrCode::IO_EFDTYPE, "Bad file descriptor type" },
@@ -38,19 +39,19 @@ public:
             });
         }
     }
-    IoReturn(IoReturn& other) : Return(other) { }
-    ~IoReturn() { };
+    Return(Return& other) : base::Return(other) { }
+    ~Return() { };
 
-    IoReturn& operator=(const int ecode) {
-        Return::operator=(ecode);
+    Return& operator=(const int ecode) {
+        base::Return::operator=(ecode);
         return *this;
     }   
-    IoReturn& operator=(const IoReturn& ret) {
-        Return::operator=(ret);
+    Return& operator=(const Return& ret) {
+        base::Return::operator=(ret);
         return *this;
     }   
-    IoReturn& operator=(const IoReturn&& ret) {
-        Return::operator=(ret);
+    Return& operator=(const Return&& ret) {
+        base::Return::operator=(ret);
         return *this;
     }
 };

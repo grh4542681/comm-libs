@@ -1,9 +1,9 @@
 #ifndef __LOG_PRIORITY_H__
 #define __LOG_PRIORITY_H__
 
-namespace infra {
+namespace infra::log {
 
-enum class LogPriority : int {
+enum class Priority : int {
     Emergency = 0,
     Alert,
     Critical,

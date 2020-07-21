@@ -43,13 +43,13 @@ set(DEPEND_TARGETS)
 
 add_library(libtimer.so SHARED ${LIBTIMER_SRC})
 target_include_directories(libtimer.so PRIVATE ${LIBTIMER_HRD})
-set_target_properties(libtimer.so PROPERTIES OUTPUT_NAME "gtimer" CLEAN_DIRECT_OUTPUT 1)
+set_target_properties(libtimer.so PROPERTIES OUTPUT_NAME "timer" CLEAN_DIRECT_OUTPUT 1)
 list(APPEND LIBTIMER_TARGETS libtimer.so)
 
 if(BUILD_STATIC_LIBS)
     add_library(libtimer.a STATIC ${LIBTIMER_SRC})
     target_include_directories(libtimer.a PRIVATE ${LIBTIMER_HRD})
-    set_target_properties(libtimer.a PROPERTIES OUTPUT_NAME "gtimer" CLEAN_DIRECT_OUTPUT 1)
+    set_target_properties(libtimer.a PROPERTIES OUTPUT_NAME "timer" CLEAN_DIRECT_OUTPUT 1)
     list(APPEND LIBTIMER_TARGETS libtimer.a)
 endif()
 

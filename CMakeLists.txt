@@ -29,12 +29,12 @@ ExternalProject_Add(libutil
                     INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install
                     )
 
-ExternalProject_Add(libio
-                    SOURCE_DIR ${LIBIO_SRC_TOP}
-                    CONFIGURE_COMMAND ${CMAKE} ${EXTERNAL_PROJECT_CMAKE_ARGS} ${LIBIO_SRC_TOP}
-                    BUILD_COMMAND $(MAKE)
-                    INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install
-                    )
+#ExternalProject_Add(libio
+#                    SOURCE_DIR ${LIBIO_SRC_TOP}
+#                    CONFIGURE_COMMAND ${CMAKE} ${EXTERNAL_PROJECT_CMAKE_ARGS} ${LIBIO_SRC_TOP}
+#                    BUILD_COMMAND $(MAKE)
+#                    INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install
+#                    )
 
 ExternalProject_Add(libfile
                     SOURCE_DIR ${LIBFILE_SRC_TOP}
@@ -45,6 +45,13 @@ ExternalProject_Add(libfile
 
 ExternalProject_Add(libtimer
                     SOURCE_DIR ${LIBTIMER_SRC_TOP}
+                    CONFIGURE_COMMAND ${CMAKE} ${EXTERNAL_PROJECT_CMAKE_ARGS} ${LIBTIMER_SRC_TOP}
+                    BUILD_COMMAND $(MAKE)
+                    INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install
+                    )
+
+ExternalProject_Add(libprocess
+                    SOURCE_DIR ${LIBPROCESS_SRC_TOP}
                     CONFIGURE_COMMAND ${CMAKE} ${EXTERNAL_PROJECT_CMAKE_ARGS} ${LIBTIMER_SRC_TOP}
                     BUILD_COMMAND $(MAKE)
                     INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install

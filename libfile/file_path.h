@@ -4,17 +4,17 @@
 #include <string>
 #include <vector>
 
-namespace infra {
+namespace infra::file {
 
-class FilePath {
+class Path {
 public:
-    FilePath();
-    FilePath(std::string raw);
-    ~FilePath();
+    Path();
+    Path(std::string raw);
+    ~Path();
 
-    FilePath& operator<<(std::string& other);
-    FilePath& operator<<(std::string&& other);
-    FilePath& operator<<(FilePath& other);
+    Path& operator<<(std::string& other);
+    Path& operator<<(std::string&& other);
+    Path& operator<<(Path& other);
 
     std::string& GetRaw();
     int GetDepth();

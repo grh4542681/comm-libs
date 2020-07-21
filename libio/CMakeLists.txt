@@ -46,13 +46,13 @@ set(LIBIO_TARGETS)
 
 
 add_library(libio.so SHARED ${LIBIO_SRC})
-set_target_properties(libio.so PROPERTIES OUTPUT_NAME "gio" CLEAN_DIRECT_OUTPUT 1)
+set_target_properties(libio.so PROPERTIES OUTPUT_NAME "io" CLEAN_DIRECT_OUTPUT 1)
 target_include_directories(libio.so PRIVATE ${LIBIO_HRD})
 list(APPEND LIBIO_TARGETS libio.so)
 
 if(BUILD_STATIC_LIBS)
     add_library(libio.a STATIC ${LIBIO_SRC})
-    set_target_properties(libio.a PROPERTIES OUTPUT_NAME "gio" CLEAN_DIRECT_OUTPUT 1)
+    set_target_properties(libio.a PROPERTIES OUTPUT_NAME "io" CLEAN_DIRECT_OUTPUT 1)
     target_include_directories(libio.a PRIVATE ${LIBIO_HRD})
     list(APPEND LIBIO_TARGETS libio.a)
 endif()

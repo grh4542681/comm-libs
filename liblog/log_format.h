@@ -4,29 +4,29 @@
 #include <vector>
 #include <iterator>
 
-#define LOG_FORMAT_DEFAULT (infra::LogFormat() << infra::LogFormat::Field::LeftMidBrackets \
-                                               << infra::LogFormat::Field::Year \
-                                               << infra::LogFormat::Field::HorizontalLine \
-                                               << infra::LogFormat::Field::Month \
-                                               << infra::LogFormat::Field::HorizontalLine \
-                                               << infra::LogFormat::Field::DayOfMonth \
-                                               << infra::LogFormat::Field::Blank \
-                                               << infra::LogFormat::Field::Hour \
-                                               << infra::LogFormat::Field::Colon \
-                                               << infra::LogFormat::Field::Minute \
-                                               << infra::LogFormat::Field::Colon \
-                                               << infra::LogFormat::Field::Second \
-                                               << infra::LogFormat::Field::Dot \
-                                               << infra::LogFormat::Field::Microsecond \
-                                               << infra::LogFormat::Field::RightMidBrackets \
-                                               << infra::LogFormat::Field::Blank \
-                                               << infra::LogFormat::Field::Logschema \
-                                               << infra::LogFormat::Field::Colon \
-                                               << infra::LogFormat::Field::Blank)
+#define LOG_FORMAT_DEFAULT (infra::log::Format() << infra::log::Format::Field::LeftMidBrackets \
+                                            << infra::log::Format::Field::Year \
+                                            << infra::log::Format::Field::HorizontalLine \
+                                            << infra::log::Format::Field::Month \
+                                            << infra::log::Format::Field::HorizontalLine \
+                                            << infra::log::Format::Field::DayOfMonth \
+                                            << infra::log::Format::Field::Blank \
+                                            << infra::log::Format::Field::Hour \
+                                            << infra::log::Format::Field::Colon \
+                                            << infra::log::Format::Field::Minute \
+                                            << infra::log::Format::Field::Colon \
+                                            << infra::log::Format::Field::Second \
+                                            << infra::log::Format::Field::Dot \
+                                            << infra::log::Format::Field::Microsecond \
+                                            << infra::log::Format::Field::RightMidBrackets \
+                                            << infra::log::Format::Field::Blank \
+                                            << infra::log::Format::Field::Logschema \
+                                            << infra::log::Format::Field::Colon \
+                                            << infra::log::Format::Field::Blank)
 
-namespace infra {
+namespace infra::log {
 
-class LogFormat {
+class Format {
 public:
     enum class Field : int {
         Pid,
@@ -64,7 +64,7 @@ public:
 public:
     class iterator : public std::iterator<std::input_iterator_tag, std::vector<Field>::iterator> {
     public:
-        friend class LogFormat;
+        friend class Format;
         iterator(std::vector<Field>::iterator&& vit) : ptr(vit) { }
         iterator() { }
 
@@ -96,23 +96,23 @@ public:
         std::vector<Field>::iterator ptr;
     };
 public:
-    LogFormat() { }
-    ~LogFormat() { }
+    Format() { }
+    ~Format() { }
 
     iterator begin () { return iterator(field_vec_.begin()); }
     iterator end () { return iterator(field_vec_.end()); }
 
-    LogFormat& operator<<(Field&& field) {
+    Format& operator<<(Field&& field) {
         field_vec_.push_back(field);
         return *this;
     }
 
-    LogFormat& operator>>(Field&& field) {
+    Format& operator>>(Field&& field) {
         field = field_vec_.back();
         field_vec_.pop_back();
         return *this;
     }
-    LogFormat& operator>>(Field& field) {
+    Format& operator>>(Field& field) {
         field = field_vec_.back();
         field_vec_.pop_back();
         return *this;

@@ -3,29 +3,29 @@
 
 #include <iostream>
 
-namespace infra {
+namespace infra::log {
 
-class LogDeviceInterface {
+class DeviceInterface {
 public:
-    LogDeviceInterface() { }
-    ~LogDeviceInterface() { }
+    DeviceInterface() { }
+    ~DeviceInterface() { }
 
-    virtual size_t write(std::string& appname __attribute__ ((unused)), LogPriority&& priotity __attribute__ ((unused)), std::string logstr) {
+    virtual size_t write(std::string& appname __attribute__ ((unused)), Priority&& priotity __attribute__ ((unused)), std::string logstr) {
         std::cout << logstr << std::endl;
         return logstr.size();
     }
 };
 
-class LogDevice {
+class Device {
 public:
-    ~LogDevice() { }
+    ~Device() { }
 
-    static LogDevice& Instance() {
-        static LogDevice instance;
+    static Device& Instance() {
+        static Device instance;
         return instance;
     }
 
-    template < typename I, typename ... Args > LogDevice& SetInterface(Args ... args) {
+    template < typename I, typename ... Args > Device& SetInterface(Args ... args) {
         if (log_dev_) {
             delete log_dev_;
         }
@@ -33,16 +33,16 @@ public:
         return *this;
     }
 
-    LogDeviceInterface* GetInterface() {
+    DeviceInterface* GetInterface() {
         return log_dev_;
     }
 
 private:
-    LogDevice() {
-        log_dev_ = new LogDeviceInterface();
+    Device() {
+        log_dev_ = new DeviceInterface();
     }
 private:
-    LogDeviceInterface* log_dev_;
+    DeviceInterface* log_dev_;
 };
 
 }

@@ -4,7 +4,7 @@
 #include <string>
 
 #include "timer_time.h"
-#include "sock_fd.h"
+#include "io_fd.h"
 
 #include "process_log.h"
 #include "process_return.h"
@@ -12,44 +12,36 @@
 #include "process_state.h"
 #include "process_role.h"
 
-#define ProcessChildSockFDIndex (1)
+#define ChildSockFDIndex (1)
 
 namespace process {
 
-class ProcessChild {
+class infra::Child : io::FD {
 public:
-    ProcessChild();
-    ProcessChild(std::string name, ProcessID&& pid);
-    ProcessChild(ProcessChild& other);
-    ~ProcessChild();
+    typedef std::function<void(int*)> ChildDeadCallback_t;
+public:
+    Child();
+    Child(std::string name, ID&& pid);
+    Child(Child& other);
+    ~Child();
 
-    ProcessID& GetPid();
+    ID& GetPid();
     std::string GetName();
-    ProcessRole& GetRole();
-    ProcessState& GetState();
-    void (*GetDeadCallback())(int*);
-    sock::SockFD& GetFD();
+    Role& GetRole();
+    State& GetState();
+    ChildDeadCallback_t GetDeadCallback();
 
-    ProcessChild& SetState(ProcessState state);
-    ProcessChild& SetDeadCallback(void (*dead_callback)(int*));
-    ProcessChild& SetFD(sock::SockFD& fd);
-    ProcessChild& SetFD(sock::SockFD&& fd);
-
-    ProcessRet SetSendBlock(timer::Time* overtime);
-    ProcessRet SetRecvBlock(timer::Time* overtime);
-    ProcessRet SetNonBlock();
-
-    ProcessRet Send();
-    ProcessRet Recv();
+    Child& SetRole(Role&& role);
+    Child& SetState(State&& state);
+    Child& SetDeadCallback(ChildDeadCallback_t& dead_callback);
 
 private:
-    ProcessID       pid_;
-    std::string     name_;
-    ProcessRole     role_;
-    ProcessState    state_;
+    ID          pid_;
+    std::string name_;
+    Role        role_;
+    State       state_;
 
-    bool init_flag_;
-    sock::SockFD fd_;
+    ChildDeadCallback_t dead_callback_;
     void (*dead_callback_)(int*);
 };
 

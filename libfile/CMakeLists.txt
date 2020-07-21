@@ -51,13 +51,13 @@ set(LIBFILE_TARGETS)
 
 add_library(libfile.so SHARED ${LIBFILE_SRC})
 target_include_directories(libfile.so PRIVATE ${LIBFILE_HRD})
-set_target_properties(libfile.so PROPERTIES OUTPUT_NAME "gfile" CLEAN_DIRECT_OUTPUT 1)
+set_target_properties(libfile.so PROPERTIES OUTPUT_NAME "file" CLEAN_DIRECT_OUTPUT 1)
 list(APPEND LIBFILE_TARGETS libfile.so)
 
 if(BUILD_STATIC_LIBS)
     add_library(libfile.a STATIC ${LIBFILE_SRC})
     target_include_directories(libfile.a PRIVATE ${LIBFILE_HRD})
-    set_target_properties(libfile.a PROPERTIES OUTPUT_NAME "gfile" CLEAN_DIRECT_OUTPUT 1)
+    set_target_properties(libfile.a PROPERTIES OUTPUT_NAME "file" CLEAN_DIRECT_OUTPUT 1)
     list(APPEND LIBFILE_TARGETS libfile.a)
 endif()
 

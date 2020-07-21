@@ -3,15 +3,18 @@
 
 #include "return.h"
 
-namespace process {
+namespace infra::process {
 
-class ProcessRet : public ret::Return {
+class Return : public base::Return {
 public:
-    enum ECode{
-        PROCESS_EBASE = PROCESS_ERROR_CODE_BASE,
+    enum ErrCode{
+        EDEFAULE,
+        PROCESS_EMODULE = PROCESS_ERROR_CODE_MODULE,
+
     //process common
         PROCESS_EMEMORY,
 
+        PROCESS_EINVALFD,
     // process info
         PROCESS_EACCES,
         PROCESS_EFAULT,
@@ -49,24 +52,26 @@ public:
         PROCESS_ECONFIG,
     };
 public:
-    static ECodeMapType ECodeMap;
-public:
-    ProcessRet(int err_code = 0) : ret::Return(err_code) {
-        err_code_vec_.push_back(&ProcessRet::ECodeMap);
+    Return(int ecode = 0) : base::Return(ecode) {
+        if (!_exception.ModuleExist(ErrCode::PROCESS_EMODULE)) {
+            _exception.Push(ErrCode::PROCESS_EMODULE, {
+                { ErrCode::PROCESS_EACCES, "No access" }
+            });
+        }
     }
-    ProcessRet(const ProcessRet& other) : ret::Return(other) { }
-    ~ProcessRet() { };
-public:
-    ProcessRet& operator=(const int err_code) {
-        Return::operator=(err_code);
+    Return(Return& other) : base::Return(other) { }
+    ~Return() { };
+
+    Return& operator=(const int ecode) {
+        base::Return::operator=(ecode);
         return *this;
     }   
-    ProcessRet& operator=(const ProcessRet& ret) {
-        Return::operator=(ret);
+    Return& operator=(const Return& ret) {
+        base::Return::operator=(ret);
         return *this;
     }   
-    ProcessRet& operator=(const ProcessRet&& ret) {
-        Return::operator=(ret);
+    Return& operator=(const Return&& ret) {
+        base::Return::operator=(ret);
         return *this;
     }
 };

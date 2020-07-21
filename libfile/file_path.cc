@@ -2,24 +2,24 @@
 
 #include "file_path.h"
 
-namespace infra {
+namespace infra::file {
 
-FilePath::FilePath()
+Path::Path()
 {
     raw_.clear();
     path_vector_.clear();
     abs_path_ = false;
 }
 
-FilePath::FilePath(std::string raw) : raw_(raw)
+Path::Path(std::string raw) : raw_(raw)
 {
     path_vector_.clear();
     abs_path_ = false;
     if (raw_.empty()) {
         return;
     } else {
-        StringUtil::Trim(raw_);
-        StringUtil::Distinct(raw_, '/');
+        util::String::Trim(raw_);
+        util::String::Distinct(raw_, '/');
         if (raw_[0] == '/') {
             abs_path_ = true;
             raw_.erase(0, 1);
@@ -28,51 +28,51 @@ FilePath::FilePath(std::string raw) : raw_(raw)
                 raw_ = "./" + raw_;
             }
         }
-        StringUtil::Split(raw_, "/", path_vector_);
+        util::String::Split(raw_, "/", path_vector_);
         depth_ = path_vector_.size() - 1;
     }
 }
 
-FilePath::~FilePath() {}
+Path::~Path() {}
 
-std::string& FilePath::GetRaw()
+std::string& Path::GetRaw()
 {
     return raw_;
 }
 
-FilePath& FilePath::operator<<(FilePath& other)
+Path& Path::operator<<(Path& other)
 {
     path_vector_.insert(path_vector_.end(), other.path_vector_.begin(), other.path_vector_.end());
     depth_ = path_vector_.size() - 1;
     return *this;
 }
 
-FilePath& FilePath::operator<<(std::string&& other)
+Path& Path::operator<<(std::string&& other)
 {
-    FilePath p(other);
+    Path p(other);
     return (*this << p);
 }
 
-FilePath& FilePath::operator<<(std::string& other)
+Path& Path::operator<<(std::string& other)
 {
-    return FilePath::operator<<(std::move(other));
+    return Path::operator<<(std::move(other));
 }
 
-int FilePath::GetDepth()
+int Path::GetDepth()
 {
     return depth_;
 }
 
-std::string FilePath::GetPath()
+std::string Path::GetPath()
 {
     return GetPath(0, depth_);
 }
 
-std::string FilePath::GetPath(unsigned int depth) {
+std::string Path::GetPath(unsigned int depth) {
     return GetPath(depth, depth);
 }
 
-std::string FilePath::GetPath(unsigned int start, unsigned int depth) {
+std::string Path::GetPath(unsigned int start, unsigned int depth) {
     std::string path;
     path.clear();
     if (start <= depth && depth <= depth_) {

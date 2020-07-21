@@ -4,40 +4,40 @@
 #include <sys/types.h>
 #include <iostream>
 
-namespace process {
+namespace infra::process {
 
-class ProcessID {
+class ID {
 public:
-    friend std::ostream & operator<<(std::ostream &out, ProcessID& pid);
+    friend std::ostream & operator<<(std::ostream &out, ID& pid);
 public:
-    typedef pid_t ProcessID_t;
+    typedef pid_t ID_t;
 public:
-    ProcessID();
-    ProcessID(ProcessID_t pid);
-    ProcessID(ProcessID& other);
-    ProcessID(const ProcessID& other);
-    ~ProcessID();
+    ID();
+    ID(ID_t pid);
+    ID(ID& other);
+    ID(const ID& other);
+    ~ID();
 
-    const ProcessID& operator=(ProcessID other);
+    const ID& operator=(ID other);
 
-    bool operator==(ProcessID& other);
-    bool operator==(const ProcessID& other);
-    bool operator<(ProcessID& other);
-    bool operator<(const ProcessID& other);
-    bool operator>(ProcessID& other);
-    bool operator>(const ProcessID& other);
+    bool operator==(ID& other);
+    bool operator==(const ID& other);
+    bool operator<(ID& other);
+    bool operator<(const ID& other);
+    bool operator>(ID& other);
+    bool operator>(const ID& other);
 
-    ProcessID& SetID(ProcessID_t pid);
-    ProcessID_t GetID() const;
+    ID& SetInterID(ID_t pid);
+    ID_t GetInterID() const;
 
-    static ProcessID GetProcessID();
-    static ProcessID GetProcessParentID();
+    static ID GetID();
+    static ID GetParentID();
 private:
-    ProcessID_t pid_;
+    ID_t pid_;
 };
 
-bool operator<(const ProcessID& a, const ProcessID& b);
-std::ostream & operator<<(std::ostream &out, ProcessID& pid);
+bool operator<(const ID& a, const ID& b);
+std::ostream & operator<<(std::ostream &out, ID& pid);
 
 }
 

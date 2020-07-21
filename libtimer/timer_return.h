@@ -3,9 +3,9 @@
 
 #include "return.h"
 
-namespace infra {
+namespace infra::timer {
 
-class TimerReturn : public Return {
+class Return : public base::Return {
 public:
     enum ErrCode{
         EDEFAULE,
@@ -13,26 +13,26 @@ public:
         TIMER_EGET,
     };
 public:
-    TimerReturn(int ecode) : Return(ecode) {
+    Return(int ecode = 0) : base::Return(ecode) {
         if (!_exception.ModuleExist(ErrCode::TIMER_EMODULE)) {
             _exception.Push(ErrCode::TIMER_EMODULE, {
                 { ErrCode::TIMER_EGET, "get time fail" }
             });
         }
     }
-    TimerReturn(TimerReturn& other) : Return(other) { }
-    ~TimerReturn() { };
+    Return(Return& other) : base::Return(other) { }
+    ~Return() { };
 
-    TimerReturn& operator=(const int ecode) {
-        Return::operator=(ecode);
+    Return& operator=(const int ecode) {
+        base::Return::operator=(ecode);
         return *this;
     }   
-    TimerReturn& operator=(const TimerReturn& ret) {
-        Return::operator=(ret);
+    Return& operator=(const Return& ret) {
+        base::Return::operator=(ret);
         return *this;
     }   
-    TimerReturn& operator=(const TimerReturn&& ret) {
-        Return::operator=(ret);
+    Return& operator=(const Return&& ret) {
+        base::Return::operator=(ret);
         return *this;
     }
 };

@@ -1,94 +1,75 @@
 #include "process_parent.h"
 
-namespace process {
+namespace infra::process {
 
-ProcessParent::ProcessParent()
+Parent::Parent() : io::FD()
 {
     name_.clear();
-    init_flag_ = false;
 }
 
-ProcessParent::ProcessParent(std::string name, ProcessID& pid)
+Parent::Parent(std::string name, ID& pid) : io::FD()
 {
     name_ = name;
     pid_ = pid;
-    init_flag_ = true;
 }
 
-ProcessParent::ProcessParent(std::string name, ProcessID&& pid)
+Parent::Parent(std::string name, ID&& pid) : io::FD()
 {
     name_ = name;
     pid_ = pid;
-    init_flag_ = true;
 }
 
-ProcessParent::ProcessParent(ProcessParent& other)
+Parent::Parent(Parent& other) : io::FD(other)
 {
     pid_ = other.pid_;
     name_ = other.name_;
-
-    fd_ = other.fd_;
-    init_flag_ = other.init_flag_;
 }
 
-ProcessParent::~ProcessParent()
+Parent::~Parent()
 {
-    if (init_flag_) {
-        fd_.Close();
-    }
+
 }
 
-ProcessID& ProcessParent::GetPid()
+ID& Parent::GetPid()
 {
     return pid_;
 }
 
-std::string ProcessParent::GetName()
+std::string Parent::GetName()
 {
     return name_;
 }
 
-sock::SockFD& ProcessParent::GetFD()
+Role Parent::GetRole()
 {
-    return fd_;
+    return role_;
 }
 
-ProcessParent& ProcessParent::SetFD(sock::SockFD& fd)
+State Parent::GetState()
 {
-    return SetFD(std::move(fd));
+    return state_;
 }
 
-ProcessParent& ProcessParent::SetFD(sock::SockFD&& fd)
+Parent& Parent::SetRole(Role&& role)
 {
-    fd_.SetFD(fd.GetFD());
+    role_ = role;
     return *this;
 }
 
-ProcessRet ProcessParent::SetSendBlock(timer::Time* overtime)
+Parent& Parent::SetState(State&& state)
 {
-    if (fd_.SetSendBlock(overtime) != sock::SockRet::SUCCESS) {
-        PROCESS_ERROR("set Child sockfd in pair send block time failed");
-        return ProcessRet::ERROR;
-    }
-    return ProcessRet::SUCCESS;
+    state_ = state;
+    return *this;
 }
 
-ProcessRet ProcessParent::SetRecvBlock(timer::Time* overtime)
+ssize_t Parent::Write(const void* data, size_t datalen)
 {
-    if (fd_.SetRecvBlock(overtime) != sock::SockRet::SUCCESS) {
-        PROCESS_ERROR("set Child sockfd in pair recv block time failed");
-        return ProcessRet::ERROR;
-    }
-    return ProcessRet::SUCCESS;
+    return 0;
 }
 
-ProcessRet ProcessParent::SetNonBlock()
+ssize_t Parent::Read(void* data, size_t datalen)
 {
-    if (fd_.SetNonBlock() != sock::SockRet::SUCCESS) {
-        PROCESS_ERROR("set Child sockfd in pair non block failed");
-        return ProcessRet::ERROR;
-    }
-    return ProcessRet::SUCCESS;
+    return 0;
 }
 
 }

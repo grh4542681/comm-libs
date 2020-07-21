@@ -6,9 +6,9 @@
 #include "timer_return.h"
 #include "timer_time.h"
 
-namespace infra {
+namespace infra::timer {
 
-class TimerFD : public FD {
+class FD : public io::FD {
 public:
     enum Flag {
         Realtime = 0x0001,
@@ -19,17 +19,17 @@ public:
         Absolute = 0x0020,
     };
 public:
-    TimerFD();
-    TimerFD(int flag);
-    TimerFD(int flag, Time& trigger_time, Time& interval_time);
-    TimerFD(unsigned int fd, bool auto_close = false);
-    TimerFD(TimerFD& other);
-    ~TimerFD();
+    FD();
+    FD(int flag);
+    FD(int flag, Time& trigger_time, Time& interval_time);
+    FD(unsigned int fd, bool auto_close = false);
+    FD(FD& other);
+    ~FD();
 
-    //Inherited from class FD.
-    Return SetFD(unsigned int fd, bool auto_close);
-    Return Dup(FD& new_fd);
-    FD* Clone();
+    //Inherited from class io::FD.
+    io::Return SetFD(unsigned int fd, bool auto_close);
+    io::Return Dup(FD& new_fd);
+    io::FD* Clone();
     void Close();
     ssize_t Write(const void* data, size_t datalen);
     ssize_t Read(void* data, size_t datalen);
@@ -38,9 +38,9 @@ public:
     Time& GetIntervalTime();
     int GetTriggerCounts();
 
-    TimerReturn Start();
-    TimerReturn Start(int flag, Time& trigger_time, Time& interval_time);
-    TimerReturn Stop();
+    Return Start();
+    Return Start(int flag, Time& trigger_time, Time& interval_time);
+    Return Stop();
 
 private:
     bool first_start_ = true;

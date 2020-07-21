@@ -3,7 +3,7 @@
 
 #include <time.h>
 
-namespace infra {
+namespace infra::timer {
 
 class Date {
 public:

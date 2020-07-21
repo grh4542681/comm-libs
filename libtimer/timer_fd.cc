@@ -3,14 +3,14 @@
 #include "timer_fd.h"
 #include "timer_log.h"
 
-namespace infra {
+namespace infra::timer {
 
-TimerFD::TimerFD() : FD()
+FD::FD() : io::FD()
 {
 
 }
 
-TimerFD::TimerFD(int flag)
+FD::FD(int flag)
 {
     first_start_ = true;
     auto_close_ = false;
@@ -35,12 +35,11 @@ TimerFD::TimerFD(int flag)
     fd_ = timerfd_create(clockid, flags);
     if (fd_ <= 0) {
         //TIMER_ERROR("Create timer fd error: %s", strerror(errno));
-        init_flag_ = false;
+        fd_ = -1;
     }
-    init_flag_ = true;
 }
 
-TimerFD::TimerFD(int flag, Time& trigger_time, Time& interval_time)
+FD::FD(int flag, Time& trigger_time, Time& interval_time)
 {
     first_start_ = true;
     auto_close_ = false;
@@ -67,25 +66,23 @@ TimerFD::TimerFD(int flag, Time& trigger_time, Time& interval_time)
     fd_ = timerfd_create(clockid, flags);
     if (fd_ <= 0) {
         //TIMER_ERROR("Create timer fd error: %s", strerror(errno));
-        init_flag_ = false;
+        fd_ = -1;
     }
-    init_flag_ = true;
 }
 
-TimerFD::TimerFD(unsigned int fd, bool auto_close) : FD(fd, auto_close)
+FD::FD(unsigned int fd, bool auto_close) : io::FD(fd, auto_close)
 {
     int temp_errno = 0;
     struct stat fd_stat;
     if (fstat(fd, &fd_stat)) {
         temp_errno = errno;
         //TIMER_ERROR("%s", strerror(temp_errno));
-        init_flag_ = false;
+        fd = -1;
     }
-    init_flag_ = true;
     first_start_ = true;
 }
 
-TimerFD::TimerFD(TimerFD& other) : FD(other)
+FD::FD(FD& other) : io::FD(other)
 {
     first_start_  = other.first_start_;
     flag_ = other.flag_;
@@ -93,16 +90,14 @@ TimerFD::TimerFD(TimerFD& other) : FD(other)
     interval_time_ = other.interval_time_;
 }
 
-TimerFD::~TimerFD()
+FD::~FD()
 {
-    if (init_flag_ && auto_close_) {
-        close(fd_);
-    }
+
 }
 
-Return TimerFD::SetFD(unsigned int fd, bool auto_close)
+io::Return FD::SetFD(unsigned int fd, bool auto_close)
 {
-    if (fd_ > 0 && init_flag_ && auto_close_) {
+    if (fd_ > 0) {
         close(fd_);
         fd_ = 0;
     }
@@ -111,11 +106,11 @@ Return TimerFD::SetFD(unsigned int fd, bool auto_close)
     if (fstat(fd, &fd_stat)) {
         temp_errno = errno;
         //TIMER_ERROR("%s", strerror(temp_errno));
-        init_flag_ = false;
+        fd = -1;
+        auto_close_ = auto_close;
         return temp_errno;
     }
     fd_ = fd;
-    init_flag_ = true;
     auto_close_ = auto_close;
     first_start_ = true;
     trigger_time_.SetTime(0, Time::Unit::Second);
@@ -123,48 +118,48 @@ Return TimerFD::SetFD(unsigned int fd, bool auto_close)
     return Return::SUCCESS;
 }
 
-Return TimerFD::Dup(FD& new_fd)
+io::Return FD::Dup(FD& new_fd)
 {
     return Return::SUCCESS;
 }
 
-FD* TimerFD::Clone()
+io::FD* FD::Clone()
 {
-    return alloc_.Allocate<TimerFD>(*this);
+    return alloc_.Allocate<FD>(*this);
 }
 
-void TimerFD::Close()
+void FD::Close()
 {
     close(fd_);
 }
 
-ssize_t TimerFD::Write(const void* data, size_t datalen)
+ssize_t FD::Write(const void* data, size_t datalen)
 {
     //TIMER_ERROR("Timer fd not support write.");
     return 0;
 }
 
-ssize_t TimerFD::Read(void* data, size_t datalen)
+ssize_t FD::Read(void* data, size_t datalen)
 {
     return read(fd_, data, datalen);
 }
 
-Time& TimerFD::GetTriggerTime()
+Time& FD::GetTriggerTime()
 {
     return trigger_time_;
 }
 
-Time& TimerFD::GetIntervalTime()
+Time& FD::GetIntervalTime()
 {
     return interval_time_;
 }
 
-int TimerFD::GetTriggerCounts()
+int FD::GetTriggerCounts()
 {
     return 0;
 }
 
-TimerReturn TimerFD::Start(int flag, Time& trigger_time, Time& interval_time)
+Return FD::Start(int flag, Time& trigger_time, Time& interval_time)
 {
     flag_ = flag;
     trigger_time_ = trigger_time;
@@ -173,7 +168,7 @@ TimerReturn TimerFD::Start(int flag, Time& trigger_time, Time& interval_time)
     return Start();
 }
 
-TimerReturn TimerFD::Start()
+Return FD::Start()
 {
     int flags = 0;
     if (flag_ & Flag::Absolute) {
@@ -197,7 +192,7 @@ TimerReturn TimerFD::Start()
     return Return::SUCCESS;
 }
 
-TimerReturn TimerFD::Stop()
+Return FD::Stop()
 {
     int flags = 0;
     if (flag_ & Flag::Absolute) {

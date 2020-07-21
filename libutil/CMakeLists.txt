@@ -12,12 +12,12 @@ set(LIBUTIL_SRC string_util.cc
 set(LIBUTIL_TARGETS)
 
 add_library(GRHutil_SO SHARED ${LIBUTIL_SRC})
-set_target_properties(GRHutil_SO PROPERTIES OUTPUT_NAME "gutil" CLEAN_DIRECT_OUTPUT 1)
+set_target_properties(GRHutil_SO PROPERTIES OUTPUT_NAME "util" CLEAN_DIRECT_OUTPUT 1)
 set(LIBUTIL_TARGETS ${LIBUTIL_TARGETS} GRHutil_SO)
 
 if(BUILD_STATIC_LIBS)
     add_library(GRHutil_A STATIC ${LIBUTIL_SRC})
-    set_target_properties(GRHutil_A PROPERTIES OUTPUT_NAME "gutil" CLEAN_DIRECT_OUTPUT 1)
+    set_target_properties(GRHutil_A PROPERTIES OUTPUT_NAME "util" CLEAN_DIRECT_OUTPUT 1)
     set(LIBUTIL_TARGETS ${LIBUTIL_TARGETS} GRHutil_A)
 endif()
 

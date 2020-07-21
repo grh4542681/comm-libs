@@ -17,7 +17,7 @@
 
 #define FILE_MAX_LINE_LEN (1024)
 
-namespace infra {
+namespace infra::file {
 
 class File {
 public:
@@ -61,25 +61,25 @@ public:
 
 public:
     File(std::string filename);
-    File(const FileFD& fd_);
-    File(const FileFD&& fd_);
+    File(const FD& fd_);
+    File(const FD&& fd_);
     ~File();
 
-    FileFD& GetFileFD();
+    FD& GetFileFD();
     std::string GetFileName();
     Format GetFileFormat();
     std::string GetFileFormatDescribe();
 
-    FileReturn Open(int mode, bool auto_close = false);
-    FileReturn Open(Mode mode, bool auto_close = false);
-    FileReturn Close();
+    Return Open(int mode, bool auto_close = false);
+    Return Open(Mode mode, bool auto_close = false);
+    Return Close();
 
-    static FileReturn ModeConvert(int mode, std::string& smode);
+    static Return ModeConvert(int mode, std::string& smode);
 
 private:
     std::string file_name_;
     bool auto_close_ = false;
-    FileFD fd_;
+    FD fd_;
     State state_;
     Format format_;
 
