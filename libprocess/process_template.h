@@ -25,7 +25,7 @@
 #include "process_info.h"
 #include "signal/process_signal_ctrl.h"
 
-namespace process {
+namespace infra::process {
 
 /**
 * @brief - Create process.
@@ -33,17 +33,17 @@ namespace process {
 * @tparam [F] - process main function
 */
 template < typename F >
-class ProcessTemplate {
+class Template {
 public:
-    ProcessTemplate() {
+    Template() {
 
     }
     /**
-    * @brief ProcessTemplate - Constructor
+    * @brief Template - Constructor
     *
     * @param [child] - process main function.
     */
-    ProcessTemplate(F child) {
+    Template(F child) {
         mempool_ = mempool::Mempool::getInstance();
         name_.clear();
         child_ = child;
@@ -51,19 +51,19 @@ public:
     }
 
     /**
-    * @brief ProcessTemplate - Constructor
+    * @brief Template - Constructor
     *
     * @param [name] - Process name.
     * @param [child] - Process main function.
     */
-    ProcessTemplate(std::string name, F child) {
+    Template(std::string name, F child) {
         mempool_ = mempool::Mempool::getInstance();
         name_ = name;
         child_ = child;
         auto_create_sockpair_ = false;
     }
 
-    ~ProcessTemplate() {
+    ~Template() {
 
     }
 
@@ -83,17 +83,17 @@ public:
     * @tparam [Args] - Template Args of main function.
     * @param [args] - args.
     *
-    * @returns  ProcessRet.
+    * @returns  Return.
     */
     template <typename ... Args>
-    std::tuple<const ProcessRet, const ProcessID> Run(Args&& ... args) {
+    std::tuple<const Return, const ProcessID> Run(Args&& ... args) {
         PROCESS_INFO("Starting create process.");
         //Create socket pair
         ipc::sock::SockPair pair;
         if (auto_create_sockpair_) {
             if (pair.Open() != ret::Return::SUCCESS) {
                 PROCESS_ERROR("SockPair Open error.");
-                return {ProcessRet::PROCESS_EFIFOPAIR, ProcessID(0)};
+                return {Return::PROCESS_EFIFOPAIR, ProcessID(0)};
             }
             pair.SetAutoClose(false);
         }
@@ -104,7 +104,7 @@ public:
                 pair.Close();
             }
             PROCESS_ERROR("Fork error.");
-            return {ProcessRet::PROCESS_EFORK, ProcessID(0)};
+            return {Return::PROCESS_EFORK, ProcessID(0)};
         } else if (pid == 0) {
             //cache parent process data.
             ProcessParent parent_cache(parent->GetName(), parent->GetPid());
@@ -149,9 +149,9 @@ public:
 
             PROCESS_INFO("Register child [%d] into current process.", pid);
             parent->AddChildProcess(child);
-            return {ProcessRet::SUCCESS, child_pid};
+            return {Return::SUCCESS, child_pid};
         }
-        return {ProcessRet::SUCCESS, ProcessID(0)};
+        return {Return::SUCCESS, ProcessID(0)};
     }
 #if 0
     /**
@@ -160,16 +160,16 @@ public:
     * @tparam [Args] - Template Args of main function.
     * @param [args] - args.
     *
-    * @returns  ProcessRet.
+    * @returns  Return.
     */
     template <typename ... Args>
-    ProcessRet RunDaemon(Args&& ... args) {
+    Return RunDaemon(Args&& ... args) {
         PROCESS_INFO("Starting create daemon process.");
         ProcessInfo* parent = ProcessInfo::getInstance();
         pid_t pid = fork();
         if (pid < 0) {
             PROCESS_ERROR("Fork error.");
-            return ProcessRet::PROCESS_EFORK;
+            return Return::PROCESS_EFORK;
         } else if (pid == 0) {
             PROCESS_INFO("Daemon agent process [%d] starting daemon.", getpid());
             pid_t pid = fork();
@@ -200,7 +200,7 @@ public:
                 exit(0);
             }
         } else {
-            return ProcessRet::SUCCESS;
+            return Return::SUCCESS;
         }
     }
 #endif
@@ -212,42 +212,42 @@ private:
     void (*dead_callback_)(int*);       ///< Process dead callback for parent SIGCHLD.
 
     template <typename ... Args>
-    ProcessRet _run_main(Args&& ... args) {
+    Return _run_main(Args&& ... args) {
         child_(std::forward<Args>(args)...);
-        return ProcessRet::SUCCESS;
+        return Return::SUCCESS;
     }
 };
 
 #if 0
 /**
-* @brief - ProcessTemplate template string type exception.
+* @brief - Template template string type exception.
 */
 template < >
-class ProcessTemplate<std::string> {
+class Template<std::string> {
 public:
     /**
-    * @brief ProcessTemplate - Constructor
+    * @brief Template - Constructor
     *
     * @param [child] - Process execute path.
     */
-    ProcessTemplate(std::string child) {
+    Template(std::string child) {
         mempool_ = mempool::Mempool::getInstance();
         child_ = child;
     }
 
     /**
-    * @brief ProcessTemplate - Constructor
+    * @brief Template - Constructor
     *
     * @param [name] - Process name.
     * @param [child] - Process execute path.
     */
-    ProcessTemplate(std::string name, std::string child) {
+    Template(std::string name, std::string child) {
         mempool_ = mempool::Mempool::getInstance();
         name_ = name;
         child_ = child;
     }
 
-    ~ProcessTemplate() {
+    ~Template() {
 
     }
 
@@ -264,14 +264,14 @@ public:
     /**
     * @brief Run - Start process.
     *
-    * @returns  ProcessRet.
+    * @returns  Return.
     */
-    ProcessRet Run() {
+    Return Run() {
         PROCESS_INFO("Starting create child process.");
         pid_t pid = fork();
         if (pid < 0) {
             PROCESS_ERROR("Fork error.");
-            return ProcessRet::PROCESS_EFORK;
+            return Return::PROCESS_EFORK;
         } else if (pid == 0) {
             PROCESS_INFO("Execute child [%s].", child_.c_str());
             if (execl(child_.c_str(), child_.c_str(), 0) < 0) {
@@ -287,20 +287,20 @@ public:
             PROCESS_INFO("Register child [%d] into current process.", pid);
             return parent->AddChildProcessInfo(child_process_info);
         }
-        return ProcessRet::SUCCESS;
+        return Return::SUCCESS;
     }
 
     /**
     * @brief RunDaemon - Start daemon process.
     *
-    * @returns  ProcessRet.
+    * @returns  Return.
     */
-    ProcessRet RunDaemon() {
+    Return RunDaemon() {
         PROCESS_INFO("Starting create daemon process.");
         pid_t pid = fork();
         if (pid < 0) {
             PROCESS_ERROR("Fork error.");
-            return ProcessRet::PROCESS_EFORK;
+            return Return::PROCESS_EFORK;
         } else if (pid == 0) {
             PROCESS_INFO("Daemon agent process [%d] starting daemon.", getpid());
             pid_t pid = fork();
