@@ -211,15 +211,9 @@ public:
         close(fd_);
     }
 
-    virtual FD* Clone() {
-        return alloc_.Allocate<FD>(*this);
-    }
-    virtual ssize_t Write(const void* data, size_t datalen) {
-        return 0;
-    }
-    virtual ssize_t Read(void* data, size_t datalen) {
-        return 0;
-    }
+    virtual FD* Clone() = 0;
+    virtual ssize_t Write(const void* data, size_t datalen) = 0;
+    virtual ssize_t Read(void* data, size_t datalen) = 0;
 protected:
     int fd_ = 0;
     bool auto_close_ = false;

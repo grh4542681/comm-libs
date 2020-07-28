@@ -1,6 +1,6 @@
 #include "process_child.h"
 
-namespace process {
+namespace infra::process {
 
 Child::Child()
 {
@@ -9,7 +9,6 @@ Child::Child()
     state_ = State::Normal;
 
     dead_callback_ = NULL;
-    init_flag_ = false;
 }
 
 Child::Child(std::string name, ID&& pid)
@@ -20,7 +19,6 @@ Child::Child(std::string name, ID&& pid)
     state_ = State::Normal;
 
     dead_callback_ = NULL;
-    init_flag_ = true;
 }
 
 Child::Child(Child& other)
@@ -32,7 +30,6 @@ Child::Child(Child& other)
 
     dead_callback_ = other.dead_callback_;
     fd_ = other.fd_;
-    init_flag_ = other.init_flag_;
 }
 
 Child::~Child()
@@ -60,17 +57,24 @@ State& Child::GetState()
     return state_;
 }
 
-ChildDeadCallback_t Child::GetDeadCallback()
+Child::ChildDeadCallback_t Child::GetDeadCallback()
 {
     return dead_callback_;
 }
 
-sock::SockFD& Child::GetFD()
+Child& Child::AddRole(Role&& role)
 {
-    return fd_;
+    role_ |= role;
+    return *this;
 }
 
-Child& Child::SetState(State state)
+Child& Child::DelRole(Role&& role)
+{
+    role_ &= ~role;
+    return *this;
+}
+
+Child& Child::SetState(State&& state)
 {
     state_ = state;
     return *this;
@@ -80,6 +84,16 @@ Child& Child::SetDeadCallback(ChildDeadCallback_t& dead_callback)
 {
     dead_callback_ = dead_callback;
     return *this;
+}
+
+ssize_t Child::Write(const void* data, size_t datalen)
+{
+    return 0;
+}
+
+ssize_t Child::Read(void* data, size_t datalen)
+{
+    return 0;
 }
 
 }

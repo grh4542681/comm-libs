@@ -24,6 +24,7 @@ public:
     Parent(Parent& other);
     ~Parent();
 
+    FD* Clone();
     ssize_t Write(const void* data, size_t datalen);
     ssize_t Read(void* data, size_t datalen);
 
@@ -32,8 +33,10 @@ public:
     Role GetRole();
     State GetState();
 
-    Parent& SetRole(Role&& role);
     Parent& SetState(State&& state);
+
+    Parent& AddRole(Role&& role);
+    Parent& DelRole(Role&& role);
 
 private:
     ID              pid_;

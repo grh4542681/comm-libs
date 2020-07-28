@@ -2,6 +2,7 @@
 #define __PROCESS_CHILD_H__
 
 #include <string>
+#include <functional>
 
 #include "timer_time.h"
 #include "io_fd.h"
@@ -14,9 +15,9 @@
 
 #define ChildSockFDIndex (1)
 
-namespace process {
+namespace infra::process {
 
-class infra::Child : io::FD {
+class Child : io::FD {
 public:
     typedef std::function<void(int*)> ChildDeadCallback_t;
 public:
@@ -25,15 +26,21 @@ public:
     Child(Child& other);
     ~Child();
 
+    FD* Clone();
+    ssize_t Write(const void* data, size_t datalen);
+    ssize_t Read(void* data, size_t datalen);
+
     ID& GetPid();
     std::string GetName();
     Role& GetRole();
     State& GetState();
     ChildDeadCallback_t GetDeadCallback();
 
-    Child& SetRole(Role&& role);
     Child& SetState(State&& state);
     Child& SetDeadCallback(ChildDeadCallback_t& dead_callback);
+
+    Child& AddRole(Role&& role);
+    Child& DelRole(Role&& role);
 
 private:
     ID          pid_;
@@ -42,7 +49,6 @@ private:
     State       state_;
 
     ChildDeadCallback_t dead_callback_;
-    void (*dead_callback_)(int*);
 };
 
 }

@@ -50,15 +50,21 @@ State Parent::GetState()
     return state_;
 }
 
-Parent& Parent::SetRole(Role&& role)
-{
-    role_ = role;
-    return *this;
-}
-
 Parent& Parent::SetState(State&& state)
 {
     state_ = state;
+    return *this;
+}
+
+Parent& Parent::AddRole(Role&& role)
+{
+    role_ |= role;
+    return *this;
+}
+
+Parent& Parent::DelRole(Role&& role)
+{
+    role_ &= ~role;
     return *this;
 }
 
