@@ -68,6 +68,11 @@ Parent& Parent::DelRole(Role&& role)
     return *this;
 }
 
+io::FD* Parent::Clone()
+{
+    return nullptr;
+}
+
 ssize_t Parent::Write(const void* data, size_t datalen)
 {
     return 0;

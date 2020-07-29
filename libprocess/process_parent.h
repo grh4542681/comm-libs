@@ -16,7 +16,7 @@
 
 namespace infra::process {
 
-class Parent : io::FD {
+class Parent : public io::FD {
 public:
     Parent();
     Parent(std::string name, ID& pid);

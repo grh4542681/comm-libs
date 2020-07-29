@@ -72,14 +72,14 @@ ID::ID_t ID::GetInterID() const
     return pid_;
 }
 
-ID ID::GetID()
+ID ID::GetProcessID()
 {
     ID pid;
     pid.SetInterID(getpid());
     return pid;
 }
 
-ID ID::GetParentID()
+ID ID::GetParentProcessID()
 {
     ID ppid;
     ppid.SetInterID(getppid());

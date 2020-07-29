@@ -86,6 +86,11 @@ Child& Child::SetDeadCallback(ChildDeadCallback_t& dead_callback)
     return *this;
 }
 
+io::FD* Child::Clone()
+{
+    return nullptr;
+}
+
 ssize_t Child::Write(const void* data, size_t datalen)
 {
     return 0;

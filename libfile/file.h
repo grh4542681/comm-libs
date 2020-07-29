@@ -61,8 +61,8 @@ public:
 
 public:
     File(std::string filename);
-    File(const FD& fd_);
-    File(const FD&& fd_);
+    File(FD& fd_);
+    File(FD&& fd_);
     ~File();
 
     FD& GetFileFD();

@@ -17,7 +17,7 @@
 
 namespace infra::process {
 
-class Child : io::FD {
+class Child : public io::FD {
 public:
     typedef std::function<void(int*)> ChildDeadCallback_t;
 public:

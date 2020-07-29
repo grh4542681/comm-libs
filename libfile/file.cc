@@ -28,10 +28,10 @@ File::File(std::string filename)
     state_ = State::Closed;
 }
 
-File::File(const FD& fd)
+File::File(FD& fd)
 {
     format_ = Format::Unknow;
-    if (!fd.Initalize()) {
+    if (!fd.Available()) {
         file_name_.erase();
         state_ = State::Invalid;
         FILE_ERROR("File descriptor invalid.");
@@ -48,10 +48,10 @@ File::File(const FD& fd)
     }
 }
 
-File::File(const FD&& fd)
+File::File(FD&& fd)
 {
     format_ = Format::Unknow;
-    if (!fd.Initalize()) {
+    if (!fd.Available()) {
         file_name_.erase();
         state_ = State::Invalid;
         FILE_ERROR("File descriptor invalid.");

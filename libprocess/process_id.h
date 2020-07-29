@@ -30,8 +30,8 @@ public:
     ID& SetInterID(ID_t pid);
     ID_t GetInterID() const;
 
-    static ID GetID();
-    static ID GetParentID();
+    static ID GetProcessID();
+    static ID GetParentProcessID();
 private:
     ID_t pid_;
 };
