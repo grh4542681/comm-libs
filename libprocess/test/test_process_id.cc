@@ -2,6 +2,6 @@
 #include "process_id.h"
 
 int main() {
-    infra::process::Log::Debug("process id : ", infra::process::ID::GetID(), "parent id is : ", infra::process::ID::GetParentID());
+    infra::process::Log::Debug("process id : ", infra::process::ID::GetProcessID(), "parent id is : ", infra::process::ID::GetParentProcessID());
     return 0;
 }
