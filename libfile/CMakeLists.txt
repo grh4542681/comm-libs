@@ -9,32 +9,17 @@ option(BUILD_TEST "Build test program" ON)
 option(BUILD_STATIC_LIBS "Build static Libraries" OFF)
 option(BUILD_DEPEND_LIBS "Build dependent Libraries" ON)
 
+option(AS_DEPEND_PROJ "As dependent" OFF)
+
 #dependent project
-set(DEPEND_BINARY_DIR)
-set(DEPEND_TARGETS)
-set(DEPEND_PROJ_TARGETS)
+message("--grh ${AS_DEPEND_PROJ}")
+if (NOT AS_DEPEND_PROJ)
+message("--grh ${AS_DEPEND_PROJ}")
+    set(DEPEND_SRC ${CMAKE_BINARY_DIR}/depended)
+endif ()
 
 #libutil
-set(DEPEND_LIBUTIL_PROJ_NAME libutil)
-set(DEPEND_LIBUTIL_TARGET libutil.so)
-set(DEPEND_LIBUTIL_BINARY_DIR "depend/src/${DEPEND_LIBUTIL_PROJ_NAME}-build")
-set(DEPEND_LIBUTIL_CMAKE_ARGS)
-list(APPEND DEPEND_LIBUTIL_CMAKE_ARGS "-DBUILD_TEST=OFF")
-list(APPEND DEPEND_LIBUTIL_CMAKE_ARGS "-DBUILD_STATIC_LIBS=${BUILD_STATIC_LIBS}")
-list(APPEND DEPEND_LIBUTIL_CMAKE_ARGS "-DBUILD_DEPEND_LIBS=${BUILD_DEPEND_LIBS}")
-if(OUT)
-    list(APPEND DEPEND_LIBUTIL_CMAKE_ARGS "-DOUT=${OUT}")
-endif()
-ExternalProject_Add(${DEPEND_LIBUTIL_PROJ_NAME} PREFIX ${DEPEND_PREFIX}
-                    SOURCE_DIR ${LIBUTIL_SRC_TOP}
-                    BINARY_DIR ${DEPEND_LIBUTIL_BINARY_DIR}
-                    CONFIGURE_COMMAND ${CMAKE} ${DEPEND_LIBUTIL_CMAKE_ARGS} ${LIBUTIL_SRC_TOP}
-                    BUILD_COMMAND $(MAKE) ${DEPEND_LIBUTIL_TARGET}
-                    INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install
-                    )
-list(APPEND DEPEND_TARGETS ${DEPEND_LIBUTIL_TARGET})
-list(APPEND DEPEND_PROJ_TARGETS ${DEPEND_LIBUTIL_PROJ_NAME})
-list(APPEND DEPEND_BINARY_DIR "${CMAKE_BINARY_DIR}/${DEPEND_LIBUTIL_BINARY_DIR}")
+include(depend_libutil)
 
 #project
 set(LIBFILE_HRD "${PROJ_ROOT_PATH}"
@@ -64,9 +49,6 @@ endif()
 
 add_custom_target(lib)
 add_dependencies(lib ${LIBFILE_TARGETS})
-if(BUILD_DEPEND_LIBS)
-    add_dependencies(lib ${DEPEND_PROJ_TARGETS})
-endif()
 
 INSTALL(FILES file.h
               file_log.h

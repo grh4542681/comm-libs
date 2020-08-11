@@ -15,6 +15,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_COMPILE_FLAGS}")
 
 #project arguments
 set(COMM_LIBS_PROJ_TOP "/home/ezgaoro/workspace/comm-libs")
+list(APPEND CMAKE_MODULE_PATH ${COMM_LIBS_PROJ_TOP}/cmake_modules)
+list(APPEND CMAKE_MODULE_PATH ${COMM_LIBS_PROJ_TOP})
 if(NOT OUT)
     set(OUT "${COMM_LIBS_PROJ_TOP}/output")
 endif()
