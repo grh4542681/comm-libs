@@ -14,13 +14,22 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${C_COMPILE_FLAGS}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_COMPILE_FLAGS}")
 
 #project arguments
-set(COMM_LIBS_PROJ_TOP "/home/ezgaoro/workspace/comm-libs")
-list(APPEND CMAKE_MODULE_PATH ${COMM_LIBS_PROJ_TOP}/cmake_modules)
-list(APPEND CMAKE_MODULE_PATH ${COMM_LIBS_PROJ_TOP})
+set(COMM_LIBS_PROJ_TOP $ENV{REPOTOP})
 if(NOT OUT)
-    set(OUT "${COMM_LIBS_PROJ_TOP}/output")
+    set(OUT "${COMM_LIBS_PROJ_TOP}/install")
 endif()
 set(CMAKE_INSTALL_PREFIX ${OUT})
+
+#3pp
+set(3PP_DIR "${COMM_LIBS_PROJ_TOP}/3pp")
+set(3PP_BUILD_DIR "${3PP_DIR}/build")
+set(3PP_INSTALL_DIR "${3PP_DIR}/install")
+list(APPEND CMAKE_MODULE_PATH ${3PP_DIR}/cmake_modules)
+set(3PP_GTEST_SRC_TOP "${3PP_DIR}/gtest")
+set(3PP_RAPIDJSON_SRC_TOP "${3PP_DIR}/rapidjson")
+
+#comm-libs
+list(APPEND CMAKE_MODULE_PATH ${COMM_LIBS_PROJ_TOP}/cmake_modules)
 set(LIBBASE_SRC_TOP "${COMM_LIBS_PROJ_TOP}/libbase")
 set(LIBLOG_SRC_TOP "${COMM_LIBS_PROJ_TOP}/liblog")
 set(LIBUTIL_SRC_TOP "${COMM_LIBS_PROJ_TOP}/libutil")

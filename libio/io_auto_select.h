@@ -13,7 +13,7 @@
 #include "io_epoll_fd.h"
 #include "io_select_item.h"
 
-namespace io {
+namespace infra::io {
 
 /**
 * @brief - IO multiplexing automatic processing class.

@@ -2,3 +2,9 @@
 	path = 3pp/gtest
 	url = git@github.com:grh4542681/googletest.git
 	branch = v1.10.x
+[submodule "3pp/rapidjson"]
+	path = 3pp/rapidjson
+	url = git@github.com:grh4542681/rapidjson.git
+[submodule "3pp/yaml-cpp"]
+	path = 3pp/yaml-cpp
+	url = git@github.com:grh4542681/yaml-cpp.git

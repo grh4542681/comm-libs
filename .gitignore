@@ -9,4 +9,5 @@ doc/*
 tmp/*
 */build/*
 build/*
-output/*
+*/install/*
+install/*

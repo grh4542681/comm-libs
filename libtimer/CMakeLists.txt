@@ -1,13 +1,34 @@
 cmake_minimum_required(VERSION 3.16)
-project(libtimer)
+project(libtimer VERSION 1.0.0
+        DESCRIPTION "common timer library")
 
-include(../comm-libs.cmake)
-include(ExternalProject)
+if(DEFINED ENV{REPOTOP})
+    include($ENV{REPOTOP}/comm-libs.cmake)
+else ()
+    message(FATAL_ERROR "Env REPOTOP not set")
+endif ()
+
 set(PROJ_ROOT_PATH ${CMAKE_SOURCE_DIR})
 
 option(BUILD_TEST "Build test program" ON)
 option(BUILD_STATIC_LIBS "Build static Libraries" OFF)
+option(BUILD_DEPEND_LIBS "Build dependent Libraries" ON)
 
+option(INTERNAL_AS_DEPEND_PROJ "As dependent" OFF)
+
+#dependent project
+if (BUILD_DEPEND_LIBS STREQUAL ON)
+    if (INTERNAL_AS_DEPEND_PROJ STREQUAL OFF)
+        set(DEPEND_SRC ${CMAKE_BINARY_DIR}/depended)
+    endif ()
+    set(DEPEND_PROJECTS)
+
+    include(liblog)
+
+    add_custom_target(depend-clean COMMAND rm -rf ${DEPEND_SRC})
+endif ()
+
+#project
 set(LIBTIMER_HRD ${PROJ_ROOT_PATH}
                  ${LIBBASE_SRC_TOP}
                  ${LIBLOG_SRC_TOP}
@@ -17,30 +38,6 @@ set(LIBTIMER_SRC timer_fd.cc
                  )
 
 set(LIBTIMER_TARGETS)
-
-#dependent project
-set(DEPEND_PREFIX depend)
-set(DEPEND_BINARY_DIR)
-set(DEPEND_TARGETS)
-
-#liblog
-#set(DEPEND_LIBLOG_NAME liblog)
-#set(DEPEND_LIBLOG_BINARY_DIR "${DEPEND_PREFIX}/src/${DEPEND_LIBLOG_NAME}-build")
-#set(DEPEND_LIBLOG_CMAKE_ARGS)
-#list(APPEND DEPEND_LIBLOG_CMAKE_ARGS "-DBUILD_TEST=${BUILD_TEST}")
-#list(APPEND DEPEND_LIBLOG_CMAKE_ARGS "-DBUILD_STATIC_LIBS=${BUILD_STATIC_LIBS}")
-#if(OUT)
-#    list(APPEND DEPEND_LIBLOG_CMAKE_ARGS "-DOUT=${OUT}")
-#endif()
-#ExternalProject_Add(${DEPEND_LIBLOG_NAME} PREFIX ${DEPEND_PREFIX}
-#                    SOURCE_DIR ${LIBLOG_SRC_TOP}
-#                    BINARY_DIR ${DEPEND_LIBLOG_BINARY_DIR}
-#                    CONFIGURE_COMMAND ${CMAKE} ${DEPEND_LIBLOG_CMAKE_ARGS} ${LIBLOG_SRC_TOP}
-#                    BUILD_COMMAND $(MAKE)
-#                    INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install
-#                    )
-#list(APPEND DEPEND_TARGETS ${DEPEND_LIBLOG_NAME})
-
 add_library(libtimer.so SHARED ${LIBTIMER_SRC})
 target_include_directories(libtimer.so PRIVATE ${LIBTIMER_HRD})
 set_target_properties(libtimer.so PROPERTIES OUTPUT_NAME "timer" CLEAN_DIRECT_OUTPUT 1)
@@ -65,7 +62,17 @@ INSTALL(TARGETS ${LIBTIMER_TARGETS}
         ARCHIVE DESTINATION "${CMAKE_INSTALL_PREFIX}/lib"
        )
 
-if(BUILD_TEST)
-    add_subdirectory(test)
-endif()
+include(CMakePackageConfigHelpers)
+set(LIBTIMER_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/include")
+set(LIBTIMER_LIBRARY_DIR "${CMAKE_INSTALL_PREFIX}/lib")
 
+configure_package_config_file(cmake/libtimerConfig.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/libtimerConfig.cmake
+  INSTALL_DESTINATION ${CMAKE_INSTALL_PREFIX}/cmake
+  PATH_VARS LIBTIMER_INCLUDE_DIR LIBTIMER_LIBRARY_DIR)
+#write_basic_package_version_file(
+#  ${CMAKE_CURRENT_BINARY_DIR}/FooConfigVersion.cmake
+#  VERSION 1.2.3
+#  COMPATIBILITY SameMajorVersion )
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libtimerConfig.cmake
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/cmake)

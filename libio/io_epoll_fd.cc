@@ -1,7 +1,7 @@
 #include "io_log.h"
 #include "io_epoll_fd.h"
 
-namespace io {
+namespace infra::io {
 
 EpollFD::EpollFD() : FD() { }
 

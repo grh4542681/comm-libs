@@ -2,7 +2,7 @@
 #include "io_log.h"
 #include "io_select_item.h"
 
-namespace io {
+namespace infra::io {
 
 SelectItem::SelectItem()
 {

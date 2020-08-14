@@ -1,0 +1,6 @@
+@PACKAGE_INIT@
+
+set_and_check(LIBLOG_INCLUDE_DIR "@PACKAGE_LIBLOG_INCLUDE_DIR@")
+set_and_check(LIBLOG_LIBRARY_DIR "@PACKAGE_LIBLOG_LIBRARY_DIR@")
+
+check_required_components(LIBLOG)

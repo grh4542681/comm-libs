@@ -1,7 +1,7 @@
 #ifndef __IO_SELECT_H__
 #define __IO_SELECT_H__
 
-#include "signal/process_signal_set.h"
+#include "process_signal_set.h"
 #include "timer_time.h"
 
 #include "io_return.h"
@@ -10,7 +10,7 @@
 
 #define SELECT_MAX_FD_SIZE (1024)
 
-namespace io {
+namespace infra::io {
 
 /**
 * @brief - IO multiplexing basic class.
@@ -34,42 +34,42 @@ public:
     * @param [fd] - File descriptor
     * @param [events] - Events set
     *
-    * @returns  IoRet
+    * @returns  io::Return
     */
-    IoRet AddEvent(FD& fd, int events);
+    io::Return AddEvent(FD& fd, int events);
     /**
     * @brief AddEvent - Add a listen event
     *
     * @param [event] - SelectEvent
     *
-    * @returns  IoRet
+    * @returns  io::Return
     */
-    IoRet AddEvent(SelectEvent& event);
+    io::Return AddEvent(SelectEvent& event);
     /**
     * @brief ModEvent - Modify a listen event
     *
     * @param [fd] - File descriptor
     * @param [events] - New events set
     *
-    * @returns  IoRet
+    * @returns  io::Return
     */
-    IoRet ModEvent(FD& fd, int events);
+    io::Return ModEvent(FD& fd, int events);
     /**
     * @brief ModEvent - Modify a listen event
     *
     * @param [event] - New SelectEvent
     *
-    * @returns  IoRet
+    * @returns  io::Return
     */
-    IoRet ModEvent(SelectEvent& event);
+    io::Return ModEvent(SelectEvent& event);
     /**
     * @brief DelEvent - Delete a listen event
     *
     * @param [fd] - File descriptor
     *
-    * @returns  IoRet
+    * @returns  io::Return
     */
-    IoRet DelEvent(FD& fd);
+    io::Return DelEvent(FD& fd);
 
     /**
     * @brief Listen - Blocking listening for all events
@@ -87,7 +87,7 @@ public:
     *
     * @returns  Vector of all triggered events
     */
-    std::vector<SelectEvent> Listen(process::signal::ProcessSignalSet* sigmask, timer::Time* overtime);
+    std::vector<SelectEvent> Listen(process::SignalSet* sigmask, timer::Time* overtime);
 private:
     bool init_flag_;            ///< Initialization flag
     int efd_;                   ///< epoll file descriptor

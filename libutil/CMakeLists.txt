@@ -17,8 +17,13 @@ option(BUILD_DEPEND_LIBS "Build dependent Libraries" ON)
 option(INTERNAL_AS_DEPEND_PROJ "As dependent" OFF)
 
 #dependent project
-if (INTERNAL_AS_DEPEND_PROJ EQUAL OFF)
-    set(DEPEND_SRC ${CMAKE_BINARY_DIR}/depended)
+if (BUILD_DEPEND_LIBS STREQUAL ON)
+    if (INTERNAL_AS_DEPEND_PROJ STREQUAL OFF)
+        set(DEPEND_SRC ${CMAKE_BINARY_DIR}/depended)
+    endif ()
+    set(DEPEND_PROJECTS)
+
+    add_custom_target(depend-clean COMMAND rm -rf ${DEPEND_SRC})
 endif ()
 
 #project
@@ -53,13 +58,13 @@ include(CMakePackageConfigHelpers)
 set(LIBUTIL_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/include")
 set(LIBUTIL_LIBRARY_DIR "${CMAKE_INSTALL_PREFIX}/lib")
 
-configure_package_config_file(libutilConfig.cmake.in
+configure_package_config_file(cmake/libutilConfig.cmake.in
   ${CMAKE_CURRENT_BINARY_DIR}/libutilConfig.cmake
-  INSTALL_DESTINATION ${CMAKE_INSTALL_PREFIX}
+  INSTALL_DESTINATION ${CMAKE_INSTALL_PREFIX}/cmake
   PATH_VARS LIBUTIL_INCLUDE_DIR LIBUTIL_LIBRARY_DIR)
 #write_basic_package_version_file(
 #  ${CMAKE_CURRENT_BINARY_DIR}/FooConfigVersion.cmake
 #  VERSION 1.2.3
 #  COMPATIBILITY SameMajorVersion )
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libutilConfig.cmake
-        DESTINATION ${CMAKE_INSTALL_PREFIX})
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/cmake)

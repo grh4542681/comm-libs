@@ -1,16 +1,38 @@
 cmake_minimum_required(VERSION 3.16)
-project(libio)
+project(libio VERSION 1.0.0
+        DESCRIPTION "common io library")
 
-include(../comm-libs.cmake)
-include(ExternalProject)
+if(DEFINED ENV{REPOTOP})
+    include($ENV{REPOTOP}/comm-libs.cmake)
+else ()
+    message(FATAL_ERROR "Env REPOTOP not set")
+endif ()
+
 set(PROJ_ROOT_PATH ${CMAKE_SOURCE_DIR})
 
 option(BUILD_TEST "Build test program" ON)
 option(BUILD_STATIC_LIBS "Build static Libraries" OFF)
+option(BUILD_DEPEND_LIBS "Build dependent Libraries" ON)
+
+option(INTERNAL_AS_DEPEND_PROJ "As dependent" OFF)
+
+#dependent project
+if (BUILD_DEPEND_LIBS STREQUAL ON)
+    if (INTERNAL_AS_DEPEND_PROJ STREQUAL OFF)
+        set(DEPEND_SRC ${CMAKE_BINARY_DIR}/depended)
+    endif ()
+    set(DEPEND_PROJECTS)
+
+    include(liblog)
+
+    add_custom_target(depend-clean COMMAND rm -rf ${DEPEND_SRC})
+endif ()
 
 set(LIBIO_HRD ${PROJ_ROOT_PATH}
               ${LIBBASE_SRC_TOP}
               ${LIBLOG_SRC_TOP}
+              ${LIBTIMER_SRC_TOP}
+              ${LIBPROCESS_SRC_TOP}
               )
 
 set(LIBIO_SRC io_select.cc
@@ -20,31 +42,6 @@ set(LIBIO_SRC io_select.cc
               )
 
 set(LIBIO_TARGETS)
-
-##dependent project
-#set(DEPEND_PREFIX depend)
-#set(DEPEND_BINARY_DIR)
-#set(DEPEND_TARGETS)
-#
-##liblog
-#set(DEPEND_LIBLOG_NAME liblog)
-#set(DEPEND_LIBLOG_BINARY_DIR "${DEPEND_PREFIX}/src/${DEPEND_LIBLOG_NAME}-build")
-#set(DEPEND_LIBLOG_CMAKE_ARGS)
-#list(APPEND DEPEND_LIBLOG_CMAKE_ARGS "-DBUILD_TEST=${BUILD_TEST}")
-#list(APPEND DEPEND_LIBLOG_CMAKE_ARGS "-DBUILD_STATIC_LIBS=${BUILD_STATIC_LIBS}")
-#if(OUT)
-#    list(APPEND DEPEND_LIBLOG_CMAKE_ARGS "-DOUT=${OUT}")
-#endif()
-#ExternalProject_Add(${DEPEND_LIBLOG_NAME} PREFIX ${DEPEND_PREFIX}
-#                    SOURCE_DIR ${LIBLOG_SRC_TOP}
-#                    BINARY_DIR ${DEPEND_LIBLOG_BINARY_DIR}
-#                    CONFIGURE_COMMAND ${CMAKE} ${DEPEND_LIBLOG_CMAKE_ARGS} ${LIBLOG_SRC_TOP}
-#                    BUILD_COMMAND $(MAKE)
-#                    INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install
-#                    )
-#list(APPEND DEPEND_TARGETS ${DEPEND_LIBLOG_NAME})
-
-
 add_library(libio.so SHARED ${LIBIO_SRC})
 set_target_properties(libio.so PROPERTIES OUTPUT_NAME "io" CLEAN_DIRECT_OUTPUT 1)
 target_include_directories(libio.so PRIVATE ${LIBIO_HRD})
@@ -79,6 +76,17 @@ INSTALL(TARGETS ${LIBIO_TARGETS}
         ARCHIVE DESTINATION "${CMAKE_INSTALL_PREFIX}/lib"
        )
 
-if(BUILD_TEST)
-    add_subdirectory(test)
-endif()
+include(CMakePackageConfigHelpers)
+set(LIBIO_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/include")
+set(LIBIO_LIBRARY_DIR "${CMAKE_INSTALL_PREFIX}/lib")
+
+configure_package_config_file(cmake/libioConfig.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/libioConfig.cmake
+  INSTALL_DESTINATION ${CMAKE_INSTALL_PREFIX}/cmake
+  PATH_VARS LIBIO_INCLUDE_DIR LIBIO_LIBRARY_DIR)
+#write_basic_package_version_file(
+#  ${CMAKE_CURRENT_BINARY_DIR}/FooConfigVersion.cmake
+#  VERSION 1.2.3
+#  COMPATIBILITY SameMajorVersion )
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libioConfig.cmake
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/cmake)

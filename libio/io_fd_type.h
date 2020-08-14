@@ -1,7 +1,7 @@
 #ifndef __IO_FD_TYPE_H__
 #define __IO_FD_TYPE_H__
 
-namespace io {
+namespace infra::io {
 
 enum class FDType {
     Unknow,

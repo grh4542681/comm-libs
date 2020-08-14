@@ -4,7 +4,7 @@
 #include "io_defines.h"
 #include "io_auto_select.h"
 
-namespace io {
+namespace infra::io {
 
 AutoSelect::AutoSelect()
 {

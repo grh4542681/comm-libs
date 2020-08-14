@@ -1,7 +1,7 @@
 #include "io_log.h"
 #include "io_select.h"
 
-namespace io {
+namespace infra::io {
 
 Select::Select(unsigned int item_size) : item_size_(item_size)
 {
@@ -18,7 +18,7 @@ Select::~Select()
 
 }
 
-IoRet Select::AddEvent(FD& fd, int events)
+io::Return Select::AddEvent(FD& fd, int events)
 {
     struct epoll_event ep_event;
     memset(&ep_event, 0, sizeof(struct epoll_event));
@@ -29,18 +29,18 @@ IoRet Select::AddEvent(FD& fd, int events)
     ep_event.data.fd = fd.GetFD();
     if (epoll_ctl(efd_, EPOLL_CTL_ADD, fd.GetFD(), &ep_event) == -1) {
         int tmp_errno = errno;
-        IO_ERROR("Epoll add fd error %s", strerror(tmp_errno));
+        Log::Error("Epoll add fd error %s", strerror(tmp_errno));
         return tmp_errno;
     }
-    return IoRet::SUCCESS;
+    return io::Return::SUCCESS;
 }
 
-IoRet Select::AddEvent(SelectEvent& event)
+io::Return Select::AddEvent(SelectEvent& event)
 {
     return AddEvent(event.GetFd(), event.GetEvents());
 }
 
-IoRet Select::ModEvent(FD& fd, int events)
+io::Return Select::ModEvent(FD& fd, int events)
 {
     struct epoll_event ep_event;
     memset(&ep_event, 0, sizeof(struct epoll_event));
@@ -51,25 +51,25 @@ IoRet Select::ModEvent(FD& fd, int events)
     ep_event.data.fd = fd.GetFD();
     if (epoll_ctl(efd_, EPOLL_CTL_MOD, fd.GetFD(), &ep_event) == -1) {
         int tmp_errno = errno;
-        IO_ERROR("Epoll add fd error %s", strerror(tmp_errno));
+        Log::Error("Epoll add fd error %s", strerror(tmp_errno));
         return tmp_errno;
     }
-    return IoRet::SUCCESS;
+    return io::Return::SUCCESS;
 }
 
-IoRet Select::ModEvent(SelectEvent& event)
+io::Return Select::ModEvent(SelectEvent& event)
 {
     return ModEvent(event.GetFd(), event.GetEvents());
 }
 
-IoRet Select::DelEvent(FD& fd)
+io::Return Select::DelEvent(FD& fd)
 {
     if (epoll_ctl(efd_, EPOLL_CTL_DEL, fd.GetFD(), NULL) == -1) {
         int tmp_errno = errno;
-        IO_ERROR("Epoll add fd error %s", strerror(tmp_errno));
+        Log::Error("Epoll add fd error %s", strerror(tmp_errno));
         return tmp_errno;
     }
-    return IoRet::SUCCESS;
+    return io::Return::SUCCESS;
 }
 
 std::vector<SelectEvent> Select::Listen(timer::Time* overtime)
@@ -77,7 +77,7 @@ std::vector<SelectEvent> Select::Listen(timer::Time* overtime)
     return Listen(NULL, overtime);
 }
 
-std::vector<SelectEvent> Select::Listen(process::signal::ProcessSignalSet* sigmask, timer::Time* overtime)
+std::vector<SelectEvent> Select::Listen(process::SignalSet* sigmask, timer::Time* overtime)
 {
     std::vector<SelectEvent> event_vec;
 

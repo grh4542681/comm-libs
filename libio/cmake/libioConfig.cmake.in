@@ -1,0 +1,6 @@
+@PACKAGE_INIT@
+
+set_and_check(LIBIO_INCLUDE_DIR "@PACKAGE_LIBIO_INCLUDE_DIR@")
+set_and_check(LIBIO_LIBRARY_DIR "@PACKAGE_LIBIO_LIBRARY_DIR@")
+
+check_required_components(LIBIO)

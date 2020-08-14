@@ -4,7 +4,7 @@
 #include <utility>
 #include <sys/epoll.h>
 
-namespace io {
+namespace infra::io {
 
 /**
 * @brief - Select Event that SelectItem used.
@@ -54,13 +54,13 @@ public:
     */
     ~SelectEvent() {
         if (fd_) {
-            alloc_.Deallocate<FD>(fd_);
+//            alloc_.Deallocate<FD>(fd_);
         }
     }
 
     SelectEvent& operator=(const SelectEvent& other) {
         if (fd_) {
-            alloc_.Deallocate<FD>(fd_);
+//            alloc_.Deallocate<FD>(fd_);
             fd_ = NULL;
         }
         if (other.fd_) {
@@ -132,7 +132,7 @@ public:
 protected:
     FD* fd_ = NULL;     ///> File descriptor pointer.
     int events_ = 0;    ///> Listened events set.
-    mempool::MempoolAlloctor alloc_;
+//    mempool::MempoolAlloctor alloc_;
 };
 
 }

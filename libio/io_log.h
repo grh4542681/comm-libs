@@ -5,64 +5,64 @@
 
 #define IO_LOG_FORMAT_DEFAULT LOG_FORMAT_DEFAULT
 
-namespace io {
+namespace infra::io {
 
-class Logger : public log::LogInterface {
+class Log : public log::Interface {
 public:
-    ~Logger() {
-        log::LogInterface::~LogInterface();
+    ~Log() {
+        log::Interface::~Interface();
     }
 
-    static Logger& Instance() {
-        static Logger instance;
+    static Log& Instance() {
+        static Log instance;
         return instance;
     }
 
     template <typename ... Args> static void Emergency(Args ... args) {
-        Logger::Instance().log::LogInterface::Emergency(std::forward<Args>(args)...);
+        Log::Instance().log::Interface::Emergency(std::forward<Args>(args)...);
     }
     template <typename ... Args> static void Alert(Args ... args) {
-        Logger::Instance().log::LogInterface::Alert(std::forward<Args>(args)...);
+        Log::Instance().log::Interface::Alert(std::forward<Args>(args)...);
     }
     template <typename ... Args> static void Critical(Args ... args) {
-        Logger::Instance().log::LogInterface::Critical(std::forward<Args>(args)...);
+        Log::Instance().log::Interface::Critical(std::forward<Args>(args)...);
     }
     template <typename ... Args> static void Error(Args ... args) {
-        Logger::Instance().log::LogInterface::Error(std::forward<Args>(args)...);
+        Log::Instance().log::Interface::Error(std::forward<Args>(args)...);
     }
     template <typename ... Args> static void Warning(Args ... args) {
-        Logger::Instance().log::LogInterface::Warning(std::forward<Args>(args)...);
+        Log::Instance().log::Interface::Warning(std::forward<Args>(args)...);
     }
     template <typename ... Args> static void Notice(Args ... args) {
-        Logger::Instance().log::LogInterface::Notice(std::forward<Args>(args)...);
+        Log::Instance().log::Interface::Notice(std::forward<Args>(args)...);
     }
     template <typename ... Args> static void Info(Args ... args) {
-        Logger::Instance().log::LogInterface::Info(std::forward<Args>(args)...);
+        Log::Instance().log::Interface::Info(std::forward<Args>(args)...);
     }
     template <typename ... Args> static void Debug(Args ... args) {
-        Logger::Instance().log::LogInterface::Debug(std::forward<Args>(args)...);
+        Log::Instance().log::Interface::Debug(std::forward<Args>(args)...);
     }
     template <typename ... Args> static void Debug2(Args ... args) {
-        Logger::Instance().log::LogInterface::Debug2(std::forward<Args>(args)...);
+        Log::Instance().log::Interface::Debug2(std::forward<Args>(args)...);
     }
     template <typename ... Args> static void Debug3(Args ... args) {
-        Logger::Instance().log::LogInterface::Debug3(std::forward<Args>(args)...);
+        Log::Instance().log::Interface::Debug3(std::forward<Args>(args)...);
     }
 private:
-    Logger() : log::LogInterface() {
+    Log() : log::Interface() {
         app_name_ = "IO";
         rule_map_.clear();
         rule_map_.insert({
-            {log::LogPriority::Emergency, IO_LOG_FORMAT_DEFAULT},
-            {log::LogPriority::Alert,     IO_LOG_FORMAT_DEFAULT},
-            {log::LogPriority::Critical,  IO_LOG_FORMAT_DEFAULT},
-            {log::LogPriority::Error,     IO_LOG_FORMAT_DEFAULT},
-            {log::LogPriority::Warning,   IO_LOG_FORMAT_DEFAULT},
-            {log::LogPriority::Notice,    IO_LOG_FORMAT_DEFAULT},
-            {log::LogPriority::Info,      IO_LOG_FORMAT_DEFAULT},
-            {log::LogPriority::Debug,     IO_LOG_FORMAT_DEFAULT},
-            {log::LogPriority::Debug2,    IO_LOG_FORMAT_DEFAULT},
-            {log::LogPriority::Debug3,    IO_LOG_FORMAT_DEFAULT},
+            {log::Priority::Emergency, IO_LOG_FORMAT_DEFAULT},
+            {log::Priority::Alert,     IO_LOG_FORMAT_DEFAULT},
+            {log::Priority::Critical,  IO_LOG_FORMAT_DEFAULT},
+            {log::Priority::Error,     IO_LOG_FORMAT_DEFAULT},
+            {log::Priority::Warning,   IO_LOG_FORMAT_DEFAULT},
+            {log::Priority::Notice,    IO_LOG_FORMAT_DEFAULT},
+            {log::Priority::Info,      IO_LOG_FORMAT_DEFAULT},
+            {log::Priority::Debug,     IO_LOG_FORMAT_DEFAULT},
+            {log::Priority::Debug2,    IO_LOG_FORMAT_DEFAULT},
+            {log::Priority::Debug3,    IO_LOG_FORMAT_DEFAULT},
         });
     }
 };

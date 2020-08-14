@@ -6,7 +6,7 @@
 
 #include "io_select_item.h"
 
-namespace io {
+namespace infra::io {
 
 /**
 * @brief - SelectItem adapter.
