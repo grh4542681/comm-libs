@@ -14,10 +14,10 @@ option(BUILD_TEST "Build test program" ON)
 option(BUILD_STATIC_LIBS "Build static Libraries" OFF)
 option(BUILD_DEPEND_LIBS "Build dependent Libraries" ON)
 
-option(AS_DEPEND_PROJ "As dependent" OFF)
+option(INTERNAL_AS_DEPEND_PROJ "As dependent" OFF)
 
 #dependent project
-if (AS_DEPEND_PROJ EQUAL OFF)
+if (INTERNAL_AS_DEPEND_PROJ EQUAL OFF)
     set(DEPEND_SRC ${CMAKE_BINARY_DIR}/depended)
 endif ()
 
