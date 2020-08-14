@@ -1,3 +1,4 @@
 [submodule "3pp/gtest"]
 	path = 3pp/gtest
 	url = git@github.com:grh4542681/googletest.git
+	branch = v1.10.x
