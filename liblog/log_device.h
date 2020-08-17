@@ -8,9 +8,9 @@ namespace infra::log {
 class DeviceInterface {
 public:
     DeviceInterface() { }
-    ~DeviceInterface() { }
+    virtual ~DeviceInterface() { }
 
-    virtual size_t write(std::string& appname __attribute__ ((unused)), Priority&& priotity __attribute__ ((unused)), std::string logstr) {
+    virtual size_t write(std::string& appname __attribute__ ((unused)), Priority&& priotity __attribute__ ((unused)), const std::string& logstr) {
         std::cout << logstr << std::endl;
         return logstr.size();
     }
@@ -18,7 +18,11 @@ public:
 
 class Device {
 public:
-    ~Device() { }
+    ~Device() {
+        if (log_dev_) {
+            delete log_dev_;
+        }
+    }
 
     static Device& Instance() {
         static Device instance;

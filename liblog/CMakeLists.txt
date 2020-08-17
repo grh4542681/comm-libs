@@ -10,6 +10,7 @@ endif ()
 
 set(PROJ_ROOT_PATH ${CMAKE_SOURCE_DIR})
 
+option(BUILD_UT "Build unit test" ON)
 option(BUILD_TEST "Build test program" ON)
 option(BUILD_STATIC_LIBS "Build static Libraries" OFF)
 option(BUILD_DEPEND_LIBS "Build dependent Libraries" ON)
@@ -26,10 +27,12 @@ if (BUILD_DEPEND_LIBS STREQUAL ON)
     add_custom_target(depend-clean COMMAND rm -rf ${DEPEND_SRC})
 endif ()
 
+#project
 INSTALL(FILES log_interface.h log_priority.h log_format.h log_device.h
         TYPE INCLUDE
         )
 
+#cmake
 include(CMakePackageConfigHelpers)
 set(LIBLOG_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/include")
 set(LIBLOG_LIBRARY_DIR "${CMAKE_INSTALL_PREFIX}/lib")
@@ -44,3 +47,8 @@ configure_package_config_file(cmake/liblogConfig.cmake.in
 #  COMPATIBILITY SameMajorVersion )
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/liblogConfig.cmake
         DESTINATION ${CMAKE_INSTALL_PREFIX}/cmake)
+
+#ut
+if(BUILD_UT)
+    add_subdirectory(ut)
+endif()

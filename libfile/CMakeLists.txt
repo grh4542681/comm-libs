@@ -72,6 +72,7 @@ INSTALL(TARGETS ${LIBFILE_TARGETS}
         ARCHIVE DESTINATION "${CMAKE_INSTALL_PREFIX}/lib"
        )
 
+#cmake
 include(CMakePackageConfigHelpers)
 set(LIBFILE_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/include")
 set(LIBFILE_LIBRARY_DIR "${CMAKE_INSTALL_PREFIX}/lib")
@@ -87,6 +88,9 @@ configure_package_config_file(cmake/libfileConfig.cmake.in
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libfileConfig.cmake
         DESTINATION ${CMAKE_INSTALL_PREFIX}/cmake)
 
+#test
 if(BUILD_TEST AND BUILD_DEPEND_LIBS)
     add_subdirectory(test)
 endif()
+
+#ut
