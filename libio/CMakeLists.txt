@@ -10,8 +10,10 @@ endif ()
 
 set(PROJ_ROOT_PATH ${CMAKE_SOURCE_DIR})
 
+option(BUILD_UT "Build unit test" ON)
 option(BUILD_TEST "Build test program" ON)
 option(BUILD_STATIC_LIBS "Build static Libraries" OFF)
+option(BUILD_SHARED_LIBS "Build shared Libraries" ON)
 option(BUILD_DEPEND_LIBS "Build dependent Libraries" ON)
 
 option(INTERNAL_AS_DEPEND_PROJ "As dependent" OFF)
@@ -42,10 +44,12 @@ set(LIBIO_SRC io_select.cc
               )
 
 set(LIBIO_TARGETS)
-add_library(libio.so SHARED ${LIBIO_SRC})
-set_target_properties(libio.so PROPERTIES OUTPUT_NAME "io" CLEAN_DIRECT_OUTPUT 1)
-target_include_directories(libio.so PRIVATE ${LIBIO_HRD})
-list(APPEND LIBIO_TARGETS libio.so)
+if(BUILD_SHARED_LIBS)
+    add_library(libio.so SHARED ${LIBIO_SRC})
+    set_target_properties(libio.so PROPERTIES OUTPUT_NAME "io" CLEAN_DIRECT_OUTPUT 1)
+    target_include_directories(libio.so PRIVATE ${LIBIO_HRD})
+    list(APPEND LIBIO_TARGETS libio.so)
+endif()
 
 if(BUILD_STATIC_LIBS)
     add_library(libio.a STATIC ${LIBIO_SRC})

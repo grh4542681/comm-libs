@@ -1,5 +1,6 @@
 set(UT_TARGETS)
 set(UT_HRD "${PROJ_ROOT_PATH}"
+           "${LIBBASE_SRC_TOP}"
            "${3PP_INSTALL_DIR}/include"
            )
 

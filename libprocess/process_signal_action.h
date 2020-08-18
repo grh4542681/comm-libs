@@ -11,6 +11,8 @@
 #ifndef __PROCESS_SIGNAL_ACTION_H__
 #define __PROCESS_SIGNAL_ACTION_H__
 
+#include "object.h"
+
 #include "process_signal_set.h"
 
 namespace infra::process {
@@ -20,7 +22,7 @@ class SignalCtrl;
 /**
 * @brief - Signal callback action
 */
-class SignalAction {
+class SignalAction : virtual public base::Object {
 public:
     friend class SignalCtrl;
     /**

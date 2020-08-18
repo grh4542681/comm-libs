@@ -1,11 +1,12 @@
 #ifndef __FILE_RETURN_H__
 #define __FILE_RETURN_H__
 
+#include "object.h"
 #include "return.h"
 
 namespace infra::file {
 
-class Return : public base::Return {
+class Return : virtual public base::Object, public base::Return {
 public:
     enum ErrCode{
         EDEFAULT,

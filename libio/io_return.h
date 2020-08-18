@@ -1,6 +1,7 @@
 #ifndef __IO_RETURN_H__
 #define __IO_RETURN_H__
 
+#include "object.h"
 #include "return.h"
 
 namespace infra::io {
@@ -8,7 +9,7 @@ namespace infra::io {
 /**
 * @brief - IO return value.
 */
-class Return : public base::Return {
+class Return : virtual public base::Object, public base::Return {
 public:
     /**
     * @brief - Io return value.

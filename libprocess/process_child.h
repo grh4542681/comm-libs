@@ -4,6 +4,7 @@
 #include <string>
 #include <functional>
 
+#include "object.h"
 #include "timer_time.h"
 #include "io_fd.h"
 
@@ -17,7 +18,7 @@
 
 namespace infra::process {
 
-class Child : public io::FD {
+class Child : virtual public base::Object, public io::FD {
 public:
     typedef std::function<void(int*)> ChildDeadCallback_t;
 public:

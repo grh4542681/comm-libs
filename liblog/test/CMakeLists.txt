@@ -1,6 +1,6 @@
 set(TEST_TARGETS)
 set(TEST_HRD "${PROJ_ROOT_PATH}"
-             "${LIBLOGGERR_SRC_TOP}"
+             "${LIBBASE_SRC_TOP}"
              )
 
 set(TEST_LOGGER_SRC test_logger.cc)

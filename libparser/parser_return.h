@@ -1,27 +1,15 @@
-/*******************************************************
- * Copyright (C) For free.
- * All rights reserved.
- *******************************************************
- * @author   : Ronghua Gao
- * @date     : 2019-03-04 09:01
- * @file     : parser_return.h
- * @brief    : Parser return value header.
- * @note     : Email - grh4542681@163.com
- * ******************************************************/
 #ifndef __PARSER_RETURN_H__
 #define __PARSER_RETURN_H__
 
 #include "return.h"
 
-namespace parser{
+namespace infra::parser {
 
-/**
-* @brief - Parser return value.
-*/
-class ParserRet : public ret::Return {
+class Return : public base::Return {
 public:
-    enum ECode{
-        PARSER_EBASE = PARSER_ERROR_CODE_BASE,
+    enum ErrCode{
+        EDEFAULT,
+        PARSER_EMODULE = PARSER_ERROR_CODE_MODULE,
         PARSER_ENOTFOUND,
         PARSER_ELOCK,
         PARSER_EGETRLOCK,
@@ -30,27 +18,29 @@ public:
         PARSER_ETYPE,
         PARSER_ESPACE,
         PARSER_ESERIAL,
-        PARSER_EFORMAT,
+        PARSER_EFORMAT
     };
 public:
-    static ECodeMapType ECodeMap;
-public:
-    ParserRet(int err_code = 0) : ret::Return(err_code) {
-        err_code_vec_.push_back(&ParserRet::ECodeMap);
+    Return(int ecode = 0) : base::Return(ecode) {
+        if (!_exception.ModuleExist(ErrCode::PARSER_EMODULE)) {
+            _exception.Push(ErrCode::PARSER_EMODULE, {
+                { ErrCode::PARSER_ESPACE, "No space" },
+            });
+        }
     }
-    ParserRet(ParserRet& other) : ret::Return(other) { }
-    ~ParserRet() { };
-public:
-    ParserRet& operator=(const int err_code) {
-        Return::operator=(err_code);
+    Return(Return& other) : base::Return(other) { }
+    ~Return() { };
+
+    Return& operator=(const int ecode) {
+        base::Return::operator=(ecode);
         return *this;
     }   
-    ParserRet& operator=(const ParserRet& ret) {
-        Return::operator=(ret);
+    Return& operator=(const Return& ret) {
+        base::Return::operator=(ret);
         return *this;
     }   
-    ParserRet& operator=(const ParserRet&& ret) {
-        Return::operator=(ret);
+    Return& operator=(const Return&& ret) {
+        base::Return::operator=(ret);
         return *this;
     }
 };

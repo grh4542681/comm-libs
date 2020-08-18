@@ -5,7 +5,7 @@
 
 namespace infra::process {
 
-class Return : public base::Return {
+class Return : virtual public base::Object, public base::Return {
 public:
     enum ErrCode{
         EDEFAULE,

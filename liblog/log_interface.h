@@ -9,13 +9,15 @@
 #include <ctime>
 #include <iomanip>
 
+#include "object.h"
+
 #include "log_priority.h"
 #include "log_format.h"
 #include "log_device.h"
 
 namespace infra::log {
 
-class Interface {
+class Interface : virtual public base::Object {
 public:
     Interface() : log_device_(Device::Instance()) { }
     virtual ~Interface() { }

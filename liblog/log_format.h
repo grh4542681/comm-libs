@@ -4,6 +4,8 @@
 #include <vector>
 #include <iterator>
 
+#include "object.h"
+
 #define LOG_FORMAT_DEFAULT (infra::log::Format() << infra::log::Format::Field::LeftMidBrackets \
                                             << infra::log::Format::Field::Year \
                                             << infra::log::Format::Field::HorizontalLine \
@@ -26,7 +28,7 @@
 
 namespace infra::log {
 
-class Format {
+class Format : virtual public base::Object {
 public:
     enum class Field : int {
         Pid,

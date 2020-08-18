@@ -13,6 +13,7 @@ set(PROJ_ROOT_PATH ${CMAKE_SOURCE_DIR})
 option(BUILD_UT "Build unit test" ON)
 option(BUILD_TEST "Build test program" ON)
 option(BUILD_STATIC_LIBS "Build static Libraries" OFF)
+option(BUILD_SHARED_LIBS "Build shared Libraries" ON)
 option(BUILD_DEPEND_LIBS "Build dependent Libraries" ON)
 
 option(INTERNAL_AS_DEPEND_PROJ "As dependent" OFF)
@@ -23,6 +24,8 @@ if (BUILD_DEPEND_LIBS STREQUAL ON)
         set(DEPEND_SRC ${CMAKE_BINARY_DIR}/depended)
     endif ()
     set(DEPEND_PROJECTS)
+
+    include(libbase)
 
     add_custom_target(depend-clean COMMAND rm -rf ${DEPEND_SRC})
 endif ()

@@ -3,6 +3,8 @@
 
 #include <sys/epoll.h>
 
+#include "object.h"
+
 #include "io_defines.h"
 #include "io_fd.h"
 #include "io_select_event.h"
@@ -13,7 +15,7 @@ namespace infra::io {
 /**
 * @brief - BaseItem that AutoSelect Listened.
 */
-class SelectItem {
+class SelectItem : virtual public base::Object {
 public:
     /**
     * @brief - Item state.

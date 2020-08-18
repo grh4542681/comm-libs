@@ -11,6 +11,8 @@
 #include <fcntl.h>
 #include <errno.h>
 
+#include "object.h"
+
 #include "file_log.h"
 #include "file_return.h"
 #include "file_fd.h"
@@ -19,7 +21,7 @@
 
 namespace infra::file {
 
-class File {
+class File : virtual public base::Object {
 public:
     enum class Format : int {
         Unknow = 0,

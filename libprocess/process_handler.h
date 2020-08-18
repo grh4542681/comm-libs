@@ -9,6 +9,7 @@
 #include <vector>
 #include <memory>
 
+#include "object.h"
 #include "allocator.h"
 
 #include "process_log.h"
@@ -24,7 +25,7 @@
 
 namespace infra::process {
 
-class Handler {
+class Handler : virtual public base::Object {
 public:
     ID& GetPid();
     std::string& GetName();

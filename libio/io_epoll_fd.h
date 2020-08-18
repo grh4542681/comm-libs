@@ -1,6 +1,8 @@
 #ifndef __IO_EPOLL_FD__
 #define __IO_EPOLL_FD__
 
+#include "object.h"
+
 #include "io_fd.h"
 #include "io_select_event.h"
 
@@ -9,7 +11,7 @@ namespace infra::io {
 /**
 * @brief - Epoll File descriptor
 */
-class EpollFD : public FD{
+class EpollFD : virtual public base::Object, public FD {
 public:
     /**
     * @brief EpollFD - Default constructor.

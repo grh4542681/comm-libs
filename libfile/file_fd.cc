@@ -16,7 +16,7 @@ FD::FD(unsigned int fd, bool auto_close) : io::FD(fd, auto_close)
         file_name_.erase();
         fd_ = -1; 
         ffd_ = NULL;
-        FILE_ERROR("Get filename from file descriptor error.");
+        Log::Error("Get filename from file descriptor error.");
     }
 }
 
@@ -26,14 +26,14 @@ FD::FD(FILE* ffd, bool auto_close)
         file_name_.erase();
         fd_ = -1; 
         ffd_ = NULL;
-        FILE_ERROR("File stream pointer invalid.");
+        Log::Error("File stream pointer invalid.");
     } else {
         fd_ = fileno(ffd);
         if (GetFileName(fd_, file_name_) != Return::SUCCESS) {
             file_name_.erase();
             fd_ = -1; 
             ffd_ = NULL;
-            FILE_ERROR("Get filename from file descriptor error.");
+            Log::Error("Get filename from file descriptor error.");
         } else {
             ffd_ = ffd;
             auto_close_ = auto_close;
@@ -67,12 +67,12 @@ io::Return FD::SetFD(unsigned int fd, bool auto_close)
     struct stat fd_stat;
     if (fstat(fd, &fd_stat)) {
         temp_errno = errno;
-        FILE_ERROR("%s", strerror(temp_errno));
+        Log::Error(strerror(temp_errno));
         return temp_errno;
     }   
     if (GetFileName(fd_, file_name_) != Return::SUCCESS) {
         file_name_.erase();
-        FILE_ERROR("Get filename from file descriptor error.");
+        Log::Error("Get filename from file descriptor error.");
         return Return::ERROR;
     }
     ffd_ = fdopen(fd, "w+");
@@ -132,12 +132,12 @@ io::Return FD::SetFD(FILE* ffd, bool auto_close)
     struct stat fd_stat;
     if (fstat(fd_, &fd_stat)) {
         temp_errno = errno;
-        FILE_ERROR("%s", strerror(temp_errno));
+        Log::Error(strerror(temp_errno));
         return temp_errno;
     }   
     if (GetFileName(fd_, file_name_) != Return::SUCCESS) {
         file_name_.erase();
-        FILE_ERROR("Get filename from file descriptor error.");
+        Log::Error("Get filename from file descriptor error.");
         return Return::ERROR;
     }
     ffd_ = ffd;

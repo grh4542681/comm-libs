@@ -6,6 +6,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#include "object.h"
 #include "allocator.h"
 #include "io_return.h"
 
@@ -14,7 +15,7 @@ namespace infra::io {
 /**
 * @brief - Base file descriptor class
 */
-class FD {
+class FD : virtual public base::Object {
 public:
     /**
     * @brief FD - Default consturctor

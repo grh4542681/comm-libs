@@ -10,8 +10,10 @@ endif ()
 
 set(PROJ_ROOT_PATH ${CMAKE_SOURCE_DIR})
 
+option(BUILD_UT "Build unit test" ON)
 option(BUILD_TEST "Build test program" ON)
 option(BUILD_STATIC_LIBS "Build static Libraries" OFF)
+option(BUILD_SHARED_LIBS "Build shared Libraries" ON)
 option(BUILD_DEPEND_LIBS "Build dependent Libraries" ON)
 
 option(INTERNAL_AS_DEPEND_PROJ "As dependent" OFF)
@@ -38,10 +40,12 @@ set(LIBTIMER_SRC timer_fd.cc
                  )
 
 set(LIBTIMER_TARGETS)
-add_library(libtimer.so SHARED ${LIBTIMER_SRC})
-target_include_directories(libtimer.so PRIVATE ${LIBTIMER_HRD})
-set_target_properties(libtimer.so PROPERTIES OUTPUT_NAME "timer" CLEAN_DIRECT_OUTPUT 1)
-list(APPEND LIBTIMER_TARGETS libtimer.so)
+if(BUILD_SHARED_LIBS)
+    add_library(libtimer.so SHARED ${LIBTIMER_SRC})
+    target_include_directories(libtimer.so PRIVATE ${LIBTIMER_HRD})
+    set_target_properties(libtimer.so PROPERTIES OUTPUT_NAME "timer" CLEAN_DIRECT_OUTPUT 1)
+    list(APPEND LIBTIMER_TARGETS libtimer.so)
+endif()
 
 if(BUILD_STATIC_LIBS)
     add_library(libtimer.a STATIC ${LIBTIMER_SRC})
@@ -76,3 +80,8 @@ configure_package_config_file(cmake/libtimerConfig.cmake.in
 #  COMPATIBILITY SameMajorVersion )
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libtimerConfig.cmake
         DESTINATION ${CMAKE_INSTALL_PREFIX}/cmake)
+
+#ut
+if(BUILD_UT)
+    add_subdirectory(ut)
+endif()

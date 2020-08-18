@@ -7,7 +7,7 @@
 
 namespace infra::timer {
 
-class Log : public log::Interface {
+class Log : virtual public base::Object, public log::Interface {
 public:
     ~Log() {
         log::Interface::~Interface();

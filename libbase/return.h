@@ -6,6 +6,7 @@
 #include <errno.h>
 #include <string.h>
 
+#include "object.h"
 #include "err_code.h"
 
 #define EDEFAULE UNKNOW = -2, \
@@ -14,7 +15,7 @@
 
 namespace infra::base {
 
-class Exception {
+class Exception : virtual public Object {
 public:
     typedef int ECodeType;
     typedef std::string EStringType;
@@ -62,7 +63,7 @@ private:
     Exception& operator= (const Exception&);
 };
 
-class Return {
+class Return : virtual public Object {
 public:
     enum ErrCode : int {
         EDEFAULE,

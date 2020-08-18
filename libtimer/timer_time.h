@@ -15,13 +15,14 @@
 #include <cstring>
 #include <string>
 
-namespace infra::timer {
+#include "object.h"
 
+namespace infra::timer {
 
 /**
 * @brief - Virtual class Time
 */
-class Time {
+class Time : virtual public base::Object {
 public:
     enum class Unit {
         Second,

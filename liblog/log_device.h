@@ -3,9 +3,11 @@
 
 #include <iostream>
 
+#include "object.h"
+
 namespace infra::log {
 
-class DeviceInterface {
+class DeviceInterface : virtual public base::Object {
 public:
     DeviceInterface() { }
     virtual ~DeviceInterface() { }
@@ -16,7 +18,7 @@ public:
     }
 };
 
-class Device {
+class Device : virtual public base::Object {
 public:
     ~Device() {
         if (log_dev_) {

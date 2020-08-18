@@ -24,14 +24,40 @@ protected:
     Interface log;
 };
 
-TEST_F(InterfaceTest, Emergency) {
+TEST_F(InterfaceTest, LogEmergency) {
     std::string logstr = "";
     DeviceInterfaceMock& deviceInterfaceMock = static_cast<DeviceInterfaceMock&>(*(Device::Instance().GetInterface()));
     EXPECT_CALL(deviceInterfaceMock, write(::testing::_, ::testing::_, ::testing::_))
-        //.WillOnce(::testing::SaveArg<2>(&logstr));
         .WillOnce(::testing::DoAll(::testing::SaveArg<2>(&logstr), ::testing::Return(0)));
     log.Emergency(TEST_LOG);
-    std::cout<<"--grh--"<<logstr<<std::endl;
+    EXPECT_GT(logstr.size(), 0ul);
+}
+
+TEST_F(InterfaceTest, LogAlert) {
+    std::string logstr = "";
+    DeviceInterfaceMock& deviceInterfaceMock = static_cast<DeviceInterfaceMock&>(*(Device::Instance().GetInterface()));
+    EXPECT_CALL(deviceInterfaceMock, write(::testing::_, ::testing::_, ::testing::_))
+        .WillOnce(::testing::DoAll(::testing::SaveArg<2>(&logstr), ::testing::Return(0)));
+    log.Alert(TEST_LOG);
+    EXPECT_GT(logstr.size(), 0ul);
+}
+
+TEST_F(InterfaceTest, LogCritical) {
+    std::string logstr = "";
+    DeviceInterfaceMock& deviceInterfaceMock = static_cast<DeviceInterfaceMock&>(*(Device::Instance().GetInterface()));
+    EXPECT_CALL(deviceInterfaceMock, write(::testing::_, ::testing::_, ::testing::_))
+        .WillOnce(::testing::DoAll(::testing::SaveArg<2>(&logstr), ::testing::Return(0)));
+    log.Critical(TEST_LOG);
+    EXPECT_GT(logstr.size(), 0ul);
+}
+
+TEST_F(InterfaceTest, LogError) {
+    std::string logstr = "";
+    DeviceInterfaceMock& deviceInterfaceMock = static_cast<DeviceInterfaceMock&>(*(Device::Instance().GetInterface()));
+    EXPECT_CALL(deviceInterfaceMock, write(::testing::_, ::testing::_, ::testing::_))
+        .WillOnce(::testing::DoAll(::testing::SaveArg<2>(&logstr), ::testing::Return(0)));
+    log.Error(TEST_LOG);
+    EXPECT_GT(logstr.size(), 0ul);
 }
 
 }

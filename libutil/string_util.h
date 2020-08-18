@@ -4,9 +4,11 @@
 #include <string>
 #include <vector>
 
+#include "object.h"
+
 namespace infra::util {
 
-class String {
+class String : virtual public base::Object {
 public:
 
     static void RTrim(std::string& str);

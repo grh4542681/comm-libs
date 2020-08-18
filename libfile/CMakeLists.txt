@@ -10,8 +10,10 @@ endif ()
 
 set(PROJ_ROOT_PATH ${CMAKE_SOURCE_DIR})
 
+option(BUILD_UT "Build unit test" ON)
 option(BUILD_TEST "Build test program" ON)
 option(BUILD_STATIC_LIBS "Build static Libraries" OFF)
+option(BUILD_SHARED_LIBS "Build shared Libraries" ON)
 option(BUILD_DEPEND_LIBS "Build dependent Libraries" ON)
 
 option(INTERNAL_AS_DEPEND_PROJ "As dependent" OFF)
@@ -32,6 +34,7 @@ endif ()
 #project
 set(LIBFILE_HRD "${PROJ_ROOT_PATH}"
                 "${LIBBASE_SRC_TOP}"
+                "${LIBLOG_SRC_TOP}"
                 "${LIBUTIL_SRC_TOP}"
                 "${LIBIO_SRC_TOP}"
                 )
@@ -43,10 +46,12 @@ set(LIBFILE_SRC file_api.cc
 
 set(LIBFILE_TARGETS)
 
-add_library(libfile.so SHARED ${LIBFILE_SRC})
-target_include_directories(libfile.so PRIVATE ${LIBFILE_HRD})
-set_target_properties(libfile.so PROPERTIES OUTPUT_NAME "file" CLEAN_DIRECT_OUTPUT 1)
-list(APPEND LIBFILE_TARGETS libfile.so)
+if(BUILD_SHARED_LIBS)
+    add_library(libfile.so SHARED ${LIBFILE_SRC})
+    target_include_directories(libfile.so PRIVATE ${LIBFILE_HRD})
+    set_target_properties(libfile.so PROPERTIES OUTPUT_NAME "file" CLEAN_DIRECT_OUTPUT 1)
+    list(APPEND LIBFILE_TARGETS libfile.so)
+endif()
 
 if(BUILD_STATIC_LIBS)
     add_library(libfile.a STATIC ${LIBFILE_SRC})
@@ -94,3 +99,6 @@ if(BUILD_TEST AND BUILD_DEPEND_LIBS)
 endif()
 
 #ut
+if(BUILD_UT)
+    add_subdirectory(ut)
+endif()

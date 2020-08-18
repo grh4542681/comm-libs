@@ -1,6 +1,7 @@
 #ifndef __TIMER_FD_H__
 #define __TIMER_FD_H__
 
+#include "object.h"
 #include "io_fd.h"
 
 #include "timer_return.h"
@@ -8,7 +9,7 @@
 
 namespace infra::timer {
 
-class FD : public io::FD {
+class FD  : virtual public base::Object, public io::FD {
 public:
     enum Flag {
         Realtime = 0x0001,

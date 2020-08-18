@@ -3,6 +3,7 @@
 
 #include <string>
 
+#include "object.h"
 #include "io_fd.h"
 #include "timer_time.h"
 
@@ -16,7 +17,7 @@
 
 namespace infra::process {
 
-class Parent : public io::FD {
+class Parent : virtual public base::Object, public io::FD {
 public:
     Parent();
     Parent(std::string name, ID& pid);

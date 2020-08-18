@@ -10,8 +10,10 @@ endif ()
 
 set(PROJ_ROOT_PATH ${CMAKE_SOURCE_DIR})
 
+option(BUILD_UT "Build unit test" ON)
 option(BUILD_TEST "Build test program" ON)
 option(BUILD_STATIC_LIBS "Build static Libraries" OFF)
+option(BUILD_SHARED_LIBS "Build shared Libraries" ON)
 option(BUILD_DEPEND_LIBS "Build dependent Libraries" ON)
 
 option(INTERNAL_AS_DEPEND_PROJ "As dependent" OFF)
@@ -27,17 +29,26 @@ if (BUILD_DEPEND_LIBS STREQUAL ON)
 endif ()
 
 #project
+set(LIBUTIL_HRD "${PROJ_ROOT_PATH}"
+                "${LIBBASE_SRC_TOP}"
+                )
+
 set(LIBUTIL_SRC string_util.cc
 )
 
 set(LIBUTIL_TARGETS)
-add_library(libutil.so SHARED ${LIBUTIL_SRC})
-set_target_properties(libutil.so PROPERTIES OUTPUT_NAME "util" CLEAN_DIRECT_OUTPUT 1)
-set(LIBUTIL_TARGETS ${LIBUTIL_TARGETS} libutil.so)
+if(BUILD_SHARED_LIBS)
+    add_library(libutil.so SHARED ${LIBUTIL_SRC})
+    target_include_directories(libutil.so PRIVATE ${LIBUTIL_HRD})
+    set_target_properties(libutil.so PROPERTIES OUTPUT_NAME "util" CLEAN_DIRECT_OUTPUT 1)
+    set(LIBUTIL_TARGETS ${LIBUTIL_TARGETS} libutil.so)
+endif()
+
 if(BUILD_STATIC_LIBS)
-    add_library(GRHutil_A STATIC ${LIBUTIL_SRC})
-    set_target_properties(GRHutil_A PROPERTIES OUTPUT_NAME "util" CLEAN_DIRECT_OUTPUT 1)
-    set(LIBUTIL_TARGETS ${LIBUTIL_TARGETS} GRHutil_A)
+    add_library(libutil.a STATIC ${LIBUTIL_SRC})
+    target_include_directories(libutil.a PRIVATE ${LIBUTIL_HRD})
+    set_target_properties(libutil.a PROPERTIES OUTPUT_NAME "util" CLEAN_DIRECT_OUTPUT 1)
+    set(LIBUTIL_TARGETS ${LIBUTIL_TARGETS} libutil.a)
 endif()
 add_custom_target(lib)
 add_dependencies(lib ${LIBUTIL_TARGETS})
@@ -68,3 +79,8 @@ configure_package_config_file(cmake/libutilConfig.cmake.in
 #  COMPATIBILITY SameMajorVersion )
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libutilConfig.cmake
         DESTINATION ${CMAKE_INSTALL_PREFIX}/cmake)
+
+#ut
+if(BUILD_UT)
+    add_subdirectory(ut)
+endif()

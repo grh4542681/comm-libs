@@ -4,6 +4,8 @@
 #include <string>
 #include <functional>
 
+#include "object.h"
+
 #include "io_select_item.h"
 
 namespace infra::io {
@@ -13,7 +15,7 @@ namespace infra::io {
 *
 * @tparam [HOST] - Host class.
 */
-template < typename HOST = void > class SelectItemTemplate : public io::SelectItem {
+template < typename HOST = void > class SelectItemTemplate : virtual public base::Object, public io::SelectItem {
 public:
     /**
     * @brief - SelectItem callback function type.
@@ -177,7 +179,7 @@ private:
 /**
 * @brief - SelectItemTemplate Specialization with void.
 */
-template < > class SelectItemTemplate<void> : public io::SelectItem {
+template < > class SelectItemTemplate<void> : virtual public base::Object, public io::SelectItem {
 public:
     /**
     * @brief - Callback function type.

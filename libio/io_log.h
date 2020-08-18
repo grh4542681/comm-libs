@@ -1,13 +1,14 @@
 #ifndef __IO_LOG_H__
 #define __IO_LOG_H__
 
+#include "object.h"
 #include "log_interface.h"
 
 #define IO_LOG_FORMAT_DEFAULT LOG_FORMAT_DEFAULT
 
 namespace infra::io {
 
-class Log : public log::Interface {
+class Log : virtual public base::Object, public log::Interface {
 public:
     ~Log() {
         log::Interface::~Interface();

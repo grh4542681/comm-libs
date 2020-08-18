@@ -34,7 +34,7 @@ File::File(FD& fd)
     if (!fd.Available()) {
         file_name_.erase();
         state_ = State::Invalid;
-        FILE_ERROR("File descriptor invalid.");
+        Log::Error("File descriptor invalid.");
     } else {
         file_name_ = fd.GetName();
         fd_ = fd;
@@ -54,7 +54,7 @@ File::File(FD&& fd)
     if (!fd.Available()) {
         file_name_.erase();
         state_ = State::Invalid;
-        FILE_ERROR("File descriptor invalid.");
+        Log::Error("File descriptor invalid.");
     } else {
         file_name_ = fd.GetName();
         fd_ = fd;

@@ -4,6 +4,7 @@
 #include <string>
 #include <functional>
 
+#include "object.h"
 #include "io_auto_select.h"
 
 #include "timer_return.h"
@@ -12,7 +13,7 @@
 
 namespace infra {
 
-class Timer {
+class Timer : virtual public base::Object {
 public:
     Timer();
     ~Timer();

@@ -1,6 +1,7 @@
 #ifndef __IO_SELECT_H__
 #define __IO_SELECT_H__
 
+#include "object.h"
 #include "process_signal_set.h"
 #include "timer_time.h"
 
@@ -15,7 +16,7 @@ namespace infra::io {
 /**
 * @brief - IO multiplexing basic class.
 */
-class Select {
+class Select : virtual public base::Object {
 public:
     /**
     * @brief Select - Default constructor

@@ -20,6 +20,7 @@
 #include <tuple>
 
 #include "mempool.h"
+#include "object.h"
 
 #include "process.h"
 #include "process_info.h"
@@ -33,7 +34,7 @@ namespace infra::process {
 * @tparam [F] - process main function
 */
 template < typename F >
-class Template {
+class Template : virtual public base::Object {
 public:
     Template() {
 

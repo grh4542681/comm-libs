@@ -13,6 +13,8 @@
 
 #include <map>
 
+#include "object.h"
+
 //#include "mutex/thread_rw_lock.h"
 #include "process_return.h"
 #include "process_signal.h"
@@ -25,7 +27,7 @@ namespace infra::process {
 /**
 * @brief - Process level signal ctrl.
 */
-class SignalCtrl {
+class SignalCtrl : virtual public base::Object {
 public:
 //    thread::mutex::ThreadRWLock op_lock;                               ///< Muti thread lock
 public:

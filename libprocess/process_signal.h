@@ -13,12 +13,14 @@
 
 #include <string>
 
+#include "object.h"
+
 namespace infra::process {
 
 /**
 * @brief - Linux signal Encapsulation.
 */
-class Signal {
+class Signal : virtual public base::Object {
 public:
     friend class SignalSet;
     friend class SignalCtrl;

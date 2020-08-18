@@ -3,6 +3,7 @@
 
 #include <sys/epoll.h>
 
+#include "object.h"
 #include "mempool.h"
 #include "thread_template.h"
 #include "mutex/thread_mutex_lock.h"
@@ -18,7 +19,7 @@ namespace infra::io {
 /**
 * @brief - IO multiplexing automatic processing class.
 */
-class AutoSelect {
+class AutoSelect : virtual public base::Object {
 public:
     /**
     * @brief AutoSelect - Default Constructor.

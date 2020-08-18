@@ -3,13 +3,12 @@
 
 #include <string>
 #include "file.h"
-#include "object.h"
 
 #include "parser_return.h"
 
 namespace parser {
 
-class Parser : public base::Object {
+class Parser {
 public:
     Parser() {
         object_name_ = "Parser";

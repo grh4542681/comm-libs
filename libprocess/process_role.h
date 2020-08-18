@@ -1,9 +1,11 @@
 #ifndef __PROCESS_ROLE_H__
 #define __PROCESS_ROLE_H__
 
+#include "object.h"
+
 namespace infra::process {
 
-class Role {
+class Role : virtual public base::Object {
 public:
     Role();
     Role(Role&);

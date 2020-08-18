@@ -10,8 +10,10 @@ endif ()
 
 set(PROJ_ROOT_PATH ${CMAKE_SOURCE_DIR})
 
+option(BUILD_UT "Build unit test" ON)
 option(BUILD_TEST "Build test program" ON)
 option(BUILD_STATIC_LIBS "Build static Libraries" OFF)
+option(BUILD_SHARED_LIBS "Build shared Libraries" ON)
 option(BUILD_DEPEND_LIBS "Build dependent Libraries" ON)
 
 option(INTERNAL_AS_DEPEND_PROJ "As dependent" OFF)
@@ -49,10 +51,12 @@ set(LIBPROCESS_SRC process_id.cc
 
 set(LIBPROCESS_TARGETS)
 
-add_library(libprocess.so SHARED ${LIBPROCESS_SRC})
-target_include_directories(libprocess.so PRIVATE ${LIBPROCESS_HRD} ${DEPEND_INCLUDE_DIR})
-set_target_properties(libprocess.so PROPERTIES OUTPUT_NAME "process" CLEAN_DIRECT_OUTPUT 1)
-list(APPEND LIBPROCESS_TARGETS libprocess.so)
+if(BUILD_SHARED_LIBS)
+    add_library(libprocess.so SHARED ${LIBPROCESS_SRC})
+    target_include_directories(libprocess.so PRIVATE ${LIBPROCESS_HRD} ${DEPEND_INCLUDE_DIR})
+    set_target_properties(libprocess.so PROPERTIES OUTPUT_NAME "process" CLEAN_DIRECT_OUTPUT 1)
+    list(APPEND LIBPROCESS_TARGETS libprocess.so)
+endif()
 
 if(BUILD_STATIC_LIBS)
     add_library(libprocess.a STATIC ${LIBPROCESS_SRC})
@@ -89,6 +93,12 @@ configure_package_config_file(cmake/libprocessConfig.cmake.in
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libprocessConfig.cmake
         DESTINATION ${CMAKE_INSTALL_PREFIX}/cmake)
 
+#test
 if(BUILD_TEST AND BUILD_DEPEND_LIBS)
     add_subdirectory(test)
+endif()
+
+#ut
+if(BUILD_UT)
+    add_subdirectory(ut)
 endif()

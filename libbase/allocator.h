@@ -4,9 +4,11 @@
 #include <string.h>
 #include <memory>
 
+#include "object.h"
+
 namespace infra::base {
 
-class Allocator {
+class Allocator : virtual public Object {
 public:
     Allocator() {
     }

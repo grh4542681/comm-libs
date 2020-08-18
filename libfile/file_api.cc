@@ -18,7 +18,7 @@ Return GetFileName(int fd, std::string& ofilename)
     sprintf(buf, "/proc/self/fd/%d", fd);
     if (readlink(buf, filename, sizeof(filename)-1) < 0) {
         int tmperrno = errno;
-        FILE_ERROR("Get file name from file descriptor error");
+        Log::Error("Get file name from file descriptor error");
         return tmperrno;
     }
     ofilename = std::string(filename);

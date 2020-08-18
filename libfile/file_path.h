@@ -4,9 +4,11 @@
 #include <string>
 #include <vector>
 
+#include "object.h"
+
 namespace infra::file {
 
-class Path {
+class Path : virtual public base::Object {
 public:
     Path();
     Path(std::string raw);

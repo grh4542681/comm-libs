@@ -1,11 +1,13 @@
 #ifndef __TIMER_DATE_H__
 #define __TIMER_DATE_H__
 
+#include "object.h"
+
 #include <time.h>
 
 namespace infra::timer {
 
-class Date {
+class Date : virtual public base::Object {
 public:
     enum class Unit {
         Year,

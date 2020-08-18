@@ -11,7 +11,9 @@
 #ifndef __PROCESS_SIGNAL_SET_H__
 #define __PROCESS_SIGNAL_SET_H__
 
-#include "signal.h"
+#include <signal.h>
+
+#include "object.h"
 
 #include "process_return.h"
 #include "process_signal.h"
@@ -24,7 +26,7 @@ class SignalAction;
 /**
 * @brief - Signal set.
 */
-class SignalSet {
+class SignalSet : virtual public base::Object {
 public:
     friend class SignalAction;
     friend class SignalCtrl;

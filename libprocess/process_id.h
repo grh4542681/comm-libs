@@ -4,9 +4,11 @@
 #include <sys/types.h>
 #include <iostream>
 
+#include "object.h"
+
 namespace infra::process {
 
-class ID {
+class ID : virtual public base::Object {
 public:
     friend std::ostream & operator<<(std::ostream &out, ID& pid);
 public:
