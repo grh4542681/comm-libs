@@ -152,11 +152,11 @@ Return Handler::AddParent(Parent& parent)
 }
 Return Handler::AddParent(Parent&& parent)
 {
-    if (parent_map_.find(parent.GetPid()) != parent_map_.end()) {
+    if (parent_map_.find(parent.GetName()) != parent_map_.end()) {
         return Return::PROCESS_PARENT_EEXIST;
     }
     parent.SetAutoClose(false);
-    auto [it, success] = parent_map_.insert({ID(parent.GetPid()), Parent(std::forward<Parent>(parent))});
+    auto [it, success] = parent_map_.insert({parent.GetName(), Parent(std::forward<Parent>(parent))});
     if (!success) {
         return Return::PROCESS_PARENT_EINSERT;
     }
@@ -164,98 +164,59 @@ Return Handler::AddParent(Parent&& parent)
     return Return::SUCCESS;
 }
 
-Return Handler::DelParent(ID& pid)
+Return Handler::DelParent(std::string name)
 {
-    return DelParent(std::move(pid));
-}
-Return Handler::DelParent(ID&& pid)
-{
-    if (parent_map_.find(pid) == parent_map_.end()) {
+    if (parent_map_.find(name) == parent_map_.end()) {
         return Return::PROCESS_PARENT_ENOTEXIST;
     }
-    parent_map_.erase(pid);
+    parent_map_.erase(name);
     return Return::SUCCESS;
 }
 
-std::tuple<Return, Parent&> Handler::GetParent(ID& pid)
+std::tuple<Return, Parent&> Handler::GetParent(std::string name)
 {
-    return GetParent(std::move(pid));
-}
-std::tuple<Return, Parent&> Handler::GetParent(ID&& pid)
-{
-    auto it = parent_map_.find(pid);
+    auto it = parent_map_.find(name);
     if (it == parent_map_.end()) {
         return {Return::PROCESS_PARENT_ENOTEXIST, it->second};
     }
     return {Return::SUCCESS, it->second};
 }
 
-//Return Handler::AddChild(Child& child)
-//{
-//    return AddChild(std::move(child));
-//}
-//Return Handler::AddChild(Child&& child)
-//{
-//    auto it = child_map_.find(child.GetPid());
-//    if (it != child_map_.end()) {
-//        return Return::PROCESS_EPROCDUP;
-//    }
-//    child.SetAutoClose(false);
-//    Child* p = alloc_.Allocate<Child>(child);
-//    if (!p) {
-//        return Return::PROCESS_EMEMORY;
-//    }
-//    std::pair<std::map<ID, Child*>::iterator, bool> ret;
-//    ret = child_map_.insert(std::pair<ID, Child*>(child.GetPid(), p));
-//    if (ret.second == false) {
-//        return Return::PROCESS_EPROCADD;
-//    }
-//    return Return::SUCCESS;
-//}
-//
-//Return Handler::DelChild(ID& pid)
-//{
-//    return DelChild(std::move(pid));
-//}
-//Return Handler::DelChild(ID&& pid)
-//{
-//    auto it = child_map_.find(pid);
-//    if (it == child_map_.end()) {
-//        return Return::PROCESS_EPROCNOTFOUND;
-//    }
-//    alloc_.Deallocate<Child>(it->second);
-//    child_map_.erase(it);
-//    return Return::SUCCESS;
-//}
-//
-//Return Handler::DelChild(std::string name)
-//{
-//    for (auto& it : child_map_) {
-//        if (!(it.second->GetName().compare(name))) {
-//            alloc_.Deallocate<Child>(it.second);
-//            child_map_.erase(it.first);
-//        }
-//    }
-//    return Return::SUCCESS;
-//}
-//
-//Child* Handler::GetChild(ID& pid)
-//{
-//    return GetChild(std::move(pid));
-//}
-//Child* Handler::GetChild(ID&& pid)
-//{
-//    auto it = child_map_.find(pid);
-//    if (it == child_map_.end()) {
-//        return NULL;
-//    }
-//    return it->second;
-//}
-//
-//Return Handler::GetChild(std::string name, std::vector<Child*> child_vector)
-//{
-//    return Return::SUCCESS;
-//}
+Return Handler::AddChild(Child& child)
+{
+    return AddChild(std::move(child));
+}
+Return Handler::AddChild(Child&& child)
+{
+    if (child_map_.find(child.GetName()) != child_map_.end()) {
+        return Return::PROCESS_CHILD_EEXIST;
+    }
+    child.SetAutoClose(false);
+    auto [it, success] = child_map_.insert({child.GetName(), Child(std::forward<Child>(child))});
+    if (!success) {
+        return Return::PROCESS_CHILD_EINSERT;
+    }
+    it->second.SetAutoClose(true);
+    return Return::SUCCESS;
+}
+
+Return Handler::DelChild(std::string name)
+{
+    if (child_map_.find(name) == child_map_.end()) {
+        return Return::PROCESS_CHILD_ENOTEXIST;
+    }
+    child_map_.erase(name);
+    return Return::SUCCESS;
+}
+
+std::tuple<Return, Child&> Handler::GetChild(std::string name)
+{
+    auto it = child_map_.find(name);
+    if (it == child_map_.end()) {
+        return {Return::PROCESS_CHILD_ENOTEXIST, it->second};
+    }
+    return {Return::SUCCESS, it->second};
+}
 
 //static
 Handler* Handler::GetInstance(base::Allocator&& alloc)

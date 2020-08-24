@@ -45,19 +45,13 @@ public:
 
     Return AddParent(Parent& parent);
     Return AddParent(Parent&& parent);
-    Return DelParent(ID& pid);
-    Return DelParent(ID&& pid);
-    std::tuple<Return, Parent&> GetParent(ID& pid);
-    std::tuple<Return, Parent&> GetParent(ID&& pid);
+    Return DelParent(std::string name);
+    std::tuple<Return, Parent&> GetParent(std::string name);
 
-//    Return AddChild(Child& child);
-//    Return AddChild(Child&& child);
-//    Return DelChild(ID& pid);
-//    Return DelChild(ID&& pid);
-//    Return DelChild(std::string name);
-//    Child* GetChild(ID& pid);
-//    Child* GetChild(ID&& pid);
-//    Return GetChild(std::string name, std::vector<Child*> child_vector);
+    Return AddChild(Child& child);
+    Return AddChild(Child&& child);
+    Return DelChild(std::string name);
+    std::tuple<Return, Child&> GetChild(std::string name);
 
     static Handler* GetInstance(base::Allocator&& alloc = base::Allocator());
     static void SetInstance(Handler* info);
@@ -78,7 +72,6 @@ private:
     std::string      real_name_;     ///< Real process name.
     State            state_;         ///< Process state.
     Role             role_;          ///< Process role.
-    base::Allocator  alloc_;
 
     // Command line argument
     char**              raw_cmdline_;       ///< Original command line parameter.
@@ -87,8 +80,8 @@ private:
     std::vector<char*>  environ_;           ///< Environment arguments vector.
 
     // process relationship
-    std::map<ID, Parent> parent_map_;    ///< Parent process info.
-    std::map<ID, Child>  child_map_;     ///< Child process info.
+    std::map<std::string, Parent> parent_map_;    ///< Parent process info.
+    std::map<std::string, Child>  child_map_;     ///< Child process info.
 
     static Handler* pInstance;
 };

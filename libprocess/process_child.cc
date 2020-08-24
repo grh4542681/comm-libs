@@ -5,9 +5,20 @@ namespace infra::process {
 Child::Child()
 {
     name_.clear();
-    role_ |= Role::Child;
+    role_ += Role::Child;
     relation_ += Relation::Type::Child;
     state_ = State::Normal;
+
+    dead_callback_ = NULL;
+}
+
+Child::Child(std::string name, ID& pid)
+{
+    name_ = name;
+    pid_ = pid;
+    state_ = State::Normal;
+    role_ += Role::Child;
+    relation_ += Relation::Type::Child;
 
     dead_callback_ = NULL;
 }
@@ -17,7 +28,7 @@ Child::Child(std::string name, ID&& pid)
     name_ = name;
     pid_ = pid;
     state_ = State::Normal;
-    role_ |= Role::Child;
+    role_ += Role::Child;
     relation_ += Relation::Type::Child;
 
     dead_callback_ = NULL;

@@ -24,6 +24,7 @@ public:
     typedef std::function<void(int*)> ChildDeadCallback_t;
 public:
     Child();
+    Child(std::string name, ID& pid);
     Child(std::string name, ID&& pid);
     Child(Child& other);
     ~Child();
