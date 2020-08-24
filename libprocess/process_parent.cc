@@ -5,24 +5,28 @@ namespace infra::process {
 Parent::Parent() : io::FD()
 {
     name_.clear();
+    relation_ += Relation::Type::Parent;
 }
 
 Parent::Parent(std::string name, ID& pid) : io::FD()
 {
     name_ = name;
     pid_ = pid;
+    relation_ += Relation::Type::Parent;
 }
 
 Parent::Parent(std::string name, ID&& pid) : io::FD()
 {
     name_ = name;
     pid_ = pid;
+    relation_ += Relation::Type::Parent;
 }
 
-Parent::Parent(Parent& other) : io::FD(other)
+Parent::Parent(const Parent& other) : io::FD(other)
 {
     pid_ = other.pid_;
     name_ = other.name_;
+    relation_ = other.relation_;
 }
 
 Parent::~Parent()
@@ -65,6 +69,18 @@ Parent& Parent::AddRole(Role&& role)
 Parent& Parent::DelRole(Role&& role)
 {
     role_ &= ~role;
+    return *this;
+}
+
+Parent& Parent::AddRelation(Relation&& relation)
+{
+    relation_ += relation;
+    return *this;
+}
+
+Parent& Parent::DelRelation(Relation&& relation)
+{
+    relation_ -= relation;
     return *this;
 }
 

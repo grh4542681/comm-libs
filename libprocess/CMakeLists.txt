@@ -40,6 +40,7 @@ set(LIBPROCESS_HRD ${PROJ_ROOT_PATH}
                  )
 set(LIBPROCESS_SRC process_id.cc
                    process_role.cc
+                   process_relation.cc
                    process_parent.cc
                    process_child.cc
                    process_handler.cc

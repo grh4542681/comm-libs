@@ -43,37 +43,21 @@ public:
     Handler& SetCmdLine(int argc, char** argv, char** env);
     Handler& SetCmdLine(char** raw_cmdline, unsigned int raw_cmdline_size);
 
-    template <typename ... Args> Return AddParent(Args ... args) {
-        if (parent_) {
-            parent_ = alloc_.Reconstruct<Parent>(parent_, std::forward<Args>(args)...);
-        } else {
-            parent_ = alloc_.Allocate<Parent>(std::forward<Args>(args)...);
-        }
-        return parent_ ? Return::SUCCESS : Return::PROCESS_EMEMORY;
-    }
-    Return AddParent(Parent& parent) {
-        return AddParent(std::move(parent));
-    }
-    Return AddParent(Parent&& parent) {
-        parent.SetAutoClose(false);
-        if (parent_) {
-            parent_ = alloc_.Reconstruct<Parent>(parent_, parent);
-        } else {
-            parent_ = alloc_.Allocate<Parent>(parent);
-        }
-        return parent_ ? Return::SUCCESS : Return::PROCESS_EMEMORY;
-    }
-    Return DelParent();
-    Parent* GetParent();
+    Return AddParent(Parent& parent);
+    Return AddParent(Parent&& parent);
+    Return DelParent(ID& pid);
+    Return DelParent(ID&& pid);
+    std::tuple<Return, Parent&> GetParent(ID& pid);
+    std::tuple<Return, Parent&> GetParent(ID&& pid);
 
-    Return AddChild(Child& child);
-    Return AddChild(Child&& child);
-    Return DelChild(ID& pid);
-    Return DelChild(ID&& pid);
-    Return DelChild(std::string name);
-    Child* GetChild(ID& pid);
-    Child* GetChild(ID&& pid);
-    Return GetChild(std::string name, std::vector<Child*> child_vector);
+//    Return AddChild(Child& child);
+//    Return AddChild(Child&& child);
+//    Return DelChild(ID& pid);
+//    Return DelChild(ID&& pid);
+//    Return DelChild(std::string name);
+//    Child* GetChild(ID& pid);
+//    Child* GetChild(ID&& pid);
+//    Return GetChild(std::string name, std::vector<Child*> child_vector);
 
     static Handler* GetInstance(base::Allocator&& alloc = base::Allocator());
     static void SetInstance(Handler* info);
@@ -103,8 +87,8 @@ private:
     std::vector<char*>  environ_;           ///< Environment arguments vector.
 
     // process relationship
-    Parent*               parent_;    ///< Parent process info.
-    std::map<ID, Child*>  child_map_;     ///< Child process info.
+    std::map<ID, Parent> parent_map_;    ///< Parent process info.
+    std::map<ID, Child>  child_map_;     ///< Child process info.
 
     static Handler* pInstance;
 };

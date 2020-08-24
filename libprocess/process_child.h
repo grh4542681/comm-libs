@@ -13,6 +13,7 @@
 #include "process_id.h"
 #include "process_state.h"
 #include "process_role.h"
+#include "process_relation.h"
 
 #define ChildSockFDIndex (1)
 
@@ -35,6 +36,7 @@ public:
     std::string GetName();
     Role& GetRole();
     State& GetState();
+    Relation& GetRelation();
     ChildDeadCallback_t GetDeadCallback();
 
     Child& SetState(State&& state);
@@ -43,11 +45,15 @@ public:
     Child& AddRole(Role&& role);
     Child& DelRole(Role&& role);
 
+    Child& AddRelation(Relation&& relation);
+    Child& DelRelation(Relation&& relation);
+
 private:
-    ID          pid_;
-    std::string name_;
-    Role        role_;
-    State       state_;
+    ID           pid_;
+    std::string  name_;
+    Role         role_;
+    State        state_;
+    Relation     relation_;
 
     ChildDeadCallback_t dead_callback_;
 };

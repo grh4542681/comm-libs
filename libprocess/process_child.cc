@@ -6,6 +6,7 @@ Child::Child()
 {
     name_.clear();
     role_ |= Role::Child;
+    relation_ += Relation::Type::Child;
     state_ = State::Normal;
 
     dead_callback_ = NULL;
@@ -15,8 +16,9 @@ Child::Child(std::string name, ID&& pid)
 {
     name_ = name;
     pid_ = pid;
-    role_ |= Role::Child;
     state_ = State::Normal;
+    role_ |= Role::Child;
+    relation_ += Relation::Type::Child;
 
     dead_callback_ = NULL;
 }
@@ -25,8 +27,9 @@ Child::Child(Child& other)
 {
     pid_ = other.pid_;
     name_ = other.name_;
-    role_ = other.role_;
     state_ = other.state_;
+    role_ = other.role_;
+    relation_ += Relation::Type::Child;
 
     dead_callback_ = other.dead_callback_;
     fd_ = other.fd_;
@@ -52,6 +55,11 @@ Role& Child::GetRole()
     return role_;
 }
 
+Relation& Child::GetRelation()
+{
+    return relation_;
+}
+
 State& Child::GetState()
 {
     return state_;
@@ -71,6 +79,18 @@ Child& Child::AddRole(Role&& role)
 Child& Child::DelRole(Role&& role)
 {
     role_ &= ~role;
+    return *this;
+}
+
+Child& Child::AddRelation(Relation&& relation)
+{
+    relation_ += relation;
+    return *this;
+}
+
+Child& Child::DelRelation(Relation&& relation)
+{
+    relation_ -= relation;
     return *this;
 }
 

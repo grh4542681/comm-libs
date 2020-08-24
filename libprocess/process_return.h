@@ -50,6 +50,18 @@ public:
     //process config
         PROCESS_ERAWCONFIG,
         PROCESS_ECONFIG,
+
+    //process parent
+        PROCESS_PARENT_EEXIST,
+        PROCESS_PARENT_ENOTEXIST,
+        PROCESS_PARENT_EINSERT,
+        PROCESS_PARENT_EDELETE,
+
+    //process child
+        PROCESS_CHILD_EEXIST,
+        PROCESS_CHILD_ENOTEXIST,
+        PROCESS_CHILD_EINSERT,
+        PROCESS_CHILD_EDELETE,
     };
 public:
     Return(int ecode = 0) : base::Return(ecode) {

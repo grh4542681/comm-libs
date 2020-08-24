@@ -24,7 +24,6 @@ Handler::Handler(base::Allocator&& alloc) : alloc_(alloc)
 
     raw_cmdline_ = NULL;
     raw_cmdline_size_ = 0;
-    parent_ = NULL;
 }
 
 Handler::~Handler()
@@ -147,85 +146,116 @@ Handler& Handler::SetCmdLine(char** raw_cmdline, unsigned int raw_cmdline_size)
     return *this;
 }
 
-Return Handler::DelParent()
+Return Handler::AddParent(Parent& parent)
 {
-    if (parent_) {
-        alloc_.Deallocate<Parent>(parent_);
+    return AddParent(std::move(parent));
+}
+Return Handler::AddParent(Parent&& parent)
+{
+    if (parent_map_.find(parent.GetPid()) != parent_map_.end()) {
+        return Return::PROCESS_PARENT_EEXIST;
     }
+    parent.SetAutoClose(false);
+    auto [it, success] = parent_map_.insert({ID(parent.GetPid()), Parent(std::forward<Parent>(parent))});
+    if (!success) {
+        return Return::PROCESS_PARENT_EINSERT;
+    }
+    it->second.SetAutoClose(true);
     return Return::SUCCESS;
 }
 
-Parent* Handler::GetParent()
+Return Handler::DelParent(ID& pid)
 {
-    return parent_;
+    return DelParent(std::move(pid));
 }
-
-Return Handler::AddChild(Child& child)
+Return Handler::DelParent(ID&& pid)
 {
-    return AddChild(std::move(child));
-}
-Return Handler::AddChild(Child&& child)
-{
-    auto it = child_map_.find(child.GetPid());
-    if (it != child_map_.end()) {
-        return Return::PROCESS_EPROCDUP;
+    if (parent_map_.find(pid) == parent_map_.end()) {
+        return Return::PROCESS_PARENT_ENOTEXIST;
     }
-    child.SetAutoClose(false);
-    Child* p = alloc_.Allocate<Child>(child);
-    if (!p) {
-        return Return::PROCESS_EMEMORY;
-    }
-    std::pair<std::map<ID, Child*>::iterator, bool> ret;
-    ret = child_map_.insert(std::pair<ID, Child*>(child.GetPid(), p));
-    if (ret.second == false) {
-        return Return::PROCESS_EPROCADD;
-    }
+    parent_map_.erase(pid);
     return Return::SUCCESS;
 }
 
-Return Handler::DelChild(ID& pid)
+std::tuple<Return, Parent&> Handler::GetParent(ID& pid)
 {
-    return DelChild(std::move(pid));
+    return GetParent(std::move(pid));
 }
-Return Handler::DelChild(ID&& pid)
+std::tuple<Return, Parent&> Handler::GetParent(ID&& pid)
 {
-    auto it = child_map_.find(pid);
-    if (it == child_map_.end()) {
-        return Return::PROCESS_EPROCNOTFOUND;
+    auto it = parent_map_.find(pid);
+    if (it == parent_map_.end()) {
+        return {Return::PROCESS_PARENT_ENOTEXIST, it->second};
     }
-    alloc_.Deallocate<Child>(it->second);
-    child_map_.erase(it);
-    return Return::SUCCESS;
+    return {Return::SUCCESS, it->second};
 }
 
-Return Handler::DelChild(std::string name)
-{
-    for (auto& it : child_map_) {
-        if (!(it.second->GetName().compare(name))) {
-            alloc_.Deallocate<Child>(it.second);
-            child_map_.erase(it.first);
-        }
-    }
-    return Return::SUCCESS;
-}
-
-Child* Handler::GetChild(ID& pid)
-{
-    return GetChild(std::move(pid));
-}
-Child* Handler::GetChild(ID&& pid)
-{
-    auto it = child_map_.find(pid);
-    if (it == child_map_.end()) {
-        return NULL;
-    }
-    return it->second;
-}
-
-Return Handler::GetChild(std::string name, std::vector<Child*> child_vector)
-{
-    return Return::SUCCESS;
-}
+//Return Handler::AddChild(Child& child)
+//{
+//    return AddChild(std::move(child));
+//}
+//Return Handler::AddChild(Child&& child)
+//{
+//    auto it = child_map_.find(child.GetPid());
+//    if (it != child_map_.end()) {
+//        return Return::PROCESS_EPROCDUP;
+//    }
+//    child.SetAutoClose(false);
+//    Child* p = alloc_.Allocate<Child>(child);
+//    if (!p) {
+//        return Return::PROCESS_EMEMORY;
+//    }
+//    std::pair<std::map<ID, Child*>::iterator, bool> ret;
+//    ret = child_map_.insert(std::pair<ID, Child*>(child.GetPid(), p));
+//    if (ret.second == false) {
+//        return Return::PROCESS_EPROCADD;
+//    }
+//    return Return::SUCCESS;
+//}
+//
+//Return Handler::DelChild(ID& pid)
+//{
+//    return DelChild(std::move(pid));
+//}
+//Return Handler::DelChild(ID&& pid)
+//{
+//    auto it = child_map_.find(pid);
+//    if (it == child_map_.end()) {
+//        return Return::PROCESS_EPROCNOTFOUND;
+//    }
+//    alloc_.Deallocate<Child>(it->second);
+//    child_map_.erase(it);
+//    return Return::SUCCESS;
+//}
+//
+//Return Handler::DelChild(std::string name)
+//{
+//    for (auto& it : child_map_) {
+//        if (!(it.second->GetName().compare(name))) {
+//            alloc_.Deallocate<Child>(it.second);
+//            child_map_.erase(it.first);
+//        }
+//    }
+//    return Return::SUCCESS;
+//}
+//
+//Child* Handler::GetChild(ID& pid)
+//{
+//    return GetChild(std::move(pid));
+//}
+//Child* Handler::GetChild(ID&& pid)
+//{
+//    auto it = child_map_.find(pid);
+//    if (it == child_map_.end()) {
+//        return NULL;
+//    }
+//    return it->second;
+//}
+//
+//Return Handler::GetChild(std::string name, std::vector<Child*> child_vector)
+//{
+//    return Return::SUCCESS;
+//}
 
 //static
 Handler* Handler::GetInstance(base::Allocator&& alloc)
