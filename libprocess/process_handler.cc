@@ -20,7 +20,7 @@ Handler::Handler(base::Allocator&& alloc) : alloc_(alloc)
     }
     name_ = real_name_;
     state_ = State::Normal;
-    role_ = Role::Normal;
+    role_ = Role::Type::Normal;
 
     raw_cmdline_ = NULL;
     raw_cmdline_size_ = 0;

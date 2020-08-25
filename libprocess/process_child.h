@@ -26,7 +26,7 @@ public:
     Child();
     Child(std::string name, ID& pid);
     Child(std::string name, ID&& pid);
-    Child(Child& other);
+    Child(const Child& other);
     ~Child();
 
     FD* Clone();

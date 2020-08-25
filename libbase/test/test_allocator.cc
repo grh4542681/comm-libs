@@ -2,6 +2,6 @@
 
 int main()
 {
-    infra::base::Allocator alloc;
+    auto alloc = ::infra::base::Allocator::Instance();
     return 0;
 }

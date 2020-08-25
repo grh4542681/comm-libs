@@ -2,33 +2,63 @@
 #define __ALLOCTOR_H__
 
 #include <string.h>
+#include <stdlib.h>
 #include <memory>
-
-#include "object.h"
+#include <cassert>
+#include <iostream>
+#include <unistd.h>
 
 namespace infra::base {
 
-class Allocator : virtual public Object {
+class AllocatorInterface {
+public:
+    AllocatorInterface() { }
+    virtual ~AllocatorInterface() { }
+
+    virtual void* Malloc(size_t size) {
+        return malloc(size);
+    }
+    virtual void Free(void* data) {
+        return free(data);
+    }
+};
+
+class Allocator {
 public:
     Allocator() {
+        interface_ = new AllocatorInterface();
     }
-    virtual ~Allocator() { }
+    virtual ~Allocator() {
+        if (interface_) {
+            delete interface_;
+        }
+    }
+
+    static Allocator& Instance() {
+        static Allocator instance;
+        return instance;
+    }
+
+    template < typename I, typename ... Args > Allocator& SetInterface(Args ... args) {
+        if (interface_) {
+            delete interface_;
+        }
+        interface_ = new I(std::forward<Args>(args)...);
+        return *this;
+    }
 
     void* Malloc(size_t size) {
-        return _malloc(size);
+        assert(interface_);
+        return interface_->Malloc(size);
     }
     void Free(void* data) {
-        return _free(data);
-    }
-
-    template < typename T >
-    std::allocator<T> GetAllocator() {
-        return std::allocator<T>();
+        assert(interface_);
+        interface_->Free(data);
     }
 
     template < typename T, typename ... Args>
     T* Allocate(Args&& ... args) {
-        T* ptr = (T*)_malloc(sizeof(T));
+        T* ptr = (T*)Malloc(sizeof(T));
         if (!ptr) {
             return NULL;
         } else {
@@ -38,7 +68,7 @@ public:
     template< typename T >
     void Deallocate(T* data) {
         data->~T();
-        _free(data);
+        Free(data);
     }
 
     template < typename T, typename ... Args> static T* Construct(void* ptr, Args&& ... args){
@@ -54,12 +84,8 @@ public:
         return ptr;
     }
 
-    virtual void* _malloc(size_t size) {
-        return malloc(size);
-    }
-    virtual void _free(void* data) {
-        return free(data);
-    }
+private:
+    AllocatorInterface* interface_;
 };
 
 }

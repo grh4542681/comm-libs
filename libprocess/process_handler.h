@@ -72,6 +72,7 @@ private:
     std::string      real_name_;     ///< Real process name.
     State            state_;         ///< Process state.
     Role             role_;          ///< Process role.
+    base::Allocator& alloc_;
 
     // Command line argument
     char**              raw_cmdline_;       ///< Original command line parameter.

@@ -69,13 +69,13 @@ Parent& Parent::SetState(State&& state)
 
 Parent& Parent::AddRole(Role&& role)
 {
-    role_ |= role;
+    role_ += role;
     return *this;
 }
 
 Parent& Parent::DelRole(Role&& role)
 {
-    role_ &= ~role;
+    role_ -= role;
     return *this;
 }
 

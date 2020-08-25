@@ -47,3 +47,8 @@ configure_package_config_file(cmake/libbaseConfig.cmake.in
 #  COMPATIBILITY SameMajorVersion )
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libbaseConfig.cmake
         DESTINATION ${CMAKE_INSTALL_PREFIX}/cmake)
+
+#test
+if(BUILD_TEST AND BUILD_DEPEND_LIBS)
+    add_subdirectory(test)
+endif()
