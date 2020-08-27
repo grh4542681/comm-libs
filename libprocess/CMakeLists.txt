@@ -26,6 +26,7 @@ if (BUILD_DEPEND_LIBS STREQUAL ON)
     set(DEPEND_PROJECTS)
 
     include(libfile)
+    include(libsignal)
 
     add_custom_target(depend-clean COMMAND rm -rf ${DEPEND_SRC})
 endif ()
@@ -45,10 +46,6 @@ set(LIBPROCESS_SRC process_id.cc
                    process_parent.cc
                    process_child.cc
                    process_handler.cc
-                   process_signal_id.cc
-                   process_signal_action.cc
-                   process_signal_set.cc
-                   process_signal.cc
                    )
 
 set(LIBPROCESS_TARGETS)

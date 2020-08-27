@@ -15,13 +15,13 @@
 
 namespace infra::process {
 
-SignalAction::SignalAction()
+Action::Action()
 {
     memset(&action_, 0, sizeof(struct sigaction));
      action_.sa_handler = SIG_DFL;
 }
 
-SignalAction::SignalAction(struct sigaction* action)
+Action::Action(struct sigaction* action)
 {
     memset(&action_, 0, sizeof(struct sigaction));
     action_.sa_handler = action->sa_handler;
@@ -30,7 +30,7 @@ SignalAction::SignalAction(struct sigaction* action)
     action_.sa_flags = action->sa_flags;
 }
 
-SignalAction::SignalAction(const SignalAction& other)
+Action::Action(const Action& other)
 {
     memset(&action_, 0, sizeof(struct sigaction));
     action_.sa_handler = other.action_.sa_handler;
@@ -39,12 +39,12 @@ SignalAction::SignalAction(const SignalAction& other)
     action_.sa_flags = other.action_.sa_flags;
 }
 
-SignalAction::~SignalAction()
+Action::~Action()
 {
 
 }
 
-SignalAction& SignalAction::operator=(const SignalAction& other)
+Action& Action::operator=(const Action& other)
 {
     action_.sa_handler = other.action_.sa_handler;
     action_.sa_sigaction = other.action_.sa_sigaction;
@@ -53,30 +53,30 @@ SignalAction& SignalAction::operator=(const SignalAction& other)
     return *this;
 }
 
-bool SignalAction::IsDefault()
+bool Action::IsDefault()
 {
     return (action_.sa_handler == SIG_DFL);
 }
 
-SignalAction& SignalAction::SetCallback(SignalCallback callback)
+Action& Action::SetCallback(SignalCallback callback)
 {
     action_.sa_handler = callback;
     action_.sa_flags &= ~SA_SIGINFO;
     return *this;
 }
 
-SignalAction& SignalAction::SetCallback(SignalCallback2 callback)
+Action& Action::SetCallback(SignalCallback2 callback)
 {
     action_.sa_sigaction = callback;
     action_.sa_flags |= SA_SIGINFO;
     return *this;
 }
 
-SignalAction& SignalAction::SetMaskset(SignalSet& set)
+Action& Action::SetMaskset(Set& set)
 {
     return SetMaskset(std::move(set));
 }
-SignalAction& SignalAction::SetMaskset(SignalSet&& set)
+Action& Action::SetMaskset(Set&& set)
 {
     action_.sa_mask = set.set_;
     return *this;

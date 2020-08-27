@@ -1,23 +1,23 @@
 #include <stddef.h>
 
-#include "process_log.h"
-#include "process_signal.h"
+#include "signal_log.h"
+#include "signal_process.h"
 
-namespace infra::process {
+namespace infra::signal {
 
-Signal* Signal::pInstance = NULL;
+Process* Process::pInstance = NULL;
 
-Signal::Signal()
+Process::Process()
 {
 
 }
 
-Signal::~Signal()
+Process::~Process()
 {
 
 }
 
-Signal& Signal::Instance()
+Process& Process::Instance()
 {
     if (!pInstance) {
         pInstance = new Signal();
@@ -25,14 +25,14 @@ Signal& Signal::Instance()
     return *pInstance;
 }
 
-SignalAction Signal::GetSignalAction(SignalId& sig)
+Action Process::GetAction(ID& sig)
 {
-    return GetSignalAction(std::move(sig));
+    return GetAction(std::move(sig));
 }
 
-SignalAction Signal::GetSignalAction(SignalId&& sig)
+Action Process::GetAction(ID&& sig)
 {
-    SignalAction action;
+    Action action;
     auto it = register_map_.find(sig);
     if (it != register_map_.end()) {
         action = it->second;
@@ -40,44 +40,44 @@ SignalAction Signal::GetSignalAction(SignalId&& sig)
     return action;
 }
 
-SignalSet Signal::GetSignalMask()
+Set Process::GetSignalMask()
 {
     return mask_set_;
 }
 
-Return Signal::Register(SignalId& sig, SignalAction& action)
+Return Process::Register(ID& sig, Action& action)
 {
     return Register(std::move(sig), std::move(action));
 }
 
-Return Signal::Register(SignalId&& sig, SignalAction&& action)
+Return Process::Register(ID&& sig, Action&& action)
 {
-    SignalAction old_action;
+    Action old_action;
     return Register(std::move(sig), std::move(action), std::move(old_action));
 }
 
-Return Signal::Register(SignalId& sig, SignalAction& new_action, SignalAction& old_action)
+Return Process::Register(ID& sig, Action& new_action, Action& old_action)
 {
     return Register(std::move(sig), std::move(new_action), std::move(old_action));
 }
 
-Return Signal::Register(SignalId&& sig, SignalAction&& new_action, SignalAction&& old_action)
+Return Process::Register(ID&& sig, Action&& new_action, Action&& old_action)
 {
     Return ret = Return::SUCCESS;
     if ((ret = _register_signal(std::move(sig), std::move(new_action), std::move(old_action))) != Return::SUCCESS) {
         return ret;
     }
-    //std::pair<std::map<Signal, SignalAction>::iterator, bool> ret;
+    //std::pair<std::map<Signal, Action>::iterator, bool> ret;
     register_map_.insert_or_assign(sig, new_action);
     last_register_map_.insert_or_assign(sig, old_action);
     return Return::SUCCESS;
 }
 
-Return Signal::UnRegister()
+Return Process::UnRegister()
 {
     Return ret;
-    SignalId sig;
-    std::map<SignalId, SignalAction> register_map = register_map_;
+    ID sig;
+    std::map<ID, Action> register_map = register_map_;
     for (const auto& it : register_map) {
         sig = it.first;
         ret = UnRegister(std::move(sig));
@@ -88,34 +88,34 @@ Return Signal::UnRegister()
     return Return::SUCCESS;
 }
 
-Return Signal::UnRegister(SignalId& sig)
+Return Process::UnRegister(ID& sig)
 {
     return UnRegister(std::move(sig));
 }
 
-Return Signal::UnRegister(SignalId&& sig)
+Return Process::UnRegister(ID&& sig)
 {
-    SignalAction old_action;
+    Action old_action;
     return UnRegister(std::move(sig), std::move(old_action));
 }
 
-Return Signal::UnRegister(SignalId& sig, SignalAction& old_action)
+Return Process::UnRegister(ID& sig, Action& old_action)
 {
     return UnRegister(std::move(sig), std::move(old_action));
 }
 
-Return Signal::UnRegister(SignalId&& sig, SignalAction&& old_action)
+Return Process::UnRegister(ID&& sig, Action&& old_action)
 {
-    SignalAction default_action;
+    Action default_action;
     return Register(std::move(sig), std::move(default_action), std::move(old_action));
 }
 
-Return Signal::Revert()
+Return Process::Revert()
 {
     Return ret;
-    SignalId sig;
-    SignalAction action;
-    std::map<SignalId, SignalAction> register_map = last_register_map_;
+    ID sig;
+    Action action;
+    std::map<ID, Action> register_map = last_register_map_;
     for (const auto& it : register_map) {
         sig = it.first;
         action = it.second;
@@ -127,46 +127,46 @@ Return Signal::Revert()
     return Return::SUCCESS;
 }
 
-Return Signal::Revert(SignalId& sig)
+Return Process::Revert(ID& sig)
 {
     return Revert(std::move(sig));
 }
 
-Return Signal::Revert(SignalId&& sig)
+Return Process::Revert(ID&& sig)
 {
     auto it = last_register_map_.find(sig);
     if (it == last_register_map_.end()) {
-        return Return::PROCESS_ESIGNALNOTFOUND;
+        return Return::SIGNAL_ENOTFOUND;
     }
-    SignalAction action = it->second;
+    Action action = it->second;
     return Register(std::move(sig), std::move(action));
 }
 
-Return Signal::Mask()
+Return Process::Mask()
 {
-    SignalSet new_set;
-    SignalSet old_set;
+    Set new_set;
+    Set old_set;
     new_set.AddAll();
     return Mask(new_set, old_set);
 }
 
-Return Signal::Mask(SignalSet& set)
+Return Process::Mask(Set& set)
 {
     return Mask(std::move(set));
 }
 
-Return Signal::Mask(SignalSet&& set)
+Return Process::Mask(Set&& set)
 {
-    SignalSet old_set;
+    Set old_set;
     return Mask(set, old_set);
 }
 
-Return Signal::Mask(SignalSet& new_set, SignalSet& old_set)
+Return Process::Mask(Set& new_set, Set& old_set)
 {
     return Mask(std::move(new_set), std::move(old_set));
 }
 
-Return Signal::Mask(SignalSet&& new_set, SignalSet&& old_set)
+Return Process::Mask(Set&& new_set, Set&& old_set)
 {
     Return ret = _mask_signal(SignalMaskType::APPEND, std::move(new_set), std::move(old_set));
     if (ret != Return::SUCCESS) {
@@ -180,23 +180,23 @@ Return Signal::Mask(SignalSet&& new_set, SignalSet&& old_set)
     return Return::SUCCESS;
 }
 
-Return Signal::MaskReplace(SignalSet& set)
+Return Process::MaskReplace(Set& set)
 {
     return MaskReplace(std::move(set));
 }
 
-Return Signal::MaskReplace(SignalSet&& set)
+Return Process::MaskReplace(Set&& set)
 {
-    SignalSet old_set;
+    Set old_set;
     return MaskReplace(set, old_set);
 }
 
-Return Signal::MaskReplace(SignalSet& new_set, SignalSet& old_set)
+Return Process::MaskReplace(Set& new_set, Set& old_set)
 {
     return MaskReplace(std::move(new_set), std::move(old_set));
 }
 
-Return Signal::MaskReplace(SignalSet&& new_set, SignalSet&& old_set)
+Return Process::MaskReplace(Set&& new_set, Set&& old_set)
 {
     Return ret = _mask_signal(SignalMaskType::REPLACE, std::move(new_set), std::move(old_set));
     if (ret != Return::SUCCESS) {
@@ -207,31 +207,31 @@ Return Signal::MaskReplace(SignalSet&& new_set, SignalSet&& old_set)
     return Return::SUCCESS;
 }
 
-Return Signal::UnMask()
+Return Process::UnMask()
 {
-    SignalSet new_set;
-    SignalSet old_set;
+    Set new_set;
+    Set old_set;
     new_set.AddAll();
     return UnMask(new_set, old_set);
 }
 
-Return Signal::UnMask(SignalSet& set)
+Return Process::UnMask(Set& set)
 {
     return UnMask(std::move(set));
 }
 
-Return Signal::UnMask(SignalSet&& set)
+Return Process::UnMask(Set&& set)
 {
-    SignalSet old_set;
+    Set old_set;
     return UnMask(set, old_set);
 }
 
-Return Signal::UnMask(SignalSet& new_set, SignalSet& old_set)
+Return Process::UnMask(Set& new_set, Set& old_set)
 {
     return UnMask(std::move(new_set), std::move(old_set));
 }
 
-Return Signal::UnMask(SignalSet&& new_set, SignalSet&& old_set)
+Return Process::UnMask(Set&& new_set, Set&& old_set)
 {
     Return ret = _mask_signal(SignalMaskType::SUBTRACT, std::move(new_set), std::move(old_set));
     if (ret != Return::SUCCESS) {
@@ -245,49 +245,49 @@ Return Signal::UnMask(SignalSet&& new_set, SignalSet&& old_set)
     return Return::SUCCESS;
 }
 
-Return Signal::MaskRevert()
+Return Process::MaskRevert()
 {
-    SignalSet set = last_mask_set_;
+    Set set = last_mask_set_;
     return Mask(set);
 }
 
-Return Signal::_register_signal(SignalId&& sig, SignalAction&& new_action, SignalAction&& old_action)
+Return Process::_register_signal(ID&& sig, Action&& new_action, Action&& old_action)
 {
     if (sigaction(sig.sig_, &new_action.action_, &old_action.action_) < 0) {
-        return Return::PROCESS_ESIGNALREG;
+        return Return::SIGNAL_EREGISTER;
     }
     return Return::SUCCESS;
 }
 
-Return Signal::_mask_signal(SignalMaskType how, SignalSet&& new_set, SignalSet&& old_set)
+Return Process::_mask_signal(SignalMaskType how, Set&& new_set, Set&& old_set)
 {
     switch (how) {
         case SignalMaskType::GETMASK:
             if (sigprocmask(SIG_BLOCK, NULL, &old_set.set_) < 0) {
                 Log::Error("Get process mask signal set error.");
-                return Return::PROCESS_ESIGNALMASK;
+                return Return::SIGNAL_EMASK;
             }
             break;
         case SignalMaskType::APPEND:
             if (sigprocmask(SIG_BLOCK, &new_set.set_, &old_set.set_) < 0) {
                 Log::Error("Set process mask signal set error.");
-                return Return::PROCESS_ESIGNALMASK;
+                return Return::SIGNAL_EMASK;
             }
             break;
         case SignalMaskType::SUBTRACT:
             if (sigprocmask(SIG_UNBLOCK, &new_set.set_, &old_set.set_) < 0) {
                 Log::Error("Set process mask signal set error.");
-                return Return::PROCESS_ESIGNALMASK;
+                return Return::SIGNAL_EMASK;
             }
             break;
         case SignalMaskType::REPLACE:
             if (sigprocmask(SIG_SETMASK, &new_set.set_, &old_set.set_) < 0) {
                 Log::Error("Set process mask signal set error.");
-                return Return::PROCESS_ESIGNALMASK;
+                return Return::SIGNAL_EMASK;
             }
             break;
         default:
-            return Return::PROCESS_ESIGNALMASKTYPE;
+            return Return::SIGNAL_EMASKTYPE;
     }
     return Return::SUCCESS;
 }

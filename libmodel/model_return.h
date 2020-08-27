@@ -27,7 +27,6 @@ public:
                 { ErrCode::MODEL_EFSM_STATE_ENOTEXIST, "EFSM state does not exist" },
                 { ErrCode::MODEL_EFSM_STATE_ETRANSEXIST, "EFSM state already bind in trans" },
                 { ErrCode::MODEL_EFSM_TRANS_ENOTEXIST, "EFSM trans does not exist" }
-
             });
         }
     }

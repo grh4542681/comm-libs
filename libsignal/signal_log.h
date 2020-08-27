@@ -1,11 +1,11 @@
-#ifndef __CONTAINER_LOG_H__
-#define __CONTAINER_LOG_H__
+#ifndef __SIGNAL_LOG_H__
+#define __SIGNAL_LOG_H__
 
 #include "log_interface.h"
 
-#define CONTAINER_LOG_FORMAT_DEFAULT LOG_FORMAT_DEFAULT
+#define SIGNAL_LOG_FORMAT_DEFAULT LOG_FORMAT_DEFAULT
 
-namespace infra::container {
+namespace infra::signal {
 
 class Log : virtual public base::Object, public log::Interface {
 public:
@@ -50,19 +50,19 @@ public:
     }
 private:
     Log() : log::Interface() {
-        app_name_ = "CONTAINER";
+        app_name_ = "SIGNAL";
         rule_map_.clear();
         rule_map_.insert({
-            {log::Priority::Emergency, CONTAINER_LOG_FORMAT_DEFAULT},
-            {log::Priority::Alert,     CONTAINER_LOG_FORMAT_DEFAULT},
-            {log::Priority::Critical,  CONTAINER_LOG_FORMAT_DEFAULT},
-            {log::Priority::Error,     CONTAINER_LOG_FORMAT_DEFAULT},
-            {log::Priority::Warning,   CONTAINER_LOG_FORMAT_DEFAULT},
-            {log::Priority::Notice,    CONTAINER_LOG_FORMAT_DEFAULT},
-            {log::Priority::Info,      CONTAINER_LOG_FORMAT_DEFAULT},
-            {log::Priority::Debug,     CONTAINER_LOG_FORMAT_DEFAULT},
-            {log::Priority::Debug2,    CONTAINER_LOG_FORMAT_DEFAULT},
-            {log::Priority::Debug3,    CONTAINER_LOG_FORMAT_DEFAULT},
+            {log::Priority::Emergency, SIGNAL_LOG_FORMAT_DEFAULT},
+            {log::Priority::Alert,     SIGNAL_LOG_FORMAT_DEFAULT},
+            {log::Priority::Critical,  SIGNAL_LOG_FORMAT_DEFAULT},
+            {log::Priority::Error,     SIGNAL_LOG_FORMAT_DEFAULT},
+            {log::Priority::Warning,   SIGNAL_LOG_FORMAT_DEFAULT},
+            {log::Priority::Notice,    SIGNAL_LOG_FORMAT_DEFAULT},
+            {log::Priority::Info,      SIGNAL_LOG_FORMAT_DEFAULT},
+            {log::Priority::Debug,     SIGNAL_LOG_FORMAT_DEFAULT},
+            {log::Priority::Debug2,    SIGNAL_LOG_FORMAT_DEFAULT},
+            {log::Priority::Debug3,    SIGNAL_LOG_FORMAT_DEFAULT},
         });
     }
 };
