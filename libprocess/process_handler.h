@@ -10,7 +10,7 @@
 #include <memory>
 
 #include "object.h"
-#include "allocator.h"
+#include "weak_key.h"
 
 #include "process_log.h"
 #include "process_return.h"
@@ -27,6 +27,8 @@ namespace infra::process {
 
 class Handler : virtual public base::Object {
 public:
+    ~Handler();
+
     ID& GetPid();
     std::string& GetName();
     std::string& GetRealName();
@@ -38,31 +40,33 @@ public:
 
     Handler& SetPid(ID&& pid);
     Handler& SetName(std::string name);
-    Handler& UpdateRealName();
-    Handler& UpdateRealPath();
+    Handler& SetRealName(std::string name);
     Handler& SetCmdLine(int argc, char** argv, char** env);
     Handler& SetCmdLine(char** raw_cmdline, unsigned int raw_cmdline_size);
+
+    Handler& UpdateRealName();
+    Handler& UpdateRealPath();
 
     Return AddParent(Parent& parent);
     Return AddParent(Parent&& parent);
     Return DelParent(std::string name);
+    Return DelParent();
     std::tuple<Return, Parent&> GetParent(std::string name);
 
     Return AddChild(Child& child);
     Return AddChild(Child&& child);
     Return DelChild(std::string name);
+    Return DelChild();
     std::tuple<Return, Child&> GetChild(std::string name);
 
-    static Handler* GetInstance(base::Allocator&& alloc = base::Allocator());
-    static void SetInstance(Handler* info);
+    static Handler& Instance();
 
     static Return GetProcessRealPath(std::string& path);
     static Return GetProcessRealName(std::string& name);
 
 private:
-    Handler(base::Allocator&& alloc = base::Allocator());
+    Handler();
     Handler(Handler& other);
-    ~Handler();
 
 private:
     // process argement
@@ -72,7 +76,6 @@ private:
     std::string      real_name_;     ///< Real process name.
     State            state_;         ///< Process state.
     Role             role_;          ///< Process role.
-    base::Allocator& alloc_;
 
     // Command line argument
     char**              raw_cmdline_;       ///< Original command line parameter.

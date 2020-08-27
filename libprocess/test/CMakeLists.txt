@@ -10,6 +10,13 @@ target_link_directories(test_process_id PRIVATE ${CMAKE_BINARY_DIR} ${DEPEND_LIB
 target_link_libraries(test_process_id process file util)
 list(APPEND TEST_TARGETS test_process_id)
 
+set(TEST_PROCESS_TEMPLATE_SRC test_process_template.cc)
+add_executable(test_process_template ${TEST_PROCESS_TEMPLATE_SRC})
+target_include_directories(test_process_template PRIVATE ${TEST_HRD} ${DEPEND_INCLUDE_DIR})
+target_link_directories(test_process_template PRIVATE ${CMAKE_BINARY_DIR} ${DEPEND_LIB_DIR})
+target_link_libraries(test_process_template process file util)
+list(APPEND TEST_TARGETS test_process_template)
+
 add_custom_target(test)
 add_dependencies(test ${TEST_TARGETS})
 INSTALL(TARGETS ${TEST_TARGETS}

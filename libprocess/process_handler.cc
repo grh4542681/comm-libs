@@ -7,7 +7,7 @@ namespace infra::process {
 
 Handler* Handler::pInstance = NULL;
 
-Handler::Handler(base::Allocator&& alloc) : alloc_(alloc)
+Handler::Handler()
 {
     pid_ = ID::GetProcessID();
     if (GetProcessRealPath(real_path_) != Return::SUCCESS) {
@@ -87,6 +87,57 @@ Handler& Handler::SetName(std::string name)
     return *this;
 }
 
+Handler& Handler::SetRealName(std::string name)
+{
+    if (name.size() >= raw_cmdline_size_) {
+        name.resize(raw_cmdline_size_);
+    }
+    memcpy(raw_cmdline_[0], name.c_str(), name.size());
+    memset(raw_cmdline_[0] + name.size(), 0, strlen(raw_cmdline_[0]) - name.size());
+    return *this;
+}
+
+Handler& Handler::SetCmdLine(int argc, char** argv, char** env)
+{
+    int loop = 0;
+    char* tmp = NULL;
+
+    // back up command line argv
+    if (argv) {
+        for (loop = 0; loop < argc; loop++) {
+            if (strlen(argv[loop]) >= 0) {
+                tmp = new char[(strlen(argv[loop]) + 1)];
+                memset(tmp, 0, strlen(argv[loop]));
+                memcpy(tmp, argv[loop], strlen(argv[loop]));
+                cmdline_.push_back(tmp);
+                raw_cmdline_size_ += strlen(argv[loop]) + 1;
+            }
+        }
+        raw_cmdline_ = argv;
+    }
+
+    // back up environ args
+    if (env) {
+        for (loop = 0; env[loop] != NULL; loop++) {
+            if (strlen(env[loop]) >= 0) {
+                tmp = new char[(strlen(env[loop]) + 1)];
+                memset(tmp, 0, strlen(env[loop]));
+                memcpy(tmp, env[loop], strlen(env[loop]));
+                cmdline_.push_back(tmp);
+                raw_cmdline_size_ += strlen(env[loop]) + 1;
+            }
+        }
+    }
+    return *this;
+}
+
+Handler& Handler::SetCmdLine(char** raw_cmdline, unsigned int raw_cmdline_size)
+{
+    raw_cmdline_ = raw_cmdline;
+    raw_cmdline_size_ = raw_cmdline_size;
+    return *this;
+}
+
 Handler& Handler::UpdateRealName()
 {
     if (GetProcessRealName(real_name_) != Return::SUCCESS) {
@@ -102,47 +153,6 @@ Handler& Handler::UpdateRealPath()
         Log::Error("Get process path error");
         real_path_.erase();
     }
-    return *this;
-}
-
-Handler& Handler::SetCmdLine(int argc, char** argv, char** env)
-{
-    int loop = 0;
-    char* tmp = NULL;
-
-    // back up command line argv
-    if (argv) {
-        for (loop = 0; loop < argc; loop++) {
-            if (strlen(argv[loop]) >= 0) {
-                tmp = (char*)(alloc_.Malloc(strlen(argv[loop]) + 1));
-                memset(tmp, 0, strlen(argv[loop]));
-                memcpy(tmp, argv[loop], strlen(argv[loop]));
-                cmdline_.push_back(tmp);
-                raw_cmdline_size_ += strlen(argv[loop]) + 1;
-            }
-        }
-        raw_cmdline_ = argv;
-    }
-
-    // back up environ args
-    if (env) {
-        for (loop = 0; env[loop] != NULL; loop++) {
-            if (strlen(env[loop]) >= 0) {
-                tmp = (char*)(alloc_.Malloc(strlen(env[loop]) + 1));
-                memset(tmp, 0, strlen(env[loop]));
-                memcpy(tmp, env[loop], strlen(env[loop]));
-                cmdline_.push_back(tmp);
-                raw_cmdline_size_ += strlen(env[loop]) + 1;
-            }
-        }
-    }
-    return *this;
-}
-
-Handler& Handler::SetCmdLine(char** raw_cmdline, unsigned int raw_cmdline_size)
-{
-    raw_cmdline_ = raw_cmdline;
-    raw_cmdline_size_ = raw_cmdline_size;
     return *this;
 }
 
@@ -170,6 +180,12 @@ Return Handler::DelParent(std::string name)
         return Return::PROCESS_PARENT_ENOTEXIST;
     }
     parent_map_.erase(name);
+    return Return::SUCCESS;
+}
+
+Return Handler::DelParent()
+{
+    parent_map_.clear();
     return Return::SUCCESS;
 }
 
@@ -209,6 +225,12 @@ Return Handler::DelChild(std::string name)
     return Return::SUCCESS;
 }
 
+Return Handler::DelChild()
+{
+    child_map_.clear();
+    return Return::SUCCESS;
+}
+
 std::tuple<Return, Child&> Handler::GetChild(std::string name)
 {
     auto it = child_map_.find(name);
@@ -219,17 +241,12 @@ std::tuple<Return, Child&> Handler::GetChild(std::string name)
 }
 
 //static
-Handler* Handler::GetInstance(base::Allocator&& alloc)
+Handler& Handler::Instance()
 {
     if (!pInstance) {
-        pInstance = new Handler(std::forward<base::Allocator>(alloc));
+        pInstance = new Handler();
     }
-    return pInstance;
-}
-
-void Handler::SetInstance(Handler* info)
-{
-    pInstance = info;
+    return *pInstance;
 }
 
 Return Handler::GetProcessRealPath(std::string& path)

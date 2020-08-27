@@ -17,14 +17,14 @@
 
 namespace infra::process {
 
-class SignalCtrl;
+class Signal;
 
 /**
 * @brief - Signal callback action
 */
 class SignalAction : virtual public base::Object {
 public:
-    friend class SignalCtrl;
+    friend class Signal;
     /**
     * @brief  - Signal callback function type.
     *

@@ -33,6 +33,7 @@ endif ()
 #project
 set(LIBPROCESS_HRD ${PROJ_ROOT_PATH}
                    ${LIBBASE_SRC_TOP}
+                   ${LIBCONTAINER_SRC_TOP}
                    ${LIBLOG_SRC_TOP}
                    ${LIBIO_SRC_TOP}
                    ${LIBFILE_SRC_TOP}
@@ -44,10 +45,10 @@ set(LIBPROCESS_SRC process_id.cc
                    process_parent.cc
                    process_child.cc
                    process_handler.cc
-                   process_signal.cc
+                   process_signal_id.cc
                    process_signal_action.cc
                    process_signal_set.cc
-                   process_signal_ctrl.cc
+                   process_signal.cc
                    )
 
 set(LIBPROCESS_TARGETS)

@@ -41,11 +41,11 @@ bool SignalSet::IsEmpty()
     return empty_flag_;
 }
 
-Return SignalSet::AddSig(Signal& sig)
+Return SignalSet::AddSig(SignalId& sig)
 {
     return AddSig(std::move(sig));
 }
-Return SignalSet::AddSig(Signal&& sig)
+Return SignalSet::AddSig(SignalId&& sig)
 {
     if (!sigaddset(&set_, sig.sig_)) {
         return Return::PROCESS_ESIGINVAL;
@@ -63,11 +63,11 @@ Return SignalSet::AddAll()
     return Return::SUCCESS;
 }
 
-Return SignalSet::DelSig(Signal& sig)
+Return SignalSet::DelSig(SignalId& sig)
 {
     return DelSig(std::move(sig));
 }
-Return SignalSet::DelSig(Signal&& sig)
+Return SignalSet::DelSig(SignalId&& sig)
 {
     if (!sigdelset(&set_, sig.sig_)) {
         return Return::PROCESS_ESIGINVAL;
@@ -86,7 +86,7 @@ Return SignalSet::DelAll()
     return Return::SUCCESS;
 }
 
-bool SignalSet::HasSig(Signal& sig)
+bool SignalSet::HasSig(SignalId& sig)
 {
     if (sigismember(&set_, sig.sig_) == 1) {
         return true;

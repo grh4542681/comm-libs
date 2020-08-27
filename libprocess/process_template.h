@@ -1,17 +1,10 @@
-/*******************************************************
- * Copyright (C) For free.
- * All rights reserved.
- *******************************************************
- * @author   : Ronghua Gao
- * @date     : 2019-04-17 10:46
- * @file     : process_template.h
- * @brief    : Create process by template.
- * @note     : Email - grh4542681@163.com
- * ******************************************************/
 #ifndef _PROCESS_TEMPLATE_H__
 #define _PROCESS_TEMPLATE_H__
 
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+
 #include <type_traits>
 #include <typeinfo>
 #include <iostream>
@@ -19,198 +12,87 @@
 #include <functional>
 #include <tuple>
 
-#include "mempool.h"
 #include "object.h"
-
-#include "process.h"
-#include "process_info.h"
-#include "signal/process_signal_ctrl.h"
+#include "process_handler.h"
 
 namespace infra::process {
 
-/**
-* @brief - Create process.
-*
-* @tparam [F] - process main function
-*/
 template < typename F >
 class Template : virtual public base::Object {
 public:
     Template() {
 
     }
-    /**
-    * @brief Template - Constructor
-    *
-    * @param [child] - process main function.
-    */
     Template(F child) {
-        mempool_ = mempool::Mempool::getInstance();
         name_.clear();
         child_ = child;
-        auto_create_sockpair_ = false;
     }
 
-    /**
-    * @brief Template - Constructor
-    *
-    * @param [name] - Process name.
-    * @param [child] - Process main function.
-    */
     Template(std::string name, F child) {
-        mempool_ = mempool::Mempool::getInstance();
         name_ = name;
         child_ = child;
-        auto_create_sockpair_ = false;
     }
 
     ~Template() {
 
     }
 
-    /**
-    * @brief SetDeadCallback - Set the callback if process dead parent process
-    *                       will invoke the function.
-    *
-    * @param [sigchld_callback] - Callback function.
-    */
     void SetDeadCallback(void (*dead_callback)(int*)) {
         dead_callback_ = dead_callback;
     }
 
-    /**
-    * @brief Run - Start process.
-    *
-    * @tparam [Args] - Template Args of main function.
-    * @param [args] - args.
-    *
-    * @returns  Return.
-    */
     template <typename ... Args>
-    std::tuple<const Return, const ProcessID> Run(Args&& ... args) {
-        PROCESS_INFO("Starting create process.");
+    std::tuple<const Return, const ID> Run(Args&& ... args) {
+        Log::Info("Starting create process.");
         //Create socket pair
-        ipc::sock::SockPair pair;
-        if (auto_create_sockpair_) {
-            if (pair.Open() != ret::Return::SUCCESS) {
-                PROCESS_ERROR("SockPair Open error.");
-                return {Return::PROCESS_EFIFOPAIR, ProcessID(0)};
-            }
-            pair.SetAutoClose(false);
+        int fd_pair[2];
+        if (socketpair(AF_UNIX, SOCK_STREAM, 0, fd_pair)) {
+            return {Return::ERROR, ID(0)};
         }
-        ProcessInfo* parent = ProcessInfo::getInstance();
+
         pid_t pid = fork();
         if (pid < 0) {
-            if (auto_create_sockpair_) {
-                pair.Close();
-            }
-            PROCESS_ERROR("Fork error.");
-            return {Return::PROCESS_EFORK, ProcessID(0)};
+            close(fd_pair[0]);
+            close(fd_pair[1]);
+            Log::Error("Fork error.");
+            return {Return::PROCESS_EFORK, ID(0)};
         } else if (pid == 0) {
-            //cache parent process data.
-            ProcessParent parent_cache(parent->GetName(), parent->GetPid());
-            if (auto_create_sockpair_) {
-                pair[1].Close();
-                parent_cache.SetFD(pair[0]);
-            }
+            //child
+            Handler& handler = Handler::Instance();
 
-            char** raw_cmdline = NULL;
-            unsigned int raw_cmdline_size = 0;
-            parent->GetCmdLine(&raw_cmdline, &raw_cmdline_size);
+            Parent parent(handler.GetName(), handler.GetPid());
+            parent.SetFD(fd_pair[ParentSockFDIndex], true);
+            close(fd_pair[ChildSockFDIndex]);
 
-            //destory parent mempool
-            mempool::Mempool::freeInstance();
-            ProcessInfo::setInstance(NULL);
+            handler.SetPid(ID::GetProcessID());
+            handler.SetName(handler.GetName() + "_" + name_);
+            handler.SetRealName(handler.GetName());
+            handler.DelParent();
+            handler.DelChild();
+            handler.AddParent(parent);
 
-            ProcessInfo* child = ProcessInfo::getInstance();
-            child->SetName(name_);
-            child->SetCmdLine(raw_cmdline, raw_cmdline_size);
-            if (!name_.empty()) {
-                Process::SetProcName(name_);
-            }
-            child->AddParentProcess(parent_cache);
-
-            PROCESS_INFO("Execute child main function.");
+            Log::Info("Execute child main function.");
             _run_main(std::forward<Args>(args)...);
             exit(0);
         } else {
-            std::string child_name = name_;
-            if (child_name.empty()) {
-                child_name = parent->GetName() + "_" + std::to_string(pid);
-            }
-            ProcessID child_pid(pid);
-            ProcessChild child(child_name, std::move(child_pid));
-            if (auto_create_sockpair_) {
-                pair[0].Close();
-                child.SetFD(pair[1]);
-            }
+            //parent
+            Handler& handler = Handler::Instance();
+
+            Child child(handler.GetName() + "_" + name_, ID(pid));
+            child.SetFD(fd_pair[ChildSockFDIndex], true);
+            close(fd_pair[ParentSockFDIndex]);
             child.SetDeadCallback(dead_callback_);
-            child.GetRole().AddRole(ProcessRole::Child);
-            child.SetState(ProcessState::Prepare);
 
-            PROCESS_INFO("Register child [%d] into current process.", pid);
-            parent->AddChildProcess(child);
-            return {Return::SUCCESS, child_pid};
-        }
-        return {Return::SUCCESS, ProcessID(0)};
-    }
-#if 0
-    /**
-    * @brief RunDaemon - Start daemon process.
-    *
-    * @tparam [Args] - Template Args of main function.
-    * @param [args] - args.
-    *
-    * @returns  Return.
-    */
-    template <typename ... Args>
-    Return RunDaemon(Args&& ... args) {
-        PROCESS_INFO("Starting create daemon process.");
-        ProcessInfo* parent = ProcessInfo::getInstance();
-        pid_t pid = fork();
-        if (pid < 0) {
-            PROCESS_ERROR("Fork error.");
-            return Return::PROCESS_EFORK;
-        } else if (pid == 0) {
-            PROCESS_INFO("Daemon agent process [%d] starting daemon.", getpid());
-            pid_t pid = fork();
-            if (pid < 0) {
-                PROCESS_ERROR("Daemon agent fork error.");
-                exit(0);
-            } else if (pid == 0) {
-                char** raw_cmdline = parent->raw_cmdline_;
-                unsigned int raw_cmdline_size = parent->raw_cmdline_size_;
+            Log::Info("Register child", pid, "into current process.");
+            handler.AddChild(child);
 
-                //destory parent mempool
-                mempool::Mempool::freeInstance();
-
-                ProcessInfo::pInstance = NULL;
-                ProcessInfo* child = ProcessInfo::getInstance();
-                child->raw_cmdline_ = raw_cmdline;
-                child->raw_cmdline_size_ = raw_cmdline_size;
-                if (!name_.empty()) {
-                    Process::SetProcName(name_);
-                }
-                Process::GetProcName(child->process_name_);
-
-                PROCESS_INFO("Execute daemon main function.");
-                _run_main(std::forward<Args>(args)...);
-                exit(0);
-            } else {
-                PROCESS_INFO("Daemon agent process [%d] exit.", getpid());
-                exit(0);
-            }
-        } else {
-            return Return::SUCCESS;
+            return {Return::SUCCESS, ID(pid)};
         }
     }
-#endif
 private:
-    mempool::Mempool* mempool_;         ///< Mempool pointer.
     std::string name_;                  ///< Process Name.
     F child_;                           ///< Process main function.
-    bool auto_create_sockpair_;         ///< Auto create socketpair between process.
-    void (*dead_callback_)(int*);       ///< Process dead callback for parent SIGCHLD.
+    Child::ChildDeadCallback_t dead_callback_;       ///< Process dead callback for parent SIGCHLD.
 
     template <typename ... Args>
     Return _run_main(Args&& ... args) {

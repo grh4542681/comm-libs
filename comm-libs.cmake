@@ -31,6 +31,8 @@ set(3PP_RAPIDJSON_SRC_TOP "${3PP_DIR}/rapidjson")
 #comm-libs
 list(APPEND CMAKE_MODULE_PATH ${COMM_LIBS_PROJ_TOP}/cmake_modules)
 set(LIBBASE_SRC_TOP "${COMM_LIBS_PROJ_TOP}/libbase")
+set(LIBMODEL_SRC_TOP "${COMM_LIBS_PROJ_TOP}/libmodel")
+set(LIBCONTAINER_SRC_TOP "${COMM_LIBS_PROJ_TOP}/libcontainer")
 set(LIBLOG_SRC_TOP "${COMM_LIBS_PROJ_TOP}/liblog")
 set(LIBUTIL_SRC_TOP "${COMM_LIBS_PROJ_TOP}/libutil")
 set(LIBIO_SRC_TOP "${COMM_LIBS_PROJ_TOP}/libio")

@@ -16,11 +16,11 @@
 #include "object.h"
 
 #include "process_return.h"
-#include "process_signal.h"
+#include "process_signal_id.h"
 
 namespace infra::process {
 
-class SignalCtrl;
+class Signal;
 class SignalAction;
 
 /**
@@ -29,7 +29,7 @@ class SignalAction;
 class SignalSet : virtual public base::Object {
 public:
     friend class SignalAction;
-    friend class SignalCtrl;
+    friend class Signal;
 public:
     SignalSet();
     SignalSet(const SignalSet& other);
@@ -46,8 +46,8 @@ public:
     *
     * @returns  Return.
     */
-    Return AddSig(Signal& sig);
-    Return AddSig(Signal&& sig);
+    Return AddSig(SignalId& sig);
+    Return AddSig(SignalId&& sig);
     /**
     * @brief AddAll - Add all signal.
     *
@@ -61,8 +61,8 @@ public:
     *
     * @returns  Return.
     */
-    Return DelSig(Signal& sig);
-    Return DelSig(Signal&& sig);
+    Return DelSig(SignalId& sig);
+    Return DelSig(SignalId&& sig);
     /**
     * @brief DelAll - Clean set.
     *
@@ -76,8 +76,8 @@ public:
     *
     * @returns  bool.
     */
-    bool HasSig(Signal& sig);
-    bool HasSig(Signal&& sig);
+    bool HasSig(SignalId& sig);
+    bool HasSig(SignalId&& sig);
 
     sigset_t* GetSigset();
 
