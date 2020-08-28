@@ -33,4 +33,10 @@ bool ID::operator<(const ID& other) const
     return (sig_ < other.sig_);
 }
 
+ID::ID_t ID::GetInterID() const
+{
+    return sig_;
+}
+
+
 }

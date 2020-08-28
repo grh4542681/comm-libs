@@ -1,21 +1,14 @@
 set(TEST_TARGETS)
 set(TEST_HRD ${PROJ_ROOT_PATH}
-             ${LIBPROCESS_HRD}
+             ${LIBSIGNAL_HRD}
              )
 
-set(TEST_PROCESS_ID_SRC test_process_id.cc)
-add_executable(test_process_id ${TEST_PROCESS_ID_SRC})
-target_include_directories(test_process_id PRIVATE ${TEST_HRD} ${DEPEND_INCLUDE_DIR})
-target_link_directories(test_process_id PRIVATE ${CMAKE_BINARY_DIR} ${DEPEND_LIB_DIR})
-target_link_libraries(test_process_id process file util)
-list(APPEND TEST_TARGETS test_process_id)
-
-set(TEST_PROCESS_TEMPLATE_SRC test_process_template.cc)
-add_executable(test_process_template ${TEST_PROCESS_TEMPLATE_SRC})
-target_include_directories(test_process_template PRIVATE ${TEST_HRD} ${DEPEND_INCLUDE_DIR})
-target_link_directories(test_process_template PRIVATE ${CMAKE_BINARY_DIR} ${DEPEND_LIB_DIR})
-target_link_libraries(test_process_template process file util)
-list(APPEND TEST_TARGETS test_process_template)
+set(TEST_SIGNAL_ID_SRC test_signal_id.cc)
+add_executable(test_signal_id ${TEST_SIGNAL_ID_SRC})
+target_include_directories(test_signal_id PRIVATE ${TEST_HRD} ${DEPEND_INCLUDE_DIR})
+target_link_directories(test_signal_id PRIVATE ${CMAKE_BINARY_DIR} ${DEPEND_LIB_DIR})
+target_link_libraries(test_signal_id signal pthread)
+list(APPEND TEST_TARGETS test_signal_id)
 
 add_custom_target(test)
 add_dependencies(test ${TEST_TARGETS})

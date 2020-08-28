@@ -11,6 +11,7 @@
 namespace infra::signal {
 
 class Process;
+class Thread;
 class Action;
 
 /**
@@ -20,6 +21,7 @@ class Set : virtual public base::Object {
 public:
     friend class Action;
     friend class Process;
+    friend class Thread;
 public:
     Set();
     Set(const Set& other);

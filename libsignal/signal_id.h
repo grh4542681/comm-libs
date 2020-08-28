@@ -17,6 +17,8 @@ class ID : virtual public base::Object {
 public:
     friend class Set;
     friend class Process;
+
+    typedef int ID_t;
 public:
     /**
     * @brief ID - Constructor.
@@ -38,6 +40,8 @@ public:
 
     ID& operator= (const ID& other);
     bool operator< (const ID& other) const;
+
+    ID_t GetInterID() const;
 private:
     int sig_;   ///< Linux signal.
     std::string sig_name_;

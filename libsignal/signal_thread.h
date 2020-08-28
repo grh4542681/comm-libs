@@ -11,7 +11,7 @@
 #include "timer_time.h"
 
 
-namespace thread::signal {
+namespace infra::signal {
 
 class Thread {
 public:
@@ -86,7 +86,7 @@ public:
     */
     Return MaskRevert();
 
-    Return SendSignal(pthread_t tid, ProcessSignal& sig);
+    Return SendSignal(pthread_t tid, ID& sig);
     static Return WaitSignal(timer::Time* overtime);
 
     /**

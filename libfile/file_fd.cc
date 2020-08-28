@@ -88,7 +88,7 @@ io::Return FD::Dup(FD& new_fd)
 
 FD* FD::Clone()
 {
-    return alloc_.Allocate<FD>(*this);
+    return new FD(*this);
 }
 
 void FD::Close()

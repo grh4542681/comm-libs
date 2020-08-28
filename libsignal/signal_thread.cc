@@ -144,30 +144,30 @@ Return Thread::_mask_signal(SignalMaskType how, Set&& new_set, Set&& old_set)
     switch (how) {
         case SignalMaskType::GETMASK:
             if (pthread_sigmask(SIG_BLOCK, NULL, &old_set.set_) < 0) {
-                THREAD_ERROR("Get process mask signal set error.");
-                return Return::THREAD_ESIGNALMASK;
+                Log::Error("Get process mask signal set error.");
+                return Return::SIGNAL_EMASK;
             }
             break;
         case SignalMaskType::APPEND:
             if (pthread_sigmask(SIG_BLOCK, &new_set.set_, &old_set.set_) < 0) {
-                THREAD_ERROR("Set process mask signal set error.");
-                return Return::THREAD_ESIGNALMASK;
+                Log::Error("Set process mask signal set error.");
+                return Return::SIGNAL_EMASK;
             }
             break;
         case SignalMaskType::SUBTRACT:
             if (pthread_sigmask(SIG_UNBLOCK, &new_set.set_, &old_set.set_) < 0) {
-                THREAD_ERROR("Set process mask signal set error.");
-                return Return::THREAD_ESIGNALMASK;
+                Log::Error("Set process mask signal set error.");
+                return Return::SIGNAL_EMASK;
             }
             break;
         case SignalMaskType::REPLACE:
             if (pthread_sigmask(SIG_SETMASK, &new_set.set_, &old_set.set_) < 0) {
-                THREAD_ERROR("Set process mask signal set error.");
-                return Return::THREAD_ESIGNALMASK;
+                Log::Error("Set process mask signal set error.");
+                return Return::SIGNAL_EMASK;
             }
             break;
         default:
-            return Return::THREAD_ESIGNALMASKTYPE;
+            return Return::SIGNAL_EMASKTYPE;
     }
     return Return::SUCCESS;
 }

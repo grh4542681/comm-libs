@@ -20,7 +20,7 @@ Process::~Process()
 Process& Process::Instance()
 {
     if (!pInstance) {
-        pInstance = new Signal();
+        pInstance = new Process();
     }
     return *pInstance;
 }

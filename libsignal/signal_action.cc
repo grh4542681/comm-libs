@@ -1,19 +1,9 @@
-/*******************************************************
- * Copyright (C) For free.
- * All rights reserved.
- *******************************************************
- * @author   : Ronghua Gao
- * @date     : 2019-04-18 04:06
- * @file     : process_signal_action.cc
- * @brief    : Signal callback action.
- * @note     : Email - grh4542681@163.com
- * ******************************************************/
 #include "string.h"
 #include "stddef.h"
 
-#include "process_signal_action.h"
+#include "signal_action.h"
 
-namespace infra::process {
+namespace infra::signal {
 
 Action::Action()
 {

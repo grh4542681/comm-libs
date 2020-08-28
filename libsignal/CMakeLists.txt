@@ -34,6 +34,7 @@ endif ()
 set(LIBSIGNAL_HRD ${PROJ_ROOT_PATH}
                    ${LIBBASE_SRC_TOP}
                    ${LIBLOG_SRC_TOP}
+                   ${LIBTIMER_SRC_TOP}
                  )
 set(LIBSIGNAL_SRC signal_id.cc
                   signal_set.cc

@@ -1,6 +1,9 @@
-#include "process_signal.h"
 #include "process_signal_common_callback.h"
 #include "process_template.h"
+
+#include "signal_id.h"
+#include "signal_action.h"
+#include "signal_process.h"
 
 #include <stdio.h>
 
@@ -22,8 +25,8 @@ int main (int argc, char** argv)
     infra::process::Handler& process_handler = infra::process::Handler::Instance();
     process_handler.SetCmdLine(argc, argv, environ);
 
-    infra::process::Signal& signal_handler = infra::process::Signal::Instance();
-    signal_handler.Register(infra::process::SignalId(SIGCHLD), std::move(infra::process::SignalAction().SetCallback(infra::process::SignalCommonCallback_SIGCHLD)));
+    infra::signal::Process& signal_handler = infra::signal::Process::Instance();
+    signal_handler.Register(infra::signal::ID(SIGCHLD), std::move(infra::signal::Action().SetCallback(infra::process::SignalCommonCallback_SIGCHLD)));
 
     auto process_type = child_process;
     infra::process::Template<decltype(process_type)> p1("child", child_process);
