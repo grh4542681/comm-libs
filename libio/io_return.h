@@ -15,7 +15,7 @@ public:
     * @brief - Io return value.
     */
     enum ErrCode {
-        IO_EAVALIABLE,
+        EDEFAULT,
         IO_EMODULE = IO_ERROR_CODE_MODULE,
         IO_EFDTYPE,
         IO_EUNKNOWFD,

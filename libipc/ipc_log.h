@@ -1,26 +1,73 @@
 #ifndef __IPC_LOG_H__
 #define __IPC_LOG_H__
 
-#include <stdio.h>
+#include "object.h"
+#include "log_interface.h"
 
-#define IPC_DEBUG(fmt, args...) \
-    printf("%s[%d]: ", __func__, __LINE__); \
-    printf(fmt, ##args); \
-    printf("\n");
+#define IPC_LOG_FORMAT_DEFAULT LOG_FORMAT_DEFAULT
 
-#define IPC_LOG(fmt, args...) \
-    printf("%s[%d]: ", __func__, __LINE__); \
-    printf(fmt, ##args); \
-    printf("\n");
+namespace infra::ipc {
 
-#define IPC_WARN(fmt, args...) \
-    printf("%s[%d]: ", __func__, __LINE__); \
-    printf(fmt, ##args); \
-    printf("\n");
+class Log : virtual public base::Object, public log::Interface {
+public:
+    ~Log() {
+        log::Interface::~Interface();
+    }
 
-#define IPC_ERROR(fmt, args...) \
-    printf("%s[%d]: ", __func__, __LINE__); \
-    printf(fmt, ##args); \
-    printf("\n");
+    static Log& Instance() {
+        static Log instance;
+        return instance;
+    }
+
+    template <typename ... Args> static void Emergency(Args ... args) {
+        Log::Instance().log::Interface::Emergency(std::forward<Args>(args)...);
+    }
+    template <typename ... Args> static void Alert(Args ... args) {
+        Log::Instance().log::Interface::Alert(std::forward<Args>(args)...);
+    }
+    template <typename ... Args> static void Critical(Args ... args) {
+        Log::Instance().log::Interface::Critical(std::forward<Args>(args)...);
+    }
+    template <typename ... Args> static void Error(Args ... args) {
+        Log::Instance().log::Interface::Error(std::forward<Args>(args)...);
+    }
+    template <typename ... Args> static void Warning(Args ... args) {
+        Log::Instance().log::Interface::Warning(std::forward<Args>(args)...);
+    }
+    template <typename ... Args> static void Notice(Args ... args) {
+        Log::Instance().log::Interface::Notice(std::forward<Args>(args)...);
+    }
+    template <typename ... Args> static void Info(Args ... args) {
+        Log::Instance().log::Interface::Info(std::forward<Args>(args)...);
+    }
+    template <typename ... Args> static void Debug(Args ... args) {
+        Log::Instance().log::Interface::Debug(std::forward<Args>(args)...);
+    }
+    template <typename ... Args> static void Debug2(Args ... args) {
+        Log::Instance().log::Interface::Debug2(std::forward<Args>(args)...);
+    }
+    template <typename ... Args> static void Debug3(Args ... args) {
+        Log::Instance().log::Interface::Debug3(std::forward<Args>(args)...);
+    }
+private:
+    Log() : log::Interface() {
+        app_name_ = "IPC";
+        rule_map_.clear();
+        rule_map_.insert({
+            {log::Priority::Emergency, IPC_LOG_FORMAT_DEFAULT},
+            {log::Priority::Alert,     IPC_LOG_FORMAT_DEFAULT},
+            {log::Priority::Critical,  IPC_LOG_FORMAT_DEFAULT},
+            {log::Priority::Error,     IPC_LOG_FORMAT_DEFAULT},
+            {log::Priority::Warning,   IPC_LOG_FORMAT_DEFAULT},
+            {log::Priority::Notice,    IPC_LOG_FORMAT_DEFAULT},
+            {log::Priority::Info,      IPC_LOG_FORMAT_DEFAULT},
+            {log::Priority::Debug,     IPC_LOG_FORMAT_DEFAULT},
+            {log::Priority::Debug2,    IPC_LOG_FORMAT_DEFAULT},
+            {log::Priority::Debug3,    IPC_LOG_FORMAT_DEFAULT},
+        });
+    }
+};
+
+}
 
 #endif
