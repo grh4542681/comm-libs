@@ -7,7 +7,6 @@
 #include <sys/stat.h>
 
 #include "object.h"
-#include "allocator.h"
 #include "io_return.h"
 
 namespace infra::io {
@@ -20,7 +19,7 @@ public:
     /**
     * @brief FD - Default consturctor
     */
-    FD(base::Allocator&& alloc = base::Allocator()) : alloc_(alloc) {
+    FD() {
         fd_ = -1;
         auto_close_ = false;
     }
@@ -30,7 +29,7 @@ public:
     * @param [fd] - Linux file descriptor
     * @param [auto_close] - Auto close flag
     */
-    FD(unsigned int fd, bool auto_close = false, base::Allocator&& alloc = base::Allocator()) : fd_(fd), auto_close_(auto_close), alloc_(alloc){
+    FD(unsigned int fd, bool auto_close = false) : fd_(fd), auto_close_(auto_close) {
         struct stat fd_stat;
         if (fstat(fd, &fd_stat)) {
             fd_ = -1;
@@ -42,7 +41,7 @@ public:
     *
     * @param [other] -  Other instance
     */
-    FD(FD& other) : alloc_(other.alloc_) {
+    FD(FD& other) {
         if (fd_ > 0 && auto_close_) {
             Close();
             fd_ = 0;
@@ -55,7 +54,7 @@ public:
     *
     * @param [other] -  Other instance
     */
-    FD(FD&& other) : alloc_(other.alloc_) {
+    FD(FD&& other) {
         if (fd_ > 0 && auto_close_) {
             Close();
             fd_ = 0;
@@ -68,7 +67,7 @@ public:
     *
     * @param [other] -  Other instance
     */
-    FD(const FD& other) : alloc_(other.alloc_) {
+    FD(const FD& other) {
         if (fd_ > 0 && auto_close_) {
             Close();
             fd_ = 0;
@@ -81,7 +80,7 @@ public:
     *
     * @param [other] -  Other instance
     */
-    FD(const FD&& other) : alloc_(other.alloc_) {
+    FD(const FD&& other) {
         if (fd_ > 0 && auto_close_) {
             Close();
             fd_ = 0;
@@ -218,7 +217,6 @@ public:
 protected:
     int fd_ = 0;
     bool auto_close_ = false;
-    base::Allocator& alloc_;
 };
 
 }
