@@ -16,7 +16,7 @@
 #include <sys/wait.h>
 #include <errno.h>
 
-#include "process_info.h"
+#include "process_handler.h"
 #include "process_log.h"
 
 namespace infra::process {
@@ -30,17 +30,17 @@ namespace infra::process {
 * @param [sig] - signal
 */
 void SignalCommonCallback_SIGCHLD(int sig) {
-    ProcessInfo* parent = ProcessInfo::getInstance();
-    pid_t parent_pid = parent->GetPid().GetID();
+    ProcessHandler& handler = ProcessHandler::Instance();
+    pid_t parent_pid = handler.GetPid().GetInterID();
     pid_t pid = waitpid(0, NULL, WNOHANG);
     if (pid == 0) {
-        PROCESS_INFO("Process [%d] catch a SIGCHLD that not belong to it.", parent_pid);
+        Log::Info("Process [", parent_pid, "] catch a SIGCHLD that not belong to it.");
         return;
     } else if (pid < 0) {
-        PROCESS_ERROR("Process [%d] catch a SIGCHLD, waitpid error. errno[%d]", parent_pid, errno);
+        Log::Info("Process [", parent_pid, "] catch a SIGCHLD, waitpid error. errno[", errno, "]");
         return;
     } else {
-        PROCESS_INFO("Process [%d] catch a SIGCHLD from [%d]", parent_pid, pid);
+        Log::Info("Process [", parent_pid, "] catch a SIGCHLD from [", pid, "]");
     }
 
     ProcessChild* child = parent->GetChildProcess(ProcessID(pid));

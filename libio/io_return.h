@@ -23,6 +23,7 @@ public:
         IO_EMATCHEVENT,
         IO_EADDEVENT,
         IO_ENOCALLBACK,
+        IO_EAVALIABLE,
 
         IO_EBADSELECTITEM,
         IO_ENOSELECTITEM,

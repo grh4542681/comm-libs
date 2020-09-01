@@ -23,12 +23,13 @@ public:
         tuple_key_ = other.tuple_key_;
     }
 
-    bool operator<(const UnionWeakKey& other) {
-        for (int i = 0; i < std::tuple_size<std::tuple<Args...>>::value; i++) {
-            if (std::get<i>(tuple_key_) == std::get<i>(other.tuple_key_)) {
-                return false;
-            }
-        }
+    bool operator<(const UnionWeakKey<Args...>& other) const {
+//        for (long unsigned i = 0; i < std::tuple_size<std::tuple<Args...>>::value; i++) {
+//            if (std::get<(const long unsigned)(i)>(tuple_key_) ==
+//                std::get<(const long unsigned)(i)>(other.tuple_key_)) {
+//                return false;
+//            }
+//        }
         return (tuple_key_ < other.tuple_key_);
     }
 protected:

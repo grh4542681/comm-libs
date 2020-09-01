@@ -162,11 +162,12 @@ Return Handler::AddParent(Parent& parent)
 }
 Return Handler::AddParent(Parent&& parent)
 {
-    if (parent_map_.find(parent.GetName()) != parent_map_.end()) {
+    if (parent_map_.find(container::UnionWeakKey<std::string, ID>(parent.GetName(), std::move(parent.GetPid()))) != parent_map_.end()) {
         return Return::PROCESS_PARENT_EEXIST;
     }
     parent.SetAutoClose(false);
-    auto [it, success] = parent_map_.insert({parent.GetName(), Parent(std::forward<Parent>(parent))});
+    auto [it, success] = parent_map_.insert({container::UnionWeakKey<std::string, ID>(parent.GetName(), std::move(parent.GetPid()))
+                                            , Parent(std::forward<Parent>(parent))});
     if (!success) {
         return Return::PROCESS_PARENT_EINSERT;
     }
@@ -176,10 +177,10 @@ Return Handler::AddParent(Parent&& parent)
 
 Return Handler::DelParent(std::string name)
 {
-    if (parent_map_.find(name) == parent_map_.end()) {
+    if (parent_map_.find(container::UnionWeakKey<std::string, ID>(std::move(name), ID())) == parent_map_.end()) {
         return Return::PROCESS_PARENT_ENOTEXIST;
     }
-    parent_map_.erase(name);
+    parent_map_.erase(container::UnionWeakKey<std::string, ID>(std::move(name), ID()));
     return Return::SUCCESS;
 }
 
@@ -191,7 +192,7 @@ Return Handler::DelParent()
 
 std::tuple<Return, Parent&> Handler::GetParent(std::string name)
 {
-    auto it = parent_map_.find(name);
+    auto it = parent_map_.find(container::UnionWeakKey<std::string, ID>(std::move(name), ID()));
     if (it == parent_map_.end()) {
         return {Return::PROCESS_PARENT_ENOTEXIST, it->second};
     }

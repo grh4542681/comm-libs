@@ -84,7 +84,7 @@ private:
     std::vector<char*>  environ_;           ///< Environment arguments vector.
 
     // process relationship
-    std::map<std::string, Parent> parent_map_;    ///< Parent process info.
+    std::map<container::UnionWeakKey<std::string, ID>, Parent> parent_map_;    ///< Parent process info.
     std::map<std::string, Child>  child_map_;     ///< Child process info.
 
     static Handler* pInstance;
