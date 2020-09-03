@@ -36,6 +36,7 @@ int main (int argc, char** argv)
     child = std::get<const infra::process::ID>(runret);
     printf("--%d--\n", child.GetInterID());
     sleep(30);
+    sleep(10);
 
     return 0;
 }

@@ -30,7 +30,7 @@ namespace infra::process {
 * @param [sig] - signal
 */
 void SignalCommonCallback_SIGCHLD(int sig) {
-    ProcessHandler& handler = ProcessHandler::Instance();
+    Handler& handler = Handler::Instance();
     pid_t parent_pid = handler.GetPid().GetInterID();
     pid_t pid = waitpid(0, NULL, WNOHANG);
     if (pid == 0) {
@@ -43,16 +43,16 @@ void SignalCommonCallback_SIGCHLD(int sig) {
         Log::Info("Process [", parent_pid, "] catch a SIGCHLD from [", pid, "]");
     }
 
-    ProcessChild* child = parent->GetChildProcess(ProcessID(pid));
-    if (child) {
-        auto callback = child->GetDeadCallback();
+    auto child_ret = handler.GetChild(ID(pid));
+    if (std::get<Return>(child_ret) == Return::SUCCESS) {
+        auto callback = std::get<Child&>(child_ret).GetDeadCallback();
         if (callback) {
             callback(NULL);
         }
-        parent->DelChildProcess(ProcessID(pid));
-        PROCESS_INFO("Remove child[%d] from [%d]", pid, parent_pid);
+        handler.DelChild(ID(pid));
+        Log::Info("Remove child[", pid, "] from [", parent_pid, "]");
     } else {
-        PROCESS_INFO("Dead process [%d] is not a child for [%d]", pid, parent_pid);
+        Log::Info("Dead process [", pid, "] is not a child for [", parent_pid, "]");
     }
 }
 

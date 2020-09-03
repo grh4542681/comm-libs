@@ -162,11 +162,11 @@ Return Handler::AddParent(Parent& parent)
 }
 Return Handler::AddParent(Parent&& parent)
 {
-    if (parent_map_.find(container::UnionWeakKey<std::string, ID>(parent.GetName(), std::move(parent.GetPid()))) != parent_map_.end()) {
+    if (parent_map_.find(ID(std::move(parent.GetPid()))) != parent_map_.end()) {
         return Return::PROCESS_PARENT_EEXIST;
     }
     parent.SetAutoClose(false);
-    auto [it, success] = parent_map_.insert({container::UnionWeakKey<std::string, ID>(parent.GetName(), std::move(parent.GetPid()))
+    auto [it, success] = parent_map_.insert({parent.GetPid()
                                             , Parent(std::forward<Parent>(parent))});
     if (!success) {
         return Return::PROCESS_PARENT_EINSERT;
@@ -175,12 +175,12 @@ Return Handler::AddParent(Parent&& parent)
     return Return::SUCCESS;
 }
 
-Return Handler::DelParent(std::string name)
+Return Handler::DelParent(ID&& id)
 {
-    if (parent_map_.find(container::UnionWeakKey<std::string, ID>(std::move(name), ID())) == parent_map_.end()) {
+    if (parent_map_.find(id) == parent_map_.end()) {
         return Return::PROCESS_PARENT_ENOTEXIST;
     }
-    parent_map_.erase(container::UnionWeakKey<std::string, ID>(std::move(name), ID()));
+    parent_map_.erase(id);
     return Return::SUCCESS;
 }
 
@@ -190,9 +190,9 @@ Return Handler::DelParent()
     return Return::SUCCESS;
 }
 
-std::tuple<Return, Parent&> Handler::GetParent(std::string name)
+std::tuple<Return, Parent&> Handler::GetParent(ID&& id)
 {
-    auto it = parent_map_.find(container::UnionWeakKey<std::string, ID>(std::move(name), ID()));
+    auto it = parent_map_.find(id);
     if (it == parent_map_.end()) {
         return {Return::PROCESS_PARENT_ENOTEXIST, it->second};
     }
@@ -205,11 +205,11 @@ Return Handler::AddChild(Child& child)
 }
 Return Handler::AddChild(Child&& child)
 {
-    if (child_map_.find(child.GetName()) != child_map_.end()) {
+    if (child_map_.find(child.GetPid()) != child_map_.end()) {
         return Return::PROCESS_CHILD_EEXIST;
     }
     child.SetAutoClose(false);
-    auto [it, success] = child_map_.insert({child.GetName(), Child(std::forward<Child>(child))});
+    auto [it, success] = child_map_.insert({child.GetPid(), Child(std::forward<Child>(child))});
     if (!success) {
         return Return::PROCESS_CHILD_EINSERT;
     }
@@ -217,12 +217,12 @@ Return Handler::AddChild(Child&& child)
     return Return::SUCCESS;
 }
 
-Return Handler::DelChild(std::string name)
+Return Handler::DelChild(ID&& id)
 {
-    if (child_map_.find(name) == child_map_.end()) {
+    if (child_map_.find(id) == child_map_.end()) {
         return Return::PROCESS_CHILD_ENOTEXIST;
     }
-    child_map_.erase(name);
+    child_map_.erase(id);
     return Return::SUCCESS;
 }
 
@@ -232,9 +232,9 @@ Return Handler::DelChild()
     return Return::SUCCESS;
 }
 
-std::tuple<Return, Child&> Handler::GetChild(std::string name)
+std::tuple<Return, Child&> Handler::GetChild(ID&& id)
 {
-    auto it = child_map_.find(name);
+    auto it = child_map_.find(id);
     if (it == child_map_.end()) {
         return {Return::PROCESS_CHILD_ENOTEXIST, it->second};
     }

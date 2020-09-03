@@ -10,7 +10,6 @@
 #include <memory>
 
 #include "object.h"
-#include "container_union_weak_key.h"
 
 #include "process_log.h"
 #include "process_return.h"
@@ -49,15 +48,15 @@ public:
 
     Return AddParent(Parent& parent);
     Return AddParent(Parent&& parent);
-    Return DelParent(std::string name);
+    Return DelParent(ID&& id);
     Return DelParent();
-    std::tuple<Return, Parent&> GetParent(std::string name);
+    std::tuple<Return, Parent&> GetParent(ID&& id);
 
     Return AddChild(Child& child);
     Return AddChild(Child&& child);
-    Return DelChild(std::string name);
+    Return DelChild(ID&& id);
     Return DelChild();
-    std::tuple<Return, Child&> GetChild(std::string name);
+    std::tuple<Return, Child&> GetChild(ID&& id);
 
     static Handler& Instance();
 
@@ -84,8 +83,8 @@ private:
     std::vector<char*>  environ_;           ///< Environment arguments vector.
 
     // process relationship
-    std::map<container::UnionWeakKey<std::string, ID>, Parent> parent_map_;    ///< Parent process info.
-    std::map<std::string, Child>  child_map_;     ///< Child process info.
+    std::map<ID, Parent> parent_map_;    ///< Parent process info.
+    std::map<ID, Child>  child_map_;     ///< Child process info.
 
     static Handler* pInstance;
 };
