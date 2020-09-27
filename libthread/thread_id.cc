@@ -1,90 +1,93 @@
 #include <unistd.h>
+#include <sys/syscall.h>
 
 #include "thread_id.h"
 
-namespace thread {
+#define gettidv1() syscall(__NR_gettid)
 
-ThreadID::ThreadID()
+namespace infra::thread {
+
+ID::ID()
 {
     tid_ = 0;
 }
-ThreadID::ThreadID(ThreadID_t tid)
+ID::ID(ID_t tid)
 {
     tid_ = tid;
 }
-ThreadID::ThreadID(ThreadID& other)
+ID::ID(ID& other)
 {
     tid_ = other.tid_;
 }
-ThreadID::ThreadID(const ThreadID& other)
+ID::ID(const ID& other)
 {
     tid_ = other.tid_;
 }
-ThreadID::~ThreadID()
+ID::~ID()
 {
 
 }
 
-ThreadID& ThreadID::operator=(ThreadID other)
+ID& ID::operator=(ID other)
 {
     tid_ = other.tid_;
     return *this;
 }
 
-bool ThreadID::operator==(ThreadID& other)
+bool ID::operator==(ID& other)
 {
     return (tid_ == other.tid_);
 }
 
-bool ThreadID::operator==(const ThreadID& other)
+bool ID::operator==(const ID& other)
 {
     return (tid_ == other.tid_);
 }
 
-bool ThreadID::operator<(ThreadID& other)
+bool ID::operator<(ID& other)
 {
     return (tid_ < other.tid_);
 }
 
-bool ThreadID::operator<(const ThreadID& other)
+bool ID::operator<(const ID& other)
 {
     return (tid_ < other.tid_);
 }
 
-bool ThreadID::operator>(ThreadID& other)
+bool ID::operator>(ID& other)
 {
     return (tid_ > other.tid_);
 }
 
-bool ThreadID::operator>(const ThreadID& other)
+bool ID::operator>(const ID& other)
 {
     return (tid_ > other.tid_);
 }
 
-ThreadID& ThreadID::SetID(ThreadID_t tid)
+ID& ID::SetInterID(ID_t tid)
 {
     tid_ = tid;
     return *this;
 }
 
-ThreadID::ThreadID_t ThreadID::GetID() const
+ID::ID_t ID::GetInterID() const
 {
     return tid_;
 }
 
-ThreadID ThreadID::GetThreadID()
+ID ID::GetThreadID()
 {
-    ThreadID tid;
-    tid.SetID(pthread_self());
+    ID tid;
+    tid.SetInterID((long int)gettidv1());
     return tid;
 }
 
-bool operator<(const ThreadID& a, const ThreadID& b)
+bool operator<(const ID& a, const ID& b)
 {
-    return (a.GetID() < b.GetID());
+    return (a.GetInterID() < b.GetInterID());
 }
 
-std::ostream & operator<<(std::ostream &out, ThreadID& tid)
+std::ostream & operator<<(std::ostream &out, ID& tid)
 {
     out << tid.tid_;
     return out;

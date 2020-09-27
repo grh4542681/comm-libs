@@ -4,39 +4,40 @@
 #include <sys/types.h>
 #include <iostream>
 
-namespace thread {
+namespace infra::thread {
 
-class ThreadID {
+class ID {
 public:
-    friend std::ostream & operator<<(std::ostream &out, ThreadID& tid);
+    friend std::ostream & operator<<(std::ostream &out, ID& tid);
 public:
-    typedef pid_t ThreadID_t;
+    typedef pid_t ID_t;
+    typedef pthread_t PosixID_t;
 public:
-    ThreadID();
-    ThreadID(ThreadID_t tid);
-    ThreadID(ThreadID& other);
-    ThreadID(const ThreadID& other);
-    ~ThreadID();
+    ID();
+    ID(ID_t tid);
+    ID(ID& other);
+    ID(const ID& other);
+    ~ID();
 
-    ThreadID& operator=(ThreadID other);
-    bool operator==(ThreadID& other);
-    bool operator==(const ThreadID& other);
-    bool operator<(ThreadID& other);
-    bool operator<(const ThreadID& other);
-    bool operator>(ThreadID& other);
-    bool operator>(const ThreadID& other);
+    ID& operator=(ID other);
+    bool operator==(ID& other);
+    bool operator==(const ID& other);
+    bool operator<(ID& other);
+    bool operator<(const ID& other);
+    bool operator>(ID& other);
+    bool operator>(const ID& other);
 
-    ThreadID& SetID(ThreadID_t tid);
-    ThreadID_t GetID() const;
+    ID& SetInterID(ID_t tid);
+    ID_t GetInterID() const;
 
-    static ThreadID GetThreadID();
+    static ID GetThreadID();
 
 private:
-    ThreadID_t tid_;
+    ID_t tid_;
 };
 
-bool operator<(const ThreadID& a, const ThreadID& b);
-std::ostream & operator<<(std::ostream &out, ThreadID& pid);
+bool operator<(const ID& a, const ID& b);
+std::ostream & operator<<(std::ostream &out, ID& pid);
 
 }
 
