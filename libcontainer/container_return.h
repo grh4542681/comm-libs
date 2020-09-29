@@ -12,12 +12,14 @@ public:
         CONTAINER_EMODULE = CONTAINER_ERROR_CODE_MODULE,
 
         //bitmap
+        CONTAINER_BITMAP_INIT,
         CONTAINER_BITMAP_EOUTBOUND,
     };
 public:
     Return(int ecode = 0) : base::Return(ecode) {
         if (!_exception.ModuleExist(ErrCode::CONTAINER_EMODULE)) {
             _exception.Push(ErrCode::CONTAINER_EMODULE, {
+                { ErrCode::CONTAINER_BITMAP_INIT, "" },
                 { ErrCode::CONTAINER_BITMAP_EOUTBOUND, "" }
             });
         }

@@ -51,42 +51,14 @@ public:
         return *this;
     }
 
-    bool IsRunning() {
-        return running_flag_;
-    }
-
-    ThreadInfo* GetThreadInfo() {
-        return thread_info_;
-    }
-
     template <typename ... Args>
-    ThreadRet Run(Args&& ... args) {
+    Handler* Run(Args&& ... args) {
         if (running_flag_) {
             return ThreadRet::THREAD_ERUNNING;
         }
         thread_ = std::make_shared<std::thread>(&ThreadTemplate::_run_main<Args ...>, this, std::forward<Args>(args)...);
         running_flag_ = true;
         return ThreadRet::SUCCESS;
-    }
-
-    ThreadRet Join() {
-        if (!running_flag_ || !thread_) {
-            return ThreadRet::THREAD_ERUNNING;
-        }
-        thread_->join();
-        return ThreadRet::SUCCESS;
-    }
-
-    ThreadRet Detach() {
-        if (!running_flag_ || !thread_) {
-            return ThreadRet::THREAD_ERUNNING;
-        }
-        thread_->detach();
-        return ThreadRet::SUCCESS;
-    }
-
-    R& Return() {
-        return ret_;
     }
 
 private:

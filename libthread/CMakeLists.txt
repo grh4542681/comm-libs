@@ -40,6 +40,9 @@ set(LIBTHREAD_HRD ${PROJ_ROOT_PATH}
                    ${LIBTIMER_SRC_TOP}
                  )
 set(LIBTHREAD_SRC thread_id.cc
+                  thread_role.cc
+                  thread_mutex.cc
+                  thread_rwlock.cc
                   )
 
 set(LIBTHREAD_TARGETS)

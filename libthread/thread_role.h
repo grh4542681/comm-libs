@@ -1,5 +1,5 @@
-#ifndef __PROCESS_ROLE_H__
-#define __PROCESS_ROLE_H__
+#ifndef __THREAD_ROLE_H__
+#define __THREAD_ROLE_H__
 
 #include <string>
 #include <tuple>
@@ -8,7 +8,7 @@
 #include "object.h"
 #include "container_bitmap.h"
 
-namespace infra::process {
+namespace infra::thread {
 
 class Role : virtual public base::Object {
 public:

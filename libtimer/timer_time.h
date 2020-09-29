@@ -225,22 +225,6 @@ public:
         return nanosecond_;
     }
 
-//    long ToSeconds() {
-//        return second_;
-//    }
-//
-//    long ToMilliseconds() {
-//        return ((second_ * 1000) + (nanosecond_ / 1000000));
-//    }
-//
-//    long ToMicrosecond() {
-//        return ((second_ * 1000000) + (nanosecond_ / 1000));
-//    }
-//
-//    long ToNanosecond() {
-//        return ((second_ * 1000000000) + nanosecond_);
-//    }
-
     bool IsZero() {
         return (!second_ && !nanosecond_);
     }

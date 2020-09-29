@@ -1,12 +1,9 @@
-#include "process_role.h"
+#include "thread_role.h"
 
-namespace infra::process {
+namespace infra::thread {
 
 std::vector<std::tuple<Role::Type, std::string, std::string>> Role::TypeDescription = {
     //   type        string          describe
-    { Type::Normal, "Normal", "Default role" },
-    { Type::Parent, "Parent", "Parent process" },
-    { Type::Child, "Child", "Child process" },
     { Type::PoolWorker, "PoolWorker", "Process pool worker" },
     { Type::PoolKeeper, "PoolKeeper", "Process pool manager" },
 };
