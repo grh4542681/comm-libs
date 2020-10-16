@@ -16,12 +16,15 @@ public:
         THREAD_ERUNNING,
         THREAD_ESIGNALMASKTYPE,
         THREAD_ESIGNALMASK,
+
+        THREAD_TEMPLATE_ECOUNTLIMIT,
     };
 public:
     Return(int ecode = 0) : base::Return(ecode) {
         if (!_exception.ModuleExist(ErrCode::THREAD_EMODULE)) {
             _exception.Push(ErrCode::THREAD_EMODULE, {
-                { ErrCode::THREAD_EREGISTER, "Register thread error" }
+                { ErrCode::THREAD_EREGISTER, "Register thread error" },
+                { ErrCode::THREAD_TEMPLATE_ECOUNTLIMIT, "The number of thread template creations reaches the upper limit" },
             });
         }
     }

@@ -10,6 +10,13 @@ target_link_directories(test_thread_id PRIVATE ${CMAKE_BINARY_DIR} ${DEPEND_LIB_
 target_link_libraries(test_thread_id thread pthread)
 list(APPEND TEST_TARGETS test_thread_id)
 
+set(TEST_THREAD_RUNABLE_SRC test_thread_runable.cc)
+add_executable(test_thread_runable ${TEST_THREAD_RUNABLE_SRC})
+target_include_directories(test_thread_runable PRIVATE ${TEST_HRD} ${DEPEND_INCLUDE_DIR})
+target_link_directories(test_thread_runable PRIVATE ${CMAKE_BINARY_DIR} ${DEPEND_LIB_DIR})
+target_link_libraries(test_thread_runable thread pthread)
+list(APPEND TEST_TARGETS test_thread_runable)
+
 #set(TEST_THREAD_TEMPLATE_SRC test_thread_template.cc)
 #add_executable(test_thread_template ${TEST_THREAD_TEMPLATE_SRC})
 #target_include_directories(test_thread_template PRIVATE ${TEST_HRD} ${DEPEND_INCLUDE_DIR})

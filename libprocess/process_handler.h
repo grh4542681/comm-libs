@@ -10,6 +10,7 @@
 #include <memory>
 
 #include "object.h"
+#include "thread_handler.h"
 
 #include "process_log.h"
 #include "process_return.h"
@@ -58,6 +59,11 @@ public:
     Return DelChild();
     std::tuple<Return, Child&> GetChild(ID&& id);
 
+    Return AddThread(infra::thread::Handler* handler);
+    Return DelThread(infra::thread::ID&& tid);
+    Return DelThread();
+    std::tuple<Return, infra::thread::Handler*> GetThread(infra::thread::ID&& id);
+
     static Handler& Instance();
 
     static Return GetProcessRealPath(std::string& path);
@@ -85,6 +91,9 @@ private:
     // process relationship
     std::map<ID, Parent> parent_map_;    ///< Parent process info.
     std::map<ID, Child>  child_map_;     ///< Child process info.
+
+    // thread relationship
+    std::map<thread::ID, thread::Handler*> thread_map_;
 
     static Handler* pInstance;
 };

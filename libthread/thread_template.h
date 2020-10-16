@@ -1,244 +1,86 @@
-#ifndef _THREAD_SINGLE_H__
-#define _THREAD_SINGLE_H__
+#ifndef __THREAD_TEMPLATE_H__
+#define __THREAD_TEMPLATE_H__
 
-#include <thread>
-#include <future>
-#include <utility>
-#include <functional>
-#include <type_traits>
-#include <typeinfo>
-#include <memory>
+#include "object.h"
 
-#include "thread_info.h"
+#include "process_handler.h"
 
-namespace thread {
+#include "thread_return.h"
+#include "thread_handler.h"
 
-class ThreadTemplateRet {
+namespace infra::thread {
 
-};
-
-template < typename H, typename F, typename R>
-class ThreadTemplate {
+template <typename H, typename F>
+class Template : virtual public ::infra::base::Object {
 public:
-    ThreadTemplate() {
-    }
-    ThreadTemplate(H* host, F func) {
+    Template(H* host, F func) {
         host_ = host;
-        running_flag_= false;
         func_ = func;
-        thread_ = NULL;
+        name_ = "";
+        cur_count_ = 0;
+        max_count_ = 0;
     }
-    ThreadTemplate(ThreadTemplate& other) {
-        host_ = other.host_;
-        thread_info_ = other.thread_info_;
-        func_ = other.func_;
-        running_flag_ = other.running_flag_;
-        thread_ = other.thread_;
-        ret_ = other.ret_;
+    ~Template() { }
+
+    Template<H, F>& SetName(std::string name) {
+        name_ = name;
+        return *this;
     }
-
-    ~ThreadTemplate() {
-
-    }
-
-    const ThreadTemplate& operator=(const ThreadTemplate& other) {
-        host_ = other.host_;
-        thread_info_ = other.thread_info_;
-        func_ = other.func_;
-        running_flag_ = other.running_flag_;
-        thread_ = other.thread_;
-        ret_ = other.ret_;
+    Template<H, F>& SetMaxCount(size_t max) {
+        max_count_ = max;
         return *this;
     }
 
-    template <typename ... Args>
-    Handler* Run(Args&& ... args) {
-        if (running_flag_) {
-            return ThreadRet::THREAD_ERUNNING;
-        }
-        thread_ = std::make_shared<std::thread>(&ThreadTemplate::_run_main<Args ...>, this, std::forward<Args>(args)...);
-        running_flag_ = true;
-        return ThreadRet::SUCCESS;
+    std::string GetName(std::string name) {
+        return name_;
+    }
+    size_t GetCurCount() {
+        return cur_count_;
+    }
+    size_t GetMaxCount() {
+        return max_count_;
     }
 
-private:
-    ThreadInfo* thread_info_;
-private:
+    template <typename ... Args>
+    std::tuple<Return, Handler*> Run(Args&& ... args) {
+        if (max_count_ != 0 && cur_count_ >= max_count_) {
+            return {Return::THREAD_TEMPLATE_ECOUNTLIMIT, nullptr};
+        }
+        Handler* handler = new Handler();
+        handler->name_ = name_;
+        handler->state_ = State::Prepare;
+        handler->thread_ = new std::thread(_thread_main<H, F, Args ...>, host_, func_, handler, std::forward<Args>(args)...);
+        cur_count_++;
+        return {Return::SUCCESS, handler};
+    }
+protected:
     H* host_;
     F func_;
-    bool running_flag_;
-    std::shared_ptr<std::thread> thread_;
-    R ret_;
+    std::string name_;
+    size_t cur_count_;
+    size_t max_count_;
 
-    template <typename ... Args>
-    ThreadRet _run_main(Args&& ... args) {
-        thread_info_ = ThreadInfo::getInstance();
-        thread_info_->thread_ = thread_;
-        thread_info_->Register2Process();
-
-        ret_ = (host_->*func_)(std::forward<Args>(args)...);
-
-        thread_info_->Unregister2Process();
-        ThreadInfo::freeInstance();
-        running_flag_ = false;
-        thread_info_ = NULL;
-        return ThreadRet::SUCCESS;
+    template <typename HH, typename FF, typename ... Args>
+    static Return _thread_main(HH* host, FF func, Handler* handler, Args&& ... args) {
+        handler->SetTid(ID::GetThreadID());
+        handler->SetState(State::Running);
+        if (handler->Register() != Return::SUCCESS) {
+            handler->SetState(State::RegisterFail);
+            return Return::THREAD_EREGISTER;
+        }
+        (host->*func)(std::forward<Args>(args)...);
+        if (handler->Unregister() != Return::SUCCESS) {
+            handler->SetState(State::UnregisterFail);
+            return Return::THREAD_EUNREGISTER;
+        }
+        handler->SetState(State::NormalExit);
+        return Return::SUCCESS;
     }
 };
 
-template < typename F, typename R>
-class ThreadTemplate<void, F, R> {
-public:
-    ThreadTemplate() {
-    }
-    ThreadTemplate(F func) {
-        running_flag_= false;
-        func_ = func;
-        thread_ = NULL;
-    }
-    ThreadTemplate(ThreadTemplate& other) {
-        thread_info_ = other.thread_info_;
-        func_ = other.func_;
-        running_flag_ = other.running_flag_;
-        thread_ = other.thread_;
-        ret_ = other.ret_;
-    }
+template <typename H, typename F> using TemplateMemFunction = Template<H, F>;
+template <typename F> using TemplateFunction = Template<void, F>;
 
-    ~ThreadTemplate() {
-
-    }
-
-    const ThreadTemplate& operator=(const ThreadTemplate& other) {
-        thread_info_ = other.thread_info_;
-        func_ = other.func_;
-        running_flag_ = other.running_flag_;
-        thread_ = other.thread_;
-        ret_ = other.ret_;
-        return *this;
-    }
-
-    bool IsRunning() {
-        return running_flag_;
-    }
-
-    ThreadInfo* GetThreadInfo() {
-        return thread_info_;
-    }
-
-    template <typename ... Args>
-    ThreadRet Run(Args&& ... args) {
-        if (running_flag_) {
-            return ThreadRet::THREAD_ERUNNING;
-        }
-        thread_ = std::make_shared<std::thread>(&ThreadTemplate::_run_main<Args ...>, this, std::forward<Args>(args)...);
-        running_flag_ = true;
-        return ThreadRet::SUCCESS;
-    }
-
-    ThreadRet Join() {
-        if (!running_flag_ || !thread_) {
-            return ThreadRet::THREAD_ERUNNING;
-        }
-        thread_->join();
-        return ThreadRet::SUCCESS;
-    }
-
-    ThreadRet Detach() {
-        if (!running_flag_ || !thread_) {
-            return ThreadRet::THREAD_ERUNNING;
-        }
-        thread_->detach();
-        return ThreadRet::SUCCESS;
-    }
-
-    R& Return() {
-        return ret_;
-    }
-
-private:
-    ThreadInfo* thread_info_;
-private:
-    F func_;
-    bool running_flag_;
-    std::shared_ptr<std::thread> thread_;
-    R ret_;
-
-    template <typename ... Args>
-    ThreadRet _run_main(Args&& ... args) {
-        thread_info_ = ThreadInfo::getInstance();
-        thread_info_->thread_ = thread_;
-        thread_info_->Register2Process();
-
-        ret_ = func_(std::forward<Args>(args)...);
-
-        thread_info_->Unregister2Process();
-        ThreadInfo::freeInstance();
-        running_flag_ = false;
-        thread_info_ = NULL;
-        return ThreadRet::SUCCESS;
-    }
-
-};
-
-#if 0
-template < typename F >
-class ThreadTemplate <F, ThreadTemplateRet> {
-public:
-    ThreadTemplate(F func) {
-        running_flag_= false;
-        func_ = func;
-    }
-
-    ~ThreadTemplate() {
-
-    }
-
-    ThreadInfo* GetThreadInfo() {
-        return thread_info_;
-    }
-
-    template <typename ... Args>
-    ThreadRet Run(Args&& ... args) {
-        if (running_flag_) {
-            return ThreadRet::THREAD_ERUNNING;
-        }
-        thread_ = std::thread(&ThreadTemplate::_run_main<Args ...>, this, std::forward<Args>(args)...);
-        running_flag_ = true;
-        return ThreadRet::SUCCESS;
-    }
-
-    ThreadRet Join() {
-        thread_.join();
-        return ThreadRet::SUCCESS;
-    }
-
-    void Detach() {
-        thread_.detach();
-    }
-
-private:
-    ThreadInfo* thread_info_;
-private:
-    F func_;
-    bool running_flag_;
-    std::thread thread_;
-
-    template <typename ... Args>
-    ThreadRet _run_main(Args&& ... args) {
-        thread_info_ = ThreadInfo::getInstance();
-//        thread_info_->thread_ = &thread_;
-        thread_info_->Register2Process();
-
-        func_(std::forward<Args>(args)...);
-
-        thread_info_->Unregister2Process();
-        ThreadInfo::freeInstance();
-        return ThreadRet::SUCCESS;
-    }
-
-};
-#endif
-
-};
+}
 
 #endif
