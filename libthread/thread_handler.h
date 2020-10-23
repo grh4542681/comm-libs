@@ -46,7 +46,7 @@ private:
     Role role_;
     State state_;
     Mutex mutex_;
-    std::thread* thread_;
+    std::thread thread_;
 };
 
 

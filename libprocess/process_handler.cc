@@ -241,6 +241,26 @@ std::tuple<Return, Child&> Handler::GetChild(ID&& id)
     return {Return::SUCCESS, it->second};
 }
 
+Return Handler::AddThread(infra::thread::Handler* handler)
+{
+
+}
+
+Return Handler::DelThread(infra::thread::ID&& tid)
+{
+
+}
+
+Return Handler::DelThread()
+{
+
+}
+
+std::tuple<Return, infra::thread::Handler*> Handler::GetThread(infra::thread::ID&& id)
+{
+
+}
+
 //static
 Handler& Handler::Instance()
 {

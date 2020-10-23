@@ -4,7 +4,6 @@ namespace infra::thread {
 
 Handler::Handler() {
     name_   = "";
-    thread_ = nullptr;
     state_  = State::Invalid;
     role_   = Role::Type::Normal;
 }

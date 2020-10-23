@@ -89,7 +89,13 @@ bool operator<(const ID& a, const ID& b)
 
 std::ostream & operator<<(std::ostream &out, ID& tid)
 {
-    out << tid.tid_;
+    out << std::to_string(tid.GetInterID());
+    return out;
+}
+
+std::ostream & operator<<(std::ostream &out, ID&& tid)
+{
+    out << std::to_string(tid.GetInterID());
     return out;
 }
 

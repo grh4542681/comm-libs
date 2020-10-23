@@ -3,7 +3,7 @@
 
 #include "object.h"
 
-#include "process_handler.h"
+//#include "process_handler.h"
 
 #include "thread_return.h"
 #include "thread_handler.h"
@@ -49,7 +49,8 @@ public:
         Handler* handler = new Handler();
         handler->name_ = name_;
         handler->state_ = State::Prepare;
-        handler->thread_ = new std::thread(_thread_main<H, F, Args ...>, host_, func_, handler, std::forward<Args>(args)...);
+        handler->thread_ = std::thread(_thread_main<H, F, Args ...>, host_, func_, handler, std::forward<Args>(args)...);
+       std::cout << "---out [" <<  handler->thread_.get_id() <<"]"<< std::endl;
         cur_count_++;
         return {Return::SUCCESS, handler};
     }
@@ -59,10 +60,13 @@ protected:
     std::string name_;
     size_t cur_count_;
     size_t max_count_;
+    std::function<void(H*)> thread_prepare_;
+    std::function<void(H*)> thread_exit_;
 
     template <typename HH, typename FF, typename ... Args>
     static Return _thread_main(HH* host, FF func, Handler* handler, Args&& ... args) {
         handler->SetTid(ID::GetThreadID());
+       std::cout << "---in [" <<  ID::GetThreadID()  <<"]"<< std::endl;
         handler->SetState(State::Running);
         if (handler->Register() != Return::SUCCESS) {
             handler->SetState(State::RegisterFail);
@@ -70,10 +74,14 @@ protected:
         }
         (host->*func)(std::forward<Args>(args)...);
         if (handler->Unregister() != Return::SUCCESS) {
-            handler->SetState(State::UnregisterFail);
+            if (handler->GetState() != State::Running) {
+                handler->SetState(State::UnregisterFail);
+            }
             return Return::THREAD_EUNREGISTER;
         }
-        handler->SetState(State::NormalExit);
+        if (handler->GetState() != State::Running) {
+            handler->SetState(State::NormalExit);
+        }
         return Return::SUCCESS;
     }
 };

@@ -37,7 +37,8 @@ private:
 };
 
 bool operator<(const ID& a, const ID& b);
-std::ostream & operator<<(std::ostream &out, ID& pid);
+std::ostream & operator<<(std::ostream &out, ID& tid);
+std::ostream & operator<<(std::ostream &out, ID&& tid);
 
 }
 
