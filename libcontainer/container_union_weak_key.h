@@ -24,13 +24,14 @@ public:
     }
 
     bool operator<(const UnionWeakKey<Args...>& other) const {
-//        for (long unsigned i = 0; i < std::tuple_size<std::tuple<Args...>>::value; i++) {
+        for (long unsigned i = 0; i < std::tuple_size<std::tuple<Args...>>::value; i++) {
+            printf("%d\n", std::get<(i)>(tuple_key_));
 //            if (std::get<(i)>(tuple_key_) ==
 //                std::get<(i)>(((UnionWeakKey<Args...>&)other).GetTupleKey())) {
 //                return false;
 //            }
-//        }
-        return (tuple_key_ < other.tuple_key_);
+        }
+//        return (tuple_key_ < other.tuple_key_);
     }
 
     std::tuple<Args...>& GetTupleKey() {
