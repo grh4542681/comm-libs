@@ -13,6 +13,9 @@ public:
 
         //snowflake
         CRYPT_SNOWFLAKE_INIT,
+        CRYPT_SNOWFLAKE_TIMEEPOCH,
+        CRYPT_SNOWFLAKE_MAC,
+        CRYPT_SNOWFLAKE_IPV4,
         CRYPT_SNOWFLAKE_EOUTBOUND,
     };
 public:
