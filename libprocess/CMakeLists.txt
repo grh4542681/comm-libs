@@ -27,6 +27,7 @@ if (BUILD_DEPEND_LIBS STREQUAL ON)
 
     include(libfile)
     include(libsignal)
+    include(libthread)
 
     add_custom_target(depend-clean COMMAND rm -rf ${DEPEND_SRC})
 endif ()
@@ -39,6 +40,7 @@ set(LIBPROCESS_HRD ${PROJ_ROOT_PATH}
                    ${LIBIO_SRC_TOP}
                    ${LIBFILE_SRC_TOP}
                    ${LIBTIMER_SRC_TOP}
+                   ${LIBTHREAD_SRC_TOP}
                  )
 set(LIBPROCESS_SRC process_id.cc
                    process_role.cc

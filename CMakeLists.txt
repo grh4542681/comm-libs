@@ -25,14 +25,17 @@ include(libbase)
 include(libutil)
 include(liblog)
 include(libfile)
+include(libthread)
 include(libprocess)
 set(INFRA_DEPEND_PROJECTS libbase
                           libutil
                           liblog
                           libfile
+                          libthread
                           libprocess)
 set(INFRA_DEPEND_LIBS util
                       file
+                      thread
                       process
                       )
 
