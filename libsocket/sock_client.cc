@@ -11,7 +11,7 @@
 #include "sock_log.h"
 #include "sock_client.h"
 
-namespace sock{
+namespace infra::sock{
 
 SockClient::SockClient()
 {

@@ -2,7 +2,7 @@
 
 #include "process_id.h"
 
-namespace process {
+namespace infra::process {
 
 ProcessID::ProcessID()
 {

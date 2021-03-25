@@ -4,7 +4,7 @@
 #include "rm_mempool.h"
 #include "thread_return.h"
 
-namespace thread{
+namespace infra::thread{
 
 class ThreadMQ {
 public:
@@ -18,6 +18,6 @@ private:
     unsigned int size_;
 };
 
-}//namespace thread end
+}//namespace infra::thread end
 
 #endif

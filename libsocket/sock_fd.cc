@@ -14,7 +14,7 @@
 #include "sock_log.h"
 #include "sock_fd.h"
 
-namespace sock{
+namespace infra::sock{
 //public
 /**
 * @brief SockFD - Default consturctor
@@ -960,4 +960,4 @@ ssize_t SockFD::_recv(struct sockaddr* orig, void* data, size_t datalen, void* c
     return ret;
 }
 
-}//namespace socket end
+}//namespace infra::socket end

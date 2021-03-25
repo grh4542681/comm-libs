@@ -10,7 +10,7 @@
 
 #include "sem.h"
 
-namespace ipc::sem {
+namespace infra::ipc::sem {
 
 class SemPosix : public Sem {
 public:

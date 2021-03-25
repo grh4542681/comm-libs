@@ -1,7 +1,7 @@
 #ifndef __RING_LIST_H__
 #define __RING_LIST_H__
 
-namespace container {
+namespace infra::container {
 
 template <typename T>
 class RingList {

@@ -5,7 +5,7 @@
 
 #include "shm_posix.h"
 
-namespace ipc::shm {
+namespace infra::ipc::shm {
 
 template < typename T >
 class ShmArray {

@@ -3,7 +3,7 @@
 
 #include "config_static.h"
 
-namespace process {
+namespace infra::process {
 
 class ProcessConfig : public config::ConfigStatic {
 public:

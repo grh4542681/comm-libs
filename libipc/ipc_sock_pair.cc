@@ -4,7 +4,7 @@
 
 #include "sock_pair.h"
 
-namespace ipc::sock {
+namespace infra::ipc::sock {
 
 SockPair::SockPair()
 {

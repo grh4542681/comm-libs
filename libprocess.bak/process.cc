@@ -3,7 +3,7 @@
 
 #include "file.h"
 
-namespace process {
+namespace infra::process {
 
 
 ProcessRet Process::SetProcName(std::string name)

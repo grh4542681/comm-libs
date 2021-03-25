@@ -13,7 +13,7 @@
 
 #include <string>
 
-namespace process::signal {
+namespace infra::process::signal {
 
 /**
 * @brief - Linux signal Encapsulation.

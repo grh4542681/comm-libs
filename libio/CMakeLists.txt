@@ -33,7 +33,10 @@ endif ()
 set(LIBIO_HRD ${PROJ_ROOT_PATH}
               ${LIBBASE_SRC_TOP}
               ${LIBLOG_SRC_TOP}
+              ${LIBCONTAINER_SRC_TOP}
               ${LIBTIMER_SRC_TOP}
+              ${LIBSIGNAL_SRC_TOP}
+              ${LIBTHREAD_SRC_TOP}
               ${LIBPROCESS_SRC_TOP}
               )
 

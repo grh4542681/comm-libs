@@ -25,7 +25,7 @@
 #include "process_info.h"
 #include "signal/process_signal_ctrl.h"
 
-namespace process {
+namespace infra::process {
 
 /**
 * @brief - Create process.

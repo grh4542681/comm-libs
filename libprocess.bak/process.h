@@ -10,7 +10,7 @@
 
 #define  MAX_PROCCESS_NAME_LEN (1024)
 
-namespace process {
+namespace infra::process {
 
 class Process {
 public:

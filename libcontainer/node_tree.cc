@@ -1,7 +1,7 @@
 #include <sstream>
 #include "node_tree.h"
 
-namespace container {
+namespace infra::container {
 
 NodeTree::ElementAny::ElementAny()
 {

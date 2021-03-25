@@ -1,7 +1,7 @@
 #ifndef __SOCK_COMMON_H__
 #define __SOCK_COMMON_H__
 
-namespace sock {
+namespace infra::sock {
 
 #define SOCK_ADDRESS_MAX_LEN (256)
 
@@ -21,6 +21,6 @@ enum class SockFamily{
     MULTICAST_INET6,    ///< Multicast ipv6.
 };
 
-}//namespace sock end
+}//namespace infra::sock end
 
 #endif

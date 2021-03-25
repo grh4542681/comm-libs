@@ -7,7 +7,7 @@
 #include "ipc_return.h"
 #include "sem.h"
 
-namespace ipc::sem {
+namespace infra::infra::ipc::sem {
 
 /**
 * @brief - System V semphore set.
@@ -41,6 +41,6 @@ private:
     key_t key_; ///< Semaphore set key.
 };
 
-} // namespace ipc
+} // namespace infra::infra::ipc
 
 #endif

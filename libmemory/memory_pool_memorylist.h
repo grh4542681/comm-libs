@@ -1,7 +1,7 @@
 #ifndef __MEMPOOL_MEMORYLIST_H__
 #define __MEMPOOL_MEMORYLIST_H__
 
-namespace mempool {
+namespace infra::mempool {
 
 /**
 * @brief - This linked list is used to store free memory blocks.
@@ -45,6 +45,6 @@ private:
     }
 };
 
-} //namespace end
+} //namespace infra::end
 
 #endif

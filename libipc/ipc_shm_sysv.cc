@@ -13,7 +13,7 @@
 #include "ipc_log.h"
 #include "shm_sysv.h"
 
-namespace ipc::shm {
+namespace infra::ipc::shm {
 
 ShmSysV::ShmSysV(std::string path) : Shm(path)
 {
@@ -141,4 +141,4 @@ IpcRet ShmSysV::Sync()
     return IpcRet::SUCCESS;
 }
 
-} //namespace end
+} //namespace infra::end

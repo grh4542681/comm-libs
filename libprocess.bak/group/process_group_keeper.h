@@ -15,7 +15,7 @@
 #include "process_group_worker_template.h"
 #include "process_group_worker_selectitem.h"
 
-namespace process::group {
+namespace infra::process::group {
 
 template < typename F, typename ... Args >
 class ProcessGroupKeeper {

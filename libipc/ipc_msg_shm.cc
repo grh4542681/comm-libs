@@ -6,7 +6,7 @@
 #define MSG_SHM_COUNT_INDEX (1)
 #define MSG_SHM_ALIGN_SIZE (8)
 
-namespace ipc::msg {
+namespace infra::ipc::msg {
 
 MsgShm::MsgShm()
 {

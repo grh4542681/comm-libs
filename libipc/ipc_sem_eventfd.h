@@ -8,7 +8,7 @@
 #include "ipc_return.h"
 #include "sem/sem.h"
 
-namespace ipc::sem {
+namespace infra::ipc::sem {
 
 class SemEventfd : public Sem {
 public:

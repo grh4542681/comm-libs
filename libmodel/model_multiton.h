@@ -7,7 +7,7 @@
 #include <utility>
 #include "thread_mutex_lock.h"
 
-namespace odp {
+namespace infra::odp {
 
 #if 0
 template < typename T, typename K = string>
@@ -194,6 +194,6 @@ private:
 template <typename T, typename K> thread::mutex::ThreadMutexLock Multiton<T, K>::mutex_;
 template <typename T, typename K> std::map<K, T*> Multiton<T, K>::instance_map_;
 
-} //namespace odp end
+} //namespace infra::odp end
 
 #endif

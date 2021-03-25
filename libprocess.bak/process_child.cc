@@ -1,6 +1,6 @@
 #include "process_child.h"
 
-namespace process {
+namespace infra::process {
 
 ProcessChild::ProcessChild()
 {

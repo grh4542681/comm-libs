@@ -3,12 +3,12 @@
 
 #include "parser.h"
 
-namespace parser {
+namespace infra::parser {
 
 class ParserXml : public Parser {
     
 };
 
-}//namespace parser end
+}//namespace infra::parser end
 
 #endif

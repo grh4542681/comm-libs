@@ -13,7 +13,7 @@
 
 #include "process_signal_set.h"
 
-namespace process::signal {
+namespace infra::process::signal {
 
 class ProcessSignalCtrl;
 

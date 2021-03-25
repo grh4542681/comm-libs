@@ -22,7 +22,7 @@
 #include "shm_sysv.h"
 #include "shm_posix.h"
 
-namespace ipc::shm {
+namespace infra::ipc::shm {
 
 /**
 * @brief - A share memory list.

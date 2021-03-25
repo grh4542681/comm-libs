@@ -7,11 +7,11 @@
 #include "mempool_freelist.h"
 #include "mempool_busylist.h"
 
-namespace file {
+namespace infra::infra::file {
 class File;
 }
 
-namespace mempool {
+namespace infra::infra::mempool {
 
 class MempoolThreadCache {
 public:
@@ -33,6 +33,6 @@ private:
     MempoolBusyList busy_list_;
 };
 
-} //namespace ned
+} //namespace infra::infra::end
 
 #endif

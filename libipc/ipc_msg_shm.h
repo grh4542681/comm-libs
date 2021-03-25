@@ -7,7 +7,7 @@
 #include "msg.h"
 #include "ipc_log.h"
 
-namespace ipc::msg {
+namespace infra::ipc::msg {
 
 class MsgShm : public Msg {
 public:

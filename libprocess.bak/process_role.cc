@@ -1,6 +1,6 @@
 #include "process_role.h"
 
-namespace process {
+namespace infra::process {
 
 unsigned int ProcessRole::Normal = 0x01;
 

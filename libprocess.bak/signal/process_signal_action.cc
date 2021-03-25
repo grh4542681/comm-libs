@@ -13,7 +13,7 @@
 
 #include "process_signal_action.h"
 
-namespace process::signal {
+namespace infra::process::signal {
 
 ProcessSignalAction::ProcessSignalAction()
 {

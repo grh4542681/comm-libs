@@ -20,7 +20,7 @@
 
 #include "container_return.h"
 
-namespace container{
+namespace infra::container{
 /*
  * Dictionary supported characters (ASCII code)
  * 

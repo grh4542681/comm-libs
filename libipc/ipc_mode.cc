@@ -1,6 +1,6 @@
 #include "ipc_mode.h"
 
-namespace ipc {
+namespace infra::ipc {
 
 int operator|(IpcMode a, IpcMode b) {
     return ((int)a | (int)b);

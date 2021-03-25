@@ -13,7 +13,7 @@
 
 #include <signal.h>
 
-namespace process::signal {
+namespace infra::process::signal {
 
 /**
 * @brief - Signal mask type.

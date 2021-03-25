@@ -7,7 +7,7 @@
 
 #include <pub_exception.h>
 
-namespace odp {
+namespace infra::container {
 
 template<typename T>
 class ThreadSafeQueue{

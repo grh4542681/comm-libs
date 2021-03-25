@@ -13,7 +13,7 @@
 #include "process_log.h"
 #include "process_signal_ctrl.h"
 
-namespace process::signal {
+namespace infra::process::signal {
 
 ProcessSignalCtrl* ProcessSignalCtrl::pInstance = NULL;
 

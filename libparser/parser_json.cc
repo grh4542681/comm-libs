@@ -21,7 +21,7 @@
 #include "rapidjson/writer.h"
 #include "rapidjson/prettywriter.h"
 
-namespace parser {
+namespace infra::parser {
 
 //ParserJsonObject class
 /**
@@ -1928,4 +1928,4 @@ ParserJsonObject ParserJson::find(const char* path)
     }
 }
 
-} //namespace end
+} //namespace infra::end

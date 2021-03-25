@@ -2,7 +2,7 @@
 #include "mempool.h"
 #include "mempool_center.h"
 
-namespace mempool {
+namespace infra::mempool {
 
 thread_local Mempool* Mempool::pInstance = NULL;
 
@@ -62,4 +62,4 @@ void Mempool::freeInstance()
     }
 }
 
-}// namespace pub end
+}// namespace infra::pub end

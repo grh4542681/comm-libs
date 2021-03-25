@@ -4,7 +4,7 @@
 #include "alloctor.h"
 #include "mempool.h"
 
-namespace mempool {
+namespace infra::mempool {
 
 class MempoolAlloctor : public base::Alloctor {
 public:

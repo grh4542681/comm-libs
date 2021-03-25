@@ -10,7 +10,7 @@
 #include "process_pool_worker.h"
 #include "process_pool_worker_template.h"
 
-namespace process::pool {
+namespace infra::process::pool {
 
 template < typename F, typename ... Args >
 class ProcessPoolKeeper {

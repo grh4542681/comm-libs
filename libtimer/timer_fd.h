@@ -9,8 +9,14 @@
 
 namespace infra::timer {
 
+/**
+* @brief - timer file descriptor
+*/
 class FD  : virtual public base::Object, public io::FD {
 public:
+    /**
+    * @brief - timer file descriptor flag
+    */
     enum Flag {
         Realtime = 0x0001,
         Monotonic = 0x0002,
@@ -39,9 +45,9 @@ public:
     Time& GetIntervalTime();
     int GetTriggerCounts();
 
-    Return Start();
-    Return Start(int flag, Time& trigger_time, Time& interval_time);
-    Return Stop();
+    Return Enable();
+    Return Enable(int flag, Time& trigger_time, Time& interval_time);
+    Return Disable();
 
 private:
     bool first_start_ = true;

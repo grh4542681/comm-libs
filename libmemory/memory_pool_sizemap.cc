@@ -1,6 +1,6 @@
 #include "mempool_sizemap.h"
 
-namespace mempool {
+namespace infra::mempool {
 
 MempoolSizeMap::MempoolSizeMap() {
 
@@ -10,4 +10,4 @@ MempoolSizeMap::~MempoolSizeMap() {
 
 }
 
-} //namespace end
+} //namespace infra::end

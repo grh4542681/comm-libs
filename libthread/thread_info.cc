@@ -9,7 +9,7 @@
 
 #define MAX_THREAD_NAME_LEN (1024)
 
-namespace thread {
+namespace infra::thread {
 
 thread_local ThreadInfo* ThreadInfo::pInstance = NULL;
 

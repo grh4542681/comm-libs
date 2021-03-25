@@ -15,7 +15,7 @@
 #include "process_info.h"
 #include "signal/process_signal_ctrl.h"
 
-namespace process::group {
+namespace infra::process::group {
 
 template < typename F, typename ... Args >
 class ProcessGroupWorkerTemplate {

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "mempool_center.h"
 
-namespace mempool {
+namespace infra::mempool {
 
 MempoolCenter* MempoolCenter::pInstance = NULL;
 
@@ -20,4 +20,4 @@ MempoolCenter* MempoolCenter::getInstance() {
     return pInstance;
 }
 
-} //namespace end
+} //namespace infra::end

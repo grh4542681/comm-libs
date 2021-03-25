@@ -1,7 +1,7 @@
 #ifndef __HEARTBEAR_CTRL_H__
 #define __HEARTBEAR_CTRL_H__
 
-namespace heartbeat {
+namespace infra::heartbeat {
 
 class HeartbeatCtrl {
 public:

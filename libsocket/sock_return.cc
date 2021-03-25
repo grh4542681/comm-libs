@@ -1,6 +1,6 @@
 #include "sock_return.h"
 
-namespace sock {
+namespace infra::sock {
 
 SockRet::ECodeMapType SockRet::ECodeMap = {
     { ECode::SOCK_EBASE, "Socket base error." },

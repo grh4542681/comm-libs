@@ -5,7 +5,7 @@
 #include <memory>
 #include "thread_mutex_lock.h"
 
-namespace odp {
+namespace infra::odp {
 
 template <typename T>
 class Singleton {
@@ -59,6 +59,6 @@ private:
 template <typename T> T* Singleton<T>::pInstance_ = NULL;
 template <typename T> thread::mutex::ThreadMutexLock Singleton<T>::mutex_;
 
-} //namespace odp end
+} //namespace infra::odp end
 
 #endif

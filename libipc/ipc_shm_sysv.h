@@ -18,7 +18,7 @@
 #include "ipc_return.h"
 #include "shm.h"
 
-namespace ipc::shm {
+namespace infra::ipc::shm {
 
 /**
 * @brief - SystemV share memory.
@@ -89,6 +89,6 @@ private:
     ShmSysV(const ShmSysV& other);
 };
 
-}//namespace ipc end
+}//namespace infra::ipc end
 
 #endif

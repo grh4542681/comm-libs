@@ -20,7 +20,7 @@
 namespace infra::timer {
 
 /**
-* @brief - Virtual class Time
+* @brief - Time class
 */
 class Time : virtual public base::Object {
 public:

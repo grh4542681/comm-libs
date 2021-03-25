@@ -1,7 +1,7 @@
 #ifndef __SHM_STATUS_H__
 #define __SHM_STATUS_H__
 
-namespace ipc::shm {
+namespace infra::ipc::shm {
 
 enum class ShmStatus {
     UNKNOW = 0x00,

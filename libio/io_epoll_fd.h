@@ -42,8 +42,8 @@ public:
     ~EpollFD();
 
     //Inherited from class FD.
-    ret::Return SetFD(unsigned int fd, bool auto_close);
-    ret::Return Dup(io::FD& new_fd);
+    Return SetFD(unsigned int fd, bool auto_close);
+    Return Dup(io::FD& new_fd);
     io::FD* Clone();
     void Close();
     ssize_t Write(const void* data, size_t datalen);
@@ -55,42 +55,42 @@ public:
     * @param [fd] - File descriptor.
     * @param [events] - Events set.
     *
-    * @returns  IoRet.
+    * @returns  Return.
     */
-    IoRet AddEvent(FD& fd, int events);
+    Return AddEvent(FD& fd, int events);
     /**
     * @brief AddEvent - Add a listen event.
     *
     * @param [event] - SelectEvent.
     *
-    * @returns  IoRet.
+    * @returns  Return.
     */
-    IoRet AddEvent(SelectEvent& event);
+    Return AddEvent(SelectEvent& event);
     /**
     * @brief ModEvent - Modify a listen event.
     *
     * @param [fd] - File descriptor.
     * @param [events] - New events set.
     *
-    * @returns  IoRet
+    * @returns  Return
     */
-    IoRet ModEvent(FD& fd, int events);
+    Return ModEvent(FD& fd, int events);
     /**
     * @brief ModEvent - Modify a listen event.
     *
     * @param [event] - New SelectEvent.
     *
-    * @returns  IoRet.
+    * @returns  Return.
     */
-    IoRet ModEvent(SelectEvent& event);
+    Return ModEvent(SelectEvent& event);
     /**
     * @brief DelEvent - Delete a listen event.
     *
     * @param [fd] - File descriptor.
     *
-    * @returns  IoRet.
+    * @returns  Return.
     */
-    IoRet DelEvent(FD& fd);
+    Return DelEvent(FD& fd);
 };
 
 }

@@ -15,7 +15,7 @@
 
 #define PARSERINI_LINE_MAX_LEN (256)
 
-namespace parser {
+namespace infra::parser {
 
 ParserIni::ParserIni(std::string filename)
 {
@@ -242,4 +242,4 @@ ParserRet ParserIni::_free()
     return ParserRet::SUCCESS;
 }
 
-}//namespace parser end
+}//namespace infra::parser end

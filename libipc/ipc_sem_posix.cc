@@ -6,7 +6,7 @@
 #include "ipc_log.h"
 #include "sem_posix.h"
 
-namespace ipc::sem {
+namespace infra::ipc::sem {
 
 SemPosix::SemPosix() : Sem()
 {

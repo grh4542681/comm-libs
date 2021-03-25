@@ -5,7 +5,7 @@
 #include "sock_address.h"
 #include "sock_log.h"
 
-namespace sock {
+namespace infra::sock {
 
 SockAddress::SockAddress()
 {
@@ -192,4 +192,4 @@ bool SockAddress::isMulticast()
     return this->multicast_flag_;
 }
 
-}//namespace sock end
+}//namespace infra::sock end

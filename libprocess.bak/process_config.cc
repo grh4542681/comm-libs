@@ -1,7 +1,7 @@
 #include "process_config.h"
 #include "process_log.h"
 
-namespace process {
+namespace infra::process {
 
 config::ConfigRet ProcessConfig::LoadJson(parser::ParserJson& parser)
 {

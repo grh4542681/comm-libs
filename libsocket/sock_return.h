@@ -13,7 +13,7 @@
 
 #include "return.h"
 
-namespace sock{
+namespace infra::sock{
 
 /**
 * @brief - Socket api return value.

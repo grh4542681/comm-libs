@@ -13,7 +13,7 @@
 #include "sem_sysv.h"
 #include "sem_posix.h"
 
-namespace ipc::sem {
+namespace infra::ipc::sem {
 
 enum class SemRWLockMode {
     PreferRead,

@@ -9,11 +9,11 @@
 #include "mempool_return.h"
 #include "mempool_itemori.h"
 
-namespace file {
+namespace infra::infra::file {
 class File;
 }
 
-namespace mempool {
+namespace infra::infra::mempool {
 
 class MempoolBusyList {
 public:

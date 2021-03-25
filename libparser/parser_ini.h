@@ -16,7 +16,7 @@
 #include "parser_return.h"
 #include "mempool.h"
 
-namespace parser {
+namespace infra::parser {
 
 /**
 * @brief - Parser *.ini config file class.
@@ -101,6 +101,6 @@ private:
     ParserRet _free();
 };
 
-}//namespace parser end
+}//namespace infra::parser end
 
 #endif

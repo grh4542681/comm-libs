@@ -6,7 +6,7 @@
 #include "parser_return.h"
 #include "parser.h"
 
-namespace parser {
+namespace infra::parser {
 
 class ParserTvlObject {
 public:

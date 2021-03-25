@@ -12,7 +12,6 @@ FD::FD() : io::FD()
 
 FD::FD(int flag)
 {
-    first_start_ = true;
     auto_close_ = false;
     flag_ = flag;
 
@@ -34,14 +33,13 @@ FD::FD(int flag)
 
     fd_ = timerfd_create(clockid, flags);
     if (fd_ <= 0) {
-        //TIMER_ERROR("Create timer fd error: %s", strerror(errno));
+        Log::Error("create timer-fd error: ", strerror(errno));
         fd_ = -1;
     }
 }
 
 FD::FD(int flag, Time& trigger_time, Time& interval_time)
 {
-    first_start_ = true;
     auto_close_ = false;
     flag_ = flag;
     trigger_time_ = trigger_time;
@@ -65,7 +63,7 @@ FD::FD(int flag, Time& trigger_time, Time& interval_time)
 
     fd_ = timerfd_create(clockid, flags);
     if (fd_ <= 0) {
-        //TIMER_ERROR("Create timer fd error: %s", strerror(errno));
+        Log::Error("create timer-fd error: ", strerror(errno));
         fd_ = -1;
     }
 }
@@ -76,15 +74,13 @@ FD::FD(unsigned int fd, bool auto_close) : io::FD(fd, auto_close)
     struct stat fd_stat;
     if (fstat(fd, &fd_stat)) {
         temp_errno = errno;
-        //TIMER_ERROR("%s", strerror(temp_errno));
+        Log::Error("create timer-fd error: ", strerror(temp_errno));
         fd = -1;
     }
-    first_start_ = true;
 }
 
 FD::FD(FD& other) : io::FD(other)
 {
-    first_start_  = other.first_start_;
     flag_ = other.flag_;
     trigger_time_ = other.trigger_time_;
     interval_time_ = other.interval_time_;
@@ -105,14 +101,13 @@ io::Return FD::SetFD(unsigned int fd, bool auto_close)
     struct stat fd_stat;
     if (fstat(fd, &fd_stat)) {
         temp_errno = errno;
-        //TIMER_ERROR("%s", strerror(temp_errno));
+        Log::Error(strerror(temp_errno));
         fd = -1;
         auto_close_ = auto_close;
         return temp_errno;
     }
     fd_ = fd;
     auto_close_ = auto_close;
-    first_start_ = true;
     trigger_time_.SetTime(0, Time::Unit::Second);
     interval_time_.SetTime(0, Time::Unit::Second);
     return Return::SUCCESS;
@@ -125,7 +120,7 @@ io::Return FD::Dup(FD& new_fd)
 
 io::FD* FD::Clone()
 {
-    return alloc_.Allocate<FD>(*this);
+    return new FD(*this);
 }
 
 void FD::Close()
@@ -135,7 +130,7 @@ void FD::Close()
 
 ssize_t FD::Write(const void* data, size_t datalen)
 {
-    //TIMER_ERROR("Timer fd not support write.");
+    Log::Error("timer-fd not support write.");
     return 0;
 }
 
@@ -159,16 +154,15 @@ int FD::GetTriggerCounts()
     return 0;
 }
 
-Return FD::Start(int flag, Time& trigger_time, Time& interval_time)
+Return FD::Enable(int flag, Time& trigger_time, Time& interval_time)
 {
     flag_ = flag;
     trigger_time_ = trigger_time;
     interval_time_ = interval_time;
-    first_start_ = true;
-    return Start();
+    return Enable();
 }
 
-Return FD::Start()
+Return FD::Enable()
 {
     int flags = 0;
     if (flag_ & Flag::Absolute) {
@@ -178,21 +172,18 @@ Return FD::Start()
     struct itimerspec itime;
     memset(&itime, 0x00, sizeof(struct itimerspec));
 
-    if (first_start_) {
-        first_start_ = false;
-        trigger_time_.To(&itime.it_value);
-    }
+    trigger_time_.To(&itime.it_value);
     interval_time_.To(&itime.it_interval);
 
     if (timerfd_settime(fd_, flags, &itime, NULL) < 0) {
         int tmp_errno = errno;
-        //TIMER_ERROR("Start timer error: %s", strerror(tmp_errno));
+        Log::Error("enable timer-fd error: ", strerror(tmp_errno));
         return tmp_errno;
     }
     return Return::SUCCESS;
 }
 
-Return FD::Stop()
+Return FD::Disable()
 {
     int flags = 0;
     if (flag_ & Flag::Absolute) {
@@ -204,11 +195,10 @@ Return FD::Stop()
     
     if (timerfd_settime(fd_, flags, &itime, NULL) < 0) {
         int tmp_errno = errno;
-        //TIMER_ERROR("Stop timer error: %s", strerror(tmp_errno));
+        Log::Error("disable timer-fd error: ", strerror(tmp_errno));
         return tmp_errno;
     }
     return Return::SUCCESS;
 }
-
 
 }

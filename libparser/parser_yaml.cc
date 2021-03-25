@@ -3,7 +3,7 @@
 #include "parser_log.h"
 #include "parser_yaml.h"
 
-namespace parser {
+namespace infra::parser {
 
 ParserYamlObject::ParserYamlObject()
 {

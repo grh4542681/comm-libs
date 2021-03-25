@@ -6,7 +6,7 @@
 #include "timer_time.h"
 #include "process_return.h"
 
-namespace process::mutex {
+namespace infra::process::mutex {
 
 class ProcessRWLock{
 public:

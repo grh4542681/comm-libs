@@ -2,7 +2,7 @@
 
 #define MAX_TVL_ELEMENT (9999)
 
-namespace parser {
+namespace infra::parser {
 
 ParserTvl::ParserTvl() { }
 ParserTvl::~ParserTvl()

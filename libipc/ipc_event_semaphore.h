@@ -5,7 +5,7 @@
 
 #include "event_fd.h"
 
-namespace ipc::event {
+namespace infra::ipc::event {
 
 class SemEvent : public sem::Sem {
 public:

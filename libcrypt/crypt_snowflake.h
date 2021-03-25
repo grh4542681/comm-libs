@@ -359,16 +359,16 @@ private:
 
 const long Snowflake::INVALID_ID = 0x8000000000000000l;
 const std::map<Snowflake::Mode, std::vector<std::tuple<Snowflake::Component, unsigned int>>> Snowflake::ModeComposition = {
-    {Mode::Default,    {{ Snowflake::Component::Time, 41 },
-                        { Snowflake::Component::Mac,   10 },
-                        { Snowflake::Component::Serial,    12 }}},
-    {Mode::SingleNode, {{ Snowflake::Component::Time, 45 },
-                        { Snowflake::Component::TimeBack,  2  },
-                        { Snowflake::Component::Serial,    16 }}},
-    {Mode::Distribute, {{ Snowflake::Component::Time, 41 },
-                        { Snowflake::Component::TimeBack,  2  },
-                        { Snowflake::Component::Mac,   10 },
-                        { Snowflake::Component::Serial,    12 }}},
+    {Mode::Default,    {{ Snowflake::Component::Time,     41 },
+                        { Snowflake::Component::Mac,      10 },
+                        { Snowflake::Component::Serial,   12 }}},
+    {Mode::SingleNode, {{ Snowflake::Component::Time,     45 },
+                        { Snowflake::Component::TimeBack, 2 },
+                        { Snowflake::Component::Serial,   16 }}},
+    {Mode::Distribute, {{ Snowflake::Component::Time,     41 },
+                        { Snowflake::Component::TimeBack, 2  },
+                        { Snowflake::Component::Mac,      10 },
+                        { Snowflake::Component::Serial,   12 }}},
 };
 
 }

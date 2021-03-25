@@ -6,7 +6,7 @@
 #include "mempool_sizemap.h"
 #include "mempool_memorylist.h"
 
-namespace mempool {
+namespace infra::mempool {
 
 class MempoolFreeList {
 public:
@@ -22,6 +22,6 @@ private:
 
 };
 
-} //namespace end
+} //namespace infra::end
 
 #endif

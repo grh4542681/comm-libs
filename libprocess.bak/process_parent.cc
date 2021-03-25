@@ -1,6 +1,6 @@
 #include "process_parent.h"
 
-namespace process {
+namespace infra::process {
 
 ProcessParent::ProcessParent()
 {

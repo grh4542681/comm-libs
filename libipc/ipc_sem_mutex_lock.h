@@ -8,7 +8,7 @@
 #include "sem_sysv.h"
 #include "sem_posix.h"
 
-namespace ipc::sem {
+namespace infra::ipc::sem {
 
 template < typename T = SemSysV >
 class SemMutexLock {

@@ -6,7 +6,7 @@
 #include "parser_log.h"
 #include "parser.h"
 
-namespace parser {
+namespace infra::parser {
 
 class ParserYamlObject {
 public:

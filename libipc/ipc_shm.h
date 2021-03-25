@@ -18,7 +18,7 @@
 #include "ipc_mode.h"
 #include "shm_status.h"
 
-namespace ipc::shm {
+namespace infra::ipc::shm {
 
 /**
 * @brief - Top share memory virtual class

@@ -3,7 +3,7 @@
 #include "mempool_busylist.h"
 #include "file.h"
 
-namespace mempool {
+namespace infra::mempool {
 
 MempoolBusyList::MempoolBusyList()
 {

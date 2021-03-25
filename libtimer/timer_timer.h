@@ -11,7 +11,7 @@
 #include "timer_log.h"
 #include "timer_fd.h"
 
-namespace infra {
+namespace infra::timer {
 
 class Timer : virtual public base::Object {
 public:

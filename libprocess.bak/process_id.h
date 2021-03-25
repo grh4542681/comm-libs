@@ -4,7 +4,7 @@
 #include <sys/types.h>
 #include <iostream>
 
-namespace process {
+namespace infra::process {
 
 class ProcessID {
 public:

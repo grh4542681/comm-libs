@@ -1,7 +1,7 @@
 #ifndef __MSG_ID_H__
 #define __MSG_ID_H__
 
-namespace ipc::msg {
+namespace infra::ipc::msg {
 
 class MsgID {
 public:

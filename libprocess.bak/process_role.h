@@ -1,7 +1,7 @@
 #ifndef __PROCESS_ROLE_H__
 #define __PROCESS_ROLE_H__
 
-namespace process {
+namespace infra::process {
 
 class ProcessRole {
 public:

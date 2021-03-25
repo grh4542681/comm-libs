@@ -2,7 +2,7 @@
 #define __IO_SELECT_H__
 
 #include "object.h"
-#include "process_signal_set.h"
+#include "signal_set.h"
 #include "timer_time.h"
 
 #include "io_return.h"
@@ -88,7 +88,7 @@ public:
     *
     * @returns  Vector of all triggered events
     */
-    std::vector<SelectEvent> Listen(process::SignalSet* sigmask, timer::Time* overtime);
+    std::vector<SelectEvent> Listen(signal::Set* sigmask, timer::Time* overtime);
 private:
     bool init_flag_;            ///< Initialization flag
     int efd_;                   ///< epoll file descriptor

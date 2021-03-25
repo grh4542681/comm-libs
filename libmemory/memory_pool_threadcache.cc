@@ -7,7 +7,7 @@
 #include "mempool_threadcache.h"
 #include "mempool_osproxy.h"
 
-namespace mempool {
+namespace infra::mempool {
 
 MempoolThreadCache::MempoolThreadCache()
 {
@@ -106,4 +106,4 @@ void MempoolThreadCache::Report(file::File& fd)
     busy_list_.Report(fd);
 }
 
-} //namespace end
+} //namespace infra::end

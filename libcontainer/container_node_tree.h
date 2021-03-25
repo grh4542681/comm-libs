@@ -15,7 +15,7 @@
 #include "container_return.h"
 #include "container_log.h"
 
-namespace container {
+namespace infra::container {
 
 class NodeTree {
 public:

@@ -12,7 +12,7 @@
 #include "process_log.h"
 #include "process_id.h"
 
-namespace process::pool {
+namespace infra::process::pool {
 
 class ProcessPoolWorker {
 public:

@@ -7,7 +7,7 @@
 #include "sock_common.h"
 #include "sock_return.h"
 
-namespace sock{
+namespace infra::sock{
 
 /**
 * @brief - Socket address operator class.

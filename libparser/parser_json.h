@@ -24,7 +24,7 @@
 
 #define MAXJSONFILESIZE (1024*1024)
 
-namespace parser {
+namespace infra::parser {
 
 /**
 * @brief - Type of json field.
@@ -180,6 +180,6 @@ private:
     rapidjson::Document doc_;
 };
 
-}//namespace parser end
+}//namespace infra::parser end
 
 #endif

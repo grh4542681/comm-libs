@@ -11,7 +11,7 @@
 #include "process_info.h"
 #include "group/process_group_keeper.h"
 
-namespace process {
+namespace infra::process {
 
 template < typename F >
 class ProcessMain {

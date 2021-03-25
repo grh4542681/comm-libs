@@ -50,7 +50,7 @@
 #define SHM_TT_DICT_INDEX(c) (c & (~0x20))  ///< Calculate the offset of a character.
 #define SHM_TT_DICT_CHAR(c) (c | (0x20))    ///< Calculate characters by offset.
 
-namespace ipc::shm {
+namespace infra::ipc::shm {
 
 template < typename S, typename T >
 class ShmTrieTree {

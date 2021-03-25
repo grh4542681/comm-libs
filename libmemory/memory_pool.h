@@ -12,11 +12,11 @@
 #include "report.h"
 #include "mempool_threadcache.h"
 
-namespace file {
+namespace infra::infra::file {
 class File;
 }
 
-namespace mempool {
+namespace infra::infra::mempool {
 
 class Mempool : public report::VReport {
 public:
@@ -90,6 +90,6 @@ private:
 };
 
 
-}//namespace pub end
+}//namespace infra::infra::pub end
 
 #endif

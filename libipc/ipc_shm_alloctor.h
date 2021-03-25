@@ -3,7 +3,7 @@
 
 #include "alloctor.h"
 
-namespace ipc::shm {
+namespace infra::ipc::shm {
 
 class ShmAlloctor : public base::Alloctor {
 public:

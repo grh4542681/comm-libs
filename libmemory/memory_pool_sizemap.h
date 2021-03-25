@@ -5,7 +5,7 @@
 #include <stddef.h>
 #include <sys/types.h>
 
-namespace mempool {
+namespace infra::mempool {
 
 /**
 * @brief - Small obejct size map.
@@ -77,7 +77,7 @@ private:
     }
 };
 
-} //namespace end
+} //namespace infra::end
 
 
 #endif

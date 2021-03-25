@@ -1,6 +1,6 @@
 #include "mempool_freelist.h"
 
-namespace mempool {
+namespace infra::mempool {
 
 MempoolFreeList::MempoolFreeList()
 {
@@ -26,4 +26,4 @@ MempoolRet MempoolFreeList::Clear()
     return MempoolRet::SUCCESS;
 }
 
-} //namespace end
+} //namespace infra::end

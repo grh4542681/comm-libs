@@ -5,7 +5,7 @@
 
 #include "shm.h"
 
-namespace ipc::shm {
+namespace infra::ipc::shm {
 
 template < typename S > class ShmPool {
 public:

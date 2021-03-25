@@ -13,7 +13,7 @@
 #include "sem_sysv.h"
 
 
-namespace ipc::sem {
+namespace infra::infra::ipc::sem {
 
 SemSysV::SemSysV() : Sem()
 {
@@ -235,4 +235,4 @@ IpcRet SemSysV::_v(size_t sem_index)
     return IpcRet::SUCCESS;
 }
 
-} //namespace ipc
+} //namespace infra::infra::ipc

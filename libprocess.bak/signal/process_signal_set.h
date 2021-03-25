@@ -16,11 +16,11 @@
 #include "process_return.h"
 #include "process_signal.h"
 
-namespace thread::signal {
+namespace infra::infra::thread::signal {
 class ThreadSignalCtrl;
 }
 
-namespace process::signal {
+namespace infra::infra::process::signal {
 
 class ProcessSignalCtrl;
 class ProcessSignalAction;

@@ -14,7 +14,7 @@
 
 #define ProcessChildSockFDIndex (1)
 
-namespace process {
+namespace infra::process {
 
 class ProcessChild {
 public:

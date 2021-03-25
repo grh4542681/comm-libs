@@ -19,7 +19,7 @@
 #include "process_info.h"
 #include "process_log.h"
 
-namespace process::signal {
+namespace infra::process::signal {
 
 /**
 * @brief SignalCommonCallback_SIGCHLD - Default callback function for SIGCHLD.

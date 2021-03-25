@@ -1,6 +1,6 @@
 #include "event_semaphore.h"
 
-namespace ipc::event {
+namespace infra::ipc::event {
 
 SemEvent::SemEvent()
 {

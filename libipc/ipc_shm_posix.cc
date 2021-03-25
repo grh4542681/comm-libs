@@ -17,7 +17,7 @@
 
 #include "shm_posix.h"
 
-namespace ipc::shm {
+namespace infra::ipc::shm {
 
 ShmPosix::ShmPosix(std::string path) : Shm(path)
 {
@@ -163,4 +163,4 @@ IpcRet ShmPosix::Sync()
     return IpcRet::SUCCESS;
 }
 
-} //namespace end
+} //namespace infra::end

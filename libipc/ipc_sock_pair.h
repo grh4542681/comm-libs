@@ -5,8 +5,8 @@
 #include "ipc_return.h"
 
 #include "sock_fd.h"
-namespace socklib = sock;
-namespace ipc::sock {
+namespace infra::infra::socklib = sock;
+namespace infra::infra::ipc::sock {
 
 class SockPair {
 public:

@@ -1,6 +1,6 @@
 #include "process_pool_worker.h"
 
-namespace process::pool {
+namespace infra::process::pool {
 
 ProcessPoolWorker::ProcessPoolWorker(sock::SockAddress& worker_address)
 {

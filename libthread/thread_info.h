@@ -11,7 +11,7 @@
 #include "thread_return.h"
 #include "thread_id.h"
 
-namespace thread {
+namespace infra::thread {
 template <typename H, typename F, typename R> class ThreadTemplate;
 class ThreadInfo {
 public:

@@ -5,7 +5,7 @@
 #include "sock_fd.h"
 #include "process_id.h"
 
-namespace process::group {
+namespace infra::process::group {
 
 template < typename HOST >
 class ProcessGroupWorkerSelectItem : public io::SelectItemTemplate<HOST> {

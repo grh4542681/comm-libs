@@ -7,7 +7,7 @@
 
 #include "thread_return.h"
 
-namespace infra::thread{
+namespace infra::infra::thread{
 
 /**
 * @brief - Thread level read/write lock.
@@ -26,7 +26,7 @@ private:
     pthread_rwlock_t rwlock_;   ///< package pthread lib rwlock.
 };
 
-} // namespace thread
+} // namespace infra::thread
 
 
 #endif

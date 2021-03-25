@@ -11,7 +11,7 @@
 #include "sock_return.h"
 #include "sock_address.h"
 
-namespace sock{
+namespace infra::sock{
 
 /**
 * @brief - Socker file descriptor operator class.
@@ -74,6 +74,6 @@ private:
     ssize_t _recv(struct sockaddr* orig, void* data, size_t datalen, void* ctrldata, size_t ctrldatalen, int flags);
 };
 
-}//namespace socket end
+}//namespace infra::socket end
 
 #endif

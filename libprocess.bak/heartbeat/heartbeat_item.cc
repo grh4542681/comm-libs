@@ -1,6 +1,6 @@
 #include "heartbeat_item.h"
 
-namespace heartbeat {
+namespace infra::heartbeat {
 
 HeartbeatItem::HeartbeatItem(io::FD& fd, timer::Time& over_time)
 {

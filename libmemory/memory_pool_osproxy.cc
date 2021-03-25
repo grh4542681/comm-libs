@@ -2,7 +2,7 @@
 
 #include "mempool_osproxy.h"
 
-namespace mempool {
+namespace infra::mempool {
 
 MempoolOsProxy::MempoolOsProxy()
 {

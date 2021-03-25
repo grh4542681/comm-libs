@@ -1,7 +1,7 @@
 #ifndef __HEARTBEAT_RETURN_H__
 #define __HEARTBEAT_RETURN_H__
 
-namespace heartbeat{
+namespace infra::heartbeat{
 
 enum class HeartBeatRet: int {
 //common return val

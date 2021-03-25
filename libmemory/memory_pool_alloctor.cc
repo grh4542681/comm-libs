@@ -2,7 +2,7 @@
 
 #include "mempool_alloctor.h"
 
-namespace mempool {
+namespace infra::mempool {
 
 MempoolAlloctor::MempoolAlloctor() : base::Alloctor()
 {

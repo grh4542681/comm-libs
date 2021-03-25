@@ -1,7 +1,7 @@
 #ifndef __HEARTBEAT_H__
 #define __HEARTBEAT_H__
 
-namespace heartbeat {
+namespace infra::heartbeat {
 
 class Heartbeat {
 public:

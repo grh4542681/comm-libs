@@ -1,6 +1,8 @@
 #ifndef __THREAD_TEMPLATE_H__
 #define __THREAD_TEMPLATE_H__
 
+#include <functional>
+
 #include "object.h"
 
 //#include "process_handler.h"

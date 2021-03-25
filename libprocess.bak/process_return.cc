@@ -1,6 +1,6 @@
 #include "process_return.h"
 
-namespace process {
+namespace infra::process {
 
 ProcessRet::ECodeMapType ProcessRet::ECodeMap = {
     { PROCESS_EMEMORY, "" },

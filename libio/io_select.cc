@@ -77,7 +77,7 @@ std::vector<SelectEvent> Select::Listen(timer::Time* overtime)
     return Listen(NULL, overtime);
 }
 
-std::vector<SelectEvent> Select::Listen(process::SignalSet* sigmask, timer::Time* overtime)
+std::vector<SelectEvent> Select::Listen(signal::Set* sigmask, timer::Time* overtime)
 {
     std::vector<SelectEvent> event_vec;
 

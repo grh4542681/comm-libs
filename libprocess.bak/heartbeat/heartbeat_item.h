@@ -7,7 +7,7 @@
 
 #include "heartbeat_state.h"
 
-namespace heartbeat {
+namespace infra::heartbeat {
 
 class HeartbeatItem {
 public:

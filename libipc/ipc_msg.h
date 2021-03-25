@@ -7,7 +7,7 @@
 #include "ipc_return.h"
 #include "ipc_mode.h"
 
-namespace ipc::msg {
+namespace infra::ipc::msg {
 
 class Msg {
 public:

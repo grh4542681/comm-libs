@@ -4,10 +4,9 @@
 #include <sys/epoll.h>
 
 #include "object.h"
-#include "mempool.h"
 #include "thread_template.h"
-#include "mutex/thread_mutex_lock.h"
-#include "signal/process_signal_set.h"
+#include "thread_mutex.h"
+#include "signal_set.h"
 #include "timer_time.h"
 #include "timer_fd.h"
 
@@ -37,29 +36,29 @@ public:
     * @tparam [Args] - Variable length parameter type.
     * @param [args] - Parameters required for T instantiation.
     *
-    * @returns  IoRet.
+    * @returns  Return.
     */
-    template <typename T, typename ... Args> IoRet AddSelectItem(Args&& ... args)
+    template <typename T, typename ... Args> Return AddSelectItem(Args&& ... args)
     {
         SelectItem* item = alloc_.Allocate<T>(std::forward<Args>(args)...);
         if (!item) {
-            return IoRet::EMALLOC;
+            return Return::EMALLOC;
         }
         std::pair<std::map<int, SelectItem*>::iterator, bool> map_ret = select_item_map_.insert({item->GetSelectEvent().GetFd().GetFD(), item});
         if (map_ret.second == false) {
             alloc_.Deallocate<T>(dynamic_cast<T*>(item));
-            return IoRet::EMAP;
+            return Return::EMAP;
         }
-        IoRet ret = fd_.AddEvent(item->GetSelectEvent());
-        if (ret != IoRet::SUCCESS) {
+        Return ret = fd_.AddEvent(item->GetSelectEvent());
+        if (ret != Return::SUCCESS) {
             select_item_map_.erase(item->GetSelectEvent().GetFd().GetFD());
             alloc_.Deallocate<T>(dynamic_cast<T*>(item));
             return ret;
         }
         return ret;
     }
-    IoRet DelSelectItem(FD& fd);
-    IoRet ModSelectItem();
+    Return DelSelectItem(FD& fd);
+    Return ModSelectItem();
     const SelectItem* GetSelectItem(FD& fd);
     /**
     * @brief HasSelectItem - Whether to include item.
@@ -90,9 +89,9 @@ public:
     * @param [overtime] - Over time.
     *                     if non-blocking, This parameter will be ignored.
     *
-    * @returns  IoRet.
+    * @returns  Return.
     */
-    IoRet Listen(timer::Time overtime);
+    Return Listen(timer::Time overtime);
     /**
     * @brief Listen - Start listening.
     *                 It will occupy the current thread and will not return.
@@ -101,9 +100,9 @@ public:
     * @param [overtime] - Over time.
     *                     if non-blocking, This parameter will be ignored.
     *
-    * @returns  IoRet.
+    * @returns  Return.
     */
-    IoRet Listen(process::signal::ProcessSignalSet sigmask, timer::Time overtime);
+    Return Listen(signal::Set sigmask, timer::Time overtime);
     /**
     * @brief ListenThread - Start listening.
     *                       It will create a new thread, does not take up the current thread.
@@ -113,7 +112,7 @@ public:
     *
     * @returns  
     */
-    IoRet ListenThread(timer::Time overtime);
+    Return ListenThread(timer::Time overtime);
     /**
     * @brief ListenThread - Start listening.
     *                       It will create a new thread, does not take up the current thread.
@@ -122,9 +121,9 @@ public:
     * @param [overtime] - Over time.
     *                     if non-blocking, This parameter will be ignored.
     *
-    * @returns  IoRet.
+    * @returns  Return.
     */
-    IoRet ListenThread(process::signal::ProcessSignalSet sigmask, timer::Time overtime);
+    Return ListenThread(signal::Set sigmask, timer::Time overtime);
 
 private:
     /**
@@ -137,20 +136,19 @@ private:
     *
     * @returns  
     */
-    static IoRet _select_listener_thread_handler(AutoSelect* instance, process::signal::ProcessSignalSet sigmask, timer::Time overtime);
+    static Return _select_listener_thread_handler(AutoSelect* instance, signal::Set sigmask, timer::Time overtime);
 
 private:
     bool init_flag_ = false;        ///< Initialization flag.
     bool nonblock_flag_ = false;    ///< Non-blocking flag.
-    mempool::MempoolAlloctor alloc_;
     EpollFD fd_;                    ///< epoll file descriptor.
 
-    thread::mutex::ThreadMutexLock mutex_;          ///< Thread mutex lock.
+    thread::Mutex mutex_;          ///< Thread mutex lock.
     std::map<int, SelectItem*> select_item_map_;    ///< SelectItem map.
 
-    thread::ThreadTemplate<void, decltype(&_select_listener_thread_handler), IoRet> listener_thread_; ///< Listener thread instance.
+    thread::ThreadTemplate<void, decltype(&_select_listener_thread_handler), Return> listener_thread_; ///< Listener thread instance.
 
-    IoRet _select_item_traversal();
+    Return _select_item_traversal();
 };
 
 }

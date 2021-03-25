@@ -3,7 +3,7 @@
 
 #include <pthread.h>
 
-namespace thread::mutex {
+namespace infra::thread::mutex {
 
 class ThreadCondLock {
 public:

@@ -21,7 +21,7 @@
 #include "process_signal_action.h"
 #include "process_signal_mask_type.h"
 
-namespace process::signal {
+namespace infra::process::signal {
 
 /**
 * @brief - Process level signal ctrl.

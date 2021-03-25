@@ -6,7 +6,7 @@
 #include "thread_info.h"
 #include "process_info.h"
 
-namespace thread {
+namespace infra::thread {
 
 ThreadRet RegisterThread()
 {

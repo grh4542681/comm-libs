@@ -18,7 +18,7 @@
 #include "ipc_return.h"
 #include "ipc_mode.h"
 
-namespace ipc::sem {
+namespace infra::ipc::sem {
 
 /**
 * @brief - Top semphores virtual class.

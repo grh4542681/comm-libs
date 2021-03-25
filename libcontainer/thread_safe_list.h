@@ -4,7 +4,7 @@
 #include <boost/thread/mutex>
 #include <list>
 
-namespace odp {
+namespace infra::container {
 
 template <typename T>
 class Element {

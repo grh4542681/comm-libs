@@ -6,7 +6,7 @@
 
 #include "parser_return.h"
 
-namespace parser {
+namespace infra::parser {
 
 class Parser {
 public:

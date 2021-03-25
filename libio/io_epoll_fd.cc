@@ -37,7 +37,7 @@ EpollFD::~EpollFD()
 }
 
 //Inherited from class FD.
-ret::Return EpollFD::SetFD(unsigned int fd, bool auto_close)
+Return EpollFD::SetFD(unsigned int fd, bool auto_close)
 {
     if (fd_ > 0 && init_flag_ && auto_close_) {
         close(fd_);
@@ -54,10 +54,10 @@ ret::Return EpollFD::SetFD(unsigned int fd, bool auto_close)
     fd_ = fd;
     init_flag_ = true;
     auto_close_ = auto_close;
-    return ret::Return::SUCCESS;
+    return Return::SUCCESS;
 }
 
-ret::Return EpollFD::Dup(io::FD& new_fd)
+Return EpollFD::Dup(io::FD& new_fd)
 {
 
 }
@@ -83,7 +83,7 @@ ssize_t EpollFD::Read(void* data, size_t datalen)
 }
 
 
-IoRet EpollFD::AddEvent(FD& fd, int events)
+Return EpollFD::AddEvent(FD& fd, int events)
 {
     struct epoll_event ep_event;
     memset(&ep_event, 0, sizeof(struct epoll_event));
@@ -97,15 +97,15 @@ IoRet EpollFD::AddEvent(FD& fd, int events)
         IO_ERROR("Epoll add fd[%d] error %s", ep_event.data.fd, strerror(tmp_errno));
         return tmp_errno;
     }
-    return IoRet::SUCCESS;
+    return Return::SUCCESS;
 }
 
-IoRet EpollFD::AddEvent(SelectEvent& event)
+Return EpollFD::AddEvent(SelectEvent& event)
 {
     return AddEvent(event.GetFd(), event.GetEvents());
 }
 
-IoRet EpollFD::ModEvent(FD& fd, int events)
+Return EpollFD::ModEvent(FD& fd, int events)
 {
     struct epoll_event ep_event;
     memset(&ep_event, 0, sizeof(struct epoll_event));
@@ -119,22 +119,22 @@ IoRet EpollFD::ModEvent(FD& fd, int events)
         IO_ERROR("Epoll add fd error %s", strerror(tmp_errno));
         return tmp_errno;
     }
-    return IoRet::SUCCESS;
+    return Return::SUCCESS;
 }
 
-IoRet EpollFD::ModEvent(SelectEvent& event)
+Return EpollFD::ModEvent(SelectEvent& event)
 {
     return ModEvent(event.GetFd(), event.GetEvents());
 }
 
-IoRet EpollFD::DelEvent(FD& fd)
+Return EpollFD::DelEvent(FD& fd)
 {
     if (epoll_ctl(fd_, EPOLL_CTL_DEL, fd.GetFD(), NULL) == -1) {
         int tmp_errno = errno;
         IO_ERROR("Epoll add fd error %s", strerror(tmp_errno));
         return tmp_errno;
     }
-    return IoRet::SUCCESS;
+    return Return::SUCCESS;
 }
 
 }

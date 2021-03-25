@@ -4,7 +4,7 @@
 #include "process.h"
 #include "process_info.h"
 
-namespace process {
+namespace infra::process {
 
 ProcessInfo* ProcessInfo::pInstance = NULL;
 

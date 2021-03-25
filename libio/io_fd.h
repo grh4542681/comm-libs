@@ -127,7 +127,12 @@ public:
         return (fd_ < other.fd_);
     }
 
-    bool Available() {
+    /**
+    * @brief Valid - Whether the current file descriptor is valid.
+    *
+    * @returns  bool
+    */
+    bool Valid() {
         struct stat fd_stat;
         if (fstat(fd_, &fd_stat)) {
             return false;
@@ -135,8 +140,13 @@ public:
         return true;
     }
 
+    /**
+    * @brief SetNonBlock - Set the file descriptor to non-blocking mode
+    *
+    * @returns  Return
+    */
     Return SetNonBlock() {
-        if (Available()) {
+        if (Valid()) {
             int flags;
             if((flags = fcntl(fd_, F_GETFL, 0)) < 0)
             {
@@ -152,8 +162,13 @@ public:
         return Return::IO_EAVALIABLE;
     }
 
+    /**
+    * @brief SetBlock - Set the file descriptor to blocking mode
+    *
+    * @returns  Return
+    */
     Return SetBlock() {
-        if (Available()) {
+        if (Valid()) {
             int flags;
             if((flags = fcntl(fd_, F_GETFL, 0)) < 0)
             {
@@ -168,19 +183,44 @@ public:
         }
     }
 
+    /**
+    * @brief GetAutoClose - Get the file descriptor auto-close option.
+    *
+    * @returns  
+    */
     bool GetAutoClose() {
         return auto_close_;
     }
 
+    /**
+    * @brief SetAutoClose - Set the file descriptor auto-close option.
+    *
+    * @param [flag] - bool
+    *
+    * @returns  Self-reference
+    */
     FD& SetAutoClose(bool flag) {
         auto_close_ = flag;
         return *this;
     }
 
+    /**
+    * @brief GetFD - Get real linux file descriptor.
+    *
+    * @returns  Real file descriptor.
+    */
     int GetFD() const {
             return fd_;
     }
 
+    /**
+    * @brief SetFD - Set real linux file descriptor.
+    *
+    * @param [fd] - Real linux file descriptor.
+    * @param [auto_close] - Auto-off option.
+    *
+    * @returns  Return
+    */
     virtual Return SetFD(unsigned int fd, bool auto_close) {
         if (fd_ > 0) {
             Close();
@@ -197,6 +237,13 @@ public:
         return Return::SUCCESS;
     }
 
+    /**
+    * @brief Dup - Duplicate a new file descriptor.
+    *
+    * @param [new_fd] - New file descriptor reference.
+    *
+    * @returns  Return
+    */
     virtual Return Dup(FD& new_fd) {
         int fd = dup(fd_);
         if (fd < 0) {
@@ -207,13 +254,38 @@ public:
         }
     }
 
+    /**
+    * @brief Close - Close file descriptor.
+    */
     virtual void Close() {
         close(fd_);
     }
 
-    virtual FD* Clone() = 0;
-    virtual ssize_t Write(const void* data, size_t datalen) = 0;
-    virtual ssize_t Read(void* data, size_t datalen) = 0;
+    virtual FD* Clone() {
+        return nullptr;
+    }
+    /**
+    * @brief Write - Write input to file descriptor.
+    *
+    * @param [data] - Input data pointer.
+    * @param [datalen] - Input data length.
+    *
+    * @returns  Write size.
+    */
+    virtual ssize_t Write(const void* data, size_t datalen) {
+        return 0;
+    }
+    /**
+    * @brief Read - Read output from file descriptor.
+    *
+    * @param [data] - Output data buffer.
+    * @param [datalen] - Output data buffer length.
+    *
+    * @returns  Read size.
+    */
+    virtual ssize_t Read(void* data, size_t datalen) {
+        return 0;
+    }
 protected:
     int fd_ = 0;
     bool auto_close_ = false;

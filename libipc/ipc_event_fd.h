@@ -7,7 +7,7 @@
 
 #include "ipc_return.h"
 
-namespace ipc::event {
+namespace infra::ipc::event {
 
 class EventFD : public io::FD {
 public:

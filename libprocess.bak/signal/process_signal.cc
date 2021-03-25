@@ -10,7 +10,7 @@
  * ******************************************************/
 #include "process_signal.h"
 
-namespace process::signal {
+namespace infra::process::signal {
 
 ProcessSignal::ProcessSignal()
 {

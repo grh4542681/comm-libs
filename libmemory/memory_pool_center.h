@@ -1,7 +1,7 @@
 #ifndef __MEMPOOL_CENTER_H__
 #define __MEMPOOL_CENTER_H__
 
-namespace mempool {
+namespace infra::mempool {
 
 class MempoolCenter {
 public:
@@ -20,6 +20,6 @@ private:
 };
 
 
-} //namespace end
+} //namespace infra::end
 
 #endif

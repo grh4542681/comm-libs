@@ -15,7 +15,7 @@
 #include "process_info.h"
 #include "signal/process_signal_ctrl.h"
 
-namespace process::pool {
+namespace infra::process::pool {
 
 template < typename F >
 class ProcessPoolWorkerTemplate {

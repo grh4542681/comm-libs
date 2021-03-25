@@ -31,51 +31,51 @@ auto& AutoSelect::GetListenrThread()
     return listener_thread_;
 }
 
-IoRet AutoSelect::Listen(timer::Time overtime)
+Return AutoSelect::Listen(timer::Time overtime)
 {
-    return Listen(process::signal::ProcessSignalSet(), overtime);
+    return Listen(signal::Set(), overtime);
 }
 
-IoRet AutoSelect::Listen(process::signal::ProcessSignalSet sigmask, timer::Time overtime)
+Return AutoSelect::Listen(signal::Set sigmask, timer::Time overtime)
 {
     if (!init_flag_) {
-        return IoRet::EINIT;
+        return Return::EINIT;
     }
     if (select_item_map_.empty()) {
-        return IoRet::IO_ENOSELECTITEM;
+        return Return::IO_ENOSELECTITEM;
     }
-    return _select_listener_thread_handler(this, std::forward<process::signal::ProcessSignalSet>(sigmask), std::forward<timer::Time>(overtime));
+    return _select_listener_thread_handler(this, std::forward<signal::Set>(sigmask), std::forward<timer::Time>(overtime));
 }
 
-IoRet AutoSelect::ListenThread(timer::Time overtime)
+Return AutoSelect::ListenThread(timer::Time overtime)
 {
-    return ListenThread(process::signal::ProcessSignalSet(), overtime);
+    return ListenThread(signal::Set(), overtime);
 }
 
-IoRet AutoSelect::ListenThread(process::signal::ProcessSignalSet sigmask, timer::Time overtime)
+Return AutoSelect::ListenThread(signal::Set sigmask, timer::Time overtime)
 {
     if (!init_flag_) {
-        return IoRet::EINIT;
+        return Return::EINIT;
     }
     if (select_item_map_.empty()) {
-        return IoRet::IO_ENOSELECTITEM;
+        return Return::IO_ENOSELECTITEM;
     }
-    listener_thread_ = thread::ThreadTemplate<void, decltype(&_select_listener_thread_handler), IoRet>(_select_listener_thread_handler);
-    thread::ThreadRet ret = listener_thread_.Run(this, std::forward<process::signal::ProcessSignalSet>(sigmask), std::forward<timer::Time>(overtime));
+    listener_thread_ = thread::ThreadTemplate<void, decltype(&_select_listener_thread_handler), Return>(_select_listener_thread_handler);
+    thread::ThreadRet ret = listener_thread_.Run(this, std::forward<signal::Set>(sigmask), std::forward<timer::Time>(overtime));
     if (ret != thread::ThreadRet::SUCCESS) {
         IO_ERROR("Start io auto select thread error : %s", ret.Message().c_str());
-        return IoRet::ETHREAD;
+        return Return::ETHREAD;
     }
     listener_thread_.Detach(); 
-    return IoRet::SUCCESS;
+    return Return::SUCCESS;
 }
 
-IoRet AutoSelect::DelSelectItem(FD& fd)
+Return AutoSelect::DelSelectItem(FD& fd)
 {
 
 }
 
-IoRet AutoSelect::ModSelectItem()
+Return AutoSelect::ModSelectItem()
 {
 
 }
@@ -92,12 +92,12 @@ bool AutoSelect::HasSelectItem(FD& fd)
     return (it == select_item_map_.end() ? false : true);
 }
 
-IoRet AutoSelect::_select_item_traversal()
+Return AutoSelect::_select_item_traversal()
 {
-    return IoRet::SUCCESS;
+    return Return::SUCCESS;
 }
 
-IoRet AutoSelect::_select_listener_thread_handler(AutoSelect* instance, process::signal::ProcessSignalSet sigmask, timer::Time overtime)
+Return AutoSelect::_select_listener_thread_handler(AutoSelect* instance, signal::Set sigmask, timer::Time overtime)
 {
     int item_size = 2048;
     struct epoll_event rep_evts[item_size];
@@ -125,8 +125,8 @@ IoRet AutoSelect::_select_listener_thread_handler(AutoSelect* instance, process:
                 IO_ERROR("Not found select item for file describetor [%d]", rep_evts[loop].data.fd);
                 continue;
             }
-            IoRet ret = it->second->Callback(rep_evts[loop].events);
-            if (ret != IoRet::SUCCESS) {
+            Return ret = it->second->Callback(rep_evts[loop].events);
+            if (ret != Return::SUCCESS) {
                 IO_ERROR("Execute callback for file describetor [%d] error.", rep_evts[loop].data.fd);
             }
             if (it->second->GetSelectEvent().HasOneshot()) {
@@ -136,7 +136,7 @@ IoRet AutoSelect::_select_listener_thread_handler(AutoSelect* instance, process:
     }
 
     IO_INFO("Auto select terminal normal.");
-    return IoRet::SUCCESS;
+    return Return::SUCCESS;
 }
 
 }

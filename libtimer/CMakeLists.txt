@@ -26,6 +26,7 @@ if (BUILD_DEPEND_LIBS STREQUAL ON)
     set(DEPEND_PROJECTS)
 
     include(liblog)
+#    include(libio)
 
     add_custom_target(depend-clean COMMAND rm -rf ${DEPEND_SRC})
 endif ()
@@ -80,6 +81,11 @@ configure_package_config_file(cmake/libtimerConfig.cmake.in
 #  COMPATIBILITY SameMajorVersion )
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libtimerConfig.cmake
         DESTINATION ${CMAKE_INSTALL_PREFIX}/cmake)
+
+#test
+if(BUILD_TEST AND BUILD_DEPEND_LIBS)
+    add_subdirectory(test)
+endif()
 
 #ut
 if(BUILD_UT)

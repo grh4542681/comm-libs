@@ -10,7 +10,7 @@
 #include "sock_address.h"
 #include "sock_fd.h"
 
-namespace sock{
+namespace infra::sock{
 
 /**
 * @brief - Socket server class.
@@ -60,6 +60,6 @@ private:
     SockRet _listen();
 };
 
-}//namespace sock end
+}//namespace infra::sock end
 
 #endif

@@ -3,7 +3,7 @@
 
 #include <stdlib.h>
 
-namespace mempool {
+namespace infra::mempool {
 
 class MempoolOsProxy {
 public:

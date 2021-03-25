@@ -13,7 +13,7 @@
 
 #define SOCK_DEFAULT_LISTEN_CACHE (100)
 
-namespace sock {
+namespace infra::sock {
 
 SockServer::SockServer()
 {
@@ -296,4 +296,4 @@ SockRet SockServer::_listen()
     return SockRet::SUCCESS;
 }
 
-} //namespace sock end
+} //namespace infra::sock end

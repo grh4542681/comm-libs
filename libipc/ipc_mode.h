@@ -1,7 +1,7 @@
 #ifndef __IPC_MODE_H__
 #define __IPC_MODE_H__
 
-namespace ipc {
+namespace infra::ipc {
 
 enum class IpcMode : int {
     READ_ONLY = 0x01,

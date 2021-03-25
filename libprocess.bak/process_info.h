@@ -26,7 +26,7 @@
 #include "process_child.h"
 #include "signal/process_signal_ctrl.h"
 
-namespace process {
+namespace infra::process {
 class Process;
 class ProcessInfo : public report::VReport {
 public:
