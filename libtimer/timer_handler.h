@@ -1,5 +1,5 @@
-#ifndef __TIMER_TIMER_H__
-#define __TIMER_TIMER_H__
+#ifndef __TIMER_HANDLER_H__
+#define __TIMER_HANDLER_H__
 
 #include <string>
 #include <functional>
@@ -13,14 +13,14 @@
 
 namespace infra::timer {
 
-class Timer : virtual public base::Object {
+class Handler : virtual public base::Object {
 public:
-    Timer();
-    ~Timer();
+    Handler();
+    ~Handler();
 
 private:
-    Timer(Timer& other);
-    const Timer& operator=(const Timer& other);
+    Handler(Handler& other);
+    const Handler& operator=(const Handler& other);
 
 private:
     io::AutoSelect select_;
