@@ -8,6 +8,7 @@
 //#include "process_handler.h"
 
 #include "thread_return.h"
+#include "thread_condition.h"
 #include "thread_handler.h"
 
 namespace infra::thread {
@@ -15,10 +16,13 @@ namespace infra::thread {
 template <typename H, typename F>
 class Template : virtual public ::infra::base::Object {
 public:
-    Template(H* host, F func) {
-        host_ = host;
-        func_ = func;
-        name_ = "";
+    Template(H* host, F func) :
+            host_(host), func_(func), name_("") {
+        cur_count_ = 0;
+        max_count_ = 0;
+    }
+    Template(std::string name, H* host, F func) :
+            host_(host), func_(func), name_(name) {
         cur_count_ = 0;
         max_count_ = 0;
     }
@@ -48,11 +52,11 @@ public:
         if (max_count_ != 0 && cur_count_ >= max_count_) {
             return {Return::THREAD_TEMPLATE_ECOUNTLIMIT, nullptr};
         }
-        Handler* handler = new Handler();
-        handler->name_ = name_;
-        handler->state_ = State::Prepare;
-        handler->thread_ = std::thread(_thread_main<H, F, Args ...>, host_, func_, handler, std::forward<Args>(args)...);
-       std::cout << "---out [" <<  handler->thread_.get_id() <<"]"<< std::endl;
+        Handler* handler;
+        Condition cond;
+        auto th = std::thread(_thread_main<H, F, Args ...>, host_, func_, name_, &handler, &cond, std::forward<Args>(args)...);
+        cond.Wait();
+        handler->thread_.swap(th);
         cur_count_++;
         return {Return::SUCCESS, handler};
     }
@@ -66,23 +70,25 @@ protected:
     std::function<void(H*)> thread_exit_;
 
     template <typename HH, typename FF, typename ... Args>
-    static Return _thread_main(HH* host, FF func, Handler* handler, Args&& ... args) {
-        handler->SetTid(ID::GetThreadID());
-       std::cout << "---in [" <<  ID::GetThreadID()  <<"]"<< std::endl;
-        handler->SetState(State::Running);
-        if (handler->Register() != Return::SUCCESS) {
-            handler->SetState(State::RegisterFail);
+    static Return _thread_main(HH* host, FF func, std::string name, Handler** phandler, Condition* cond, Args&& ... args) {
+        Handler& handler = Handler::Instance();
+        *phandler = &handler;
+        handler.SetTid(ID::GetThreadID());
+        handler.SetState(State::Running);
+        if (handler.Register() != Return::SUCCESS) {
+            handler.SetState(State::RegisterFail);
             return Return::THREAD_EREGISTER;
         }
+        cond->NotifyAll();
         (host->*func)(std::forward<Args>(args)...);
-        if (handler->Unregister() != Return::SUCCESS) {
-            if (handler->GetState() != State::Running) {
-                handler->SetState(State::UnregisterFail);
+        if (handler.Unregister() != Return::SUCCESS) {
+            if (handler.GetState() != State::Running) {
+                handler.SetState(State::UnregisterFail);
             }
             return Return::THREAD_EUNREGISTER;
         }
-        if (handler->GetState() != State::Running) {
-            handler->SetState(State::NormalExit);
+        if (handler.GetState() != State::Running) {
+            handler.SetState(State::NormalExit);
         }
         return Return::SUCCESS;
     }

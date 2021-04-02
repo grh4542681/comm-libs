@@ -88,14 +88,16 @@ FD::FD(FD& other) : io::FD(other)
 
 FD::~FD()
 {
-
+    if (Valid() && GetAutoClose()) {
+        Close();
+    }
 }
 
 io::Return FD::SetFD(unsigned int fd, bool auto_close)
 {
-    if (fd_ > 0) {
-        close(fd_);
-        fd_ = 0;
+    if (Valid()) {
+        Close();
+        fd_ = -1;
     }
     int temp_errno = 0;
     struct stat fd_stat;

@@ -24,7 +24,15 @@ int main() {
     std::string s = "asd";
     int i = 1;
     infra::thread::TemplateMemFunction<T1, decltype(&T1::run)> T1run(&t1,&T1::run);
-    T1run.Run(std::move(i));
+    auto h = T1run.Run(std::move(i));
+    auto h2 = T1run.Run(std::move(i));
+    std::cout << std::get<1>(h)->GetTid() << std::endl;
+    std::cout << std::get<1>(h2)->GetTid() << std::endl;
+    sleep(5);
+    printf("main [%d]\n", std::get<1>(h)->GetTid().GetInterID());
+    printf("main [%p]\n", std::get<1>(h));
+    printf("main [%d]\n", std::get<1>(h2)->GetTid().GetInterID());
+    printf("main [%p]\n", std::get<1>(h2));
     sleep(5);
     return 0;
 //    t2.Run();

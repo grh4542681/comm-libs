@@ -43,6 +43,8 @@ set(LIBTHREAD_SRC thread_id.cc
                   thread_role.cc
                   thread_mutex.cc
                   thread_rwlock.cc
+                  thread_event.cc
+                  thread_condition.cc
                   thread_handler.cc
                   )
 

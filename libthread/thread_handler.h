@@ -35,6 +35,8 @@ public:
     Return Join();
     Return Detach();
 
+    static Handler& Instance();
+
 private:
     Handler();
     ~Handler();
@@ -47,6 +49,8 @@ private:
     State state_;
     Mutex mutex_;
     std::thread thread_;
+
+    thread_local static Handler* pInstance;
 };
 
 

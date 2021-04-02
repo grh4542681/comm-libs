@@ -7,7 +7,7 @@
 
 #include "thread_return.h"
 
-namespace infra::infra::thread{
+namespace infra::thread {
 
 /**
 * @brief - Thread level read/write lock.

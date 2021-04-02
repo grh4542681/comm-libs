@@ -2,6 +2,8 @@
 
 namespace infra::thread {
 
+thread_local Handler* Handler::pInstance = nullptr;
+
 Handler::Handler() {
     name_   = "";
     state_  = State::Invalid;
@@ -64,6 +66,15 @@ Return Handler::Join() {
 }
 Return Handler::Detach() {
     return Return::SUCCESS;
+}
+
+//static
+Handler& Handler::Instance()
+{
+    if (!pInstance) {
+        pInstance = new Handler();
+    }
+    return *pInstance;
 }
 
 }

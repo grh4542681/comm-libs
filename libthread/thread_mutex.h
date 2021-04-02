@@ -7,6 +7,7 @@
 #include "timer_time.h"
 
 #include "thread_return.h"
+#include "thread_mutex.h"
 
 namespace infra::thread {
 
