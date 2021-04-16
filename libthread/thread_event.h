@@ -9,7 +9,7 @@
 
 namespace infra::thread {
 
-class Event : virtual public ::infra::base::Object, private io::FD {
+class Event : virtual public ::infra::base::Object, public io::FD {
 public:
     Event();
     Event(unsigned int fd, bool auto_close = false);

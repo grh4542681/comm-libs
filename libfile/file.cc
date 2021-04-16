@@ -31,7 +31,7 @@ File::File(std::string filename)
 File::File(FD& fd)
 {
     format_ = Format::Unknow;
-    if (!fd.Available()) {
+    if (!fd.Valid()) {
         file_name_.erase();
         state_ = State::Invalid;
         Log::Error("File descriptor invalid.");
@@ -51,7 +51,7 @@ File::File(FD& fd)
 File::File(FD&& fd)
 {
     format_ = Format::Unknow;
-    if (!fd.Available()) {
+    if (!fd.Valid()) {
         file_name_.erase();
         state_ = State::Invalid;
         Log::Error("File descriptor invalid.");

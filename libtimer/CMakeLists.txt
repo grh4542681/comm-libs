@@ -26,7 +26,10 @@ if (BUILD_DEPEND_LIBS STREQUAL ON)
     set(DEPEND_PROJECTS)
 
     include(liblog)
-#    include(libio)
+    include(libutil)
+    include(libio)
+    include(libcontainer)
+    include(libthread)
 
     add_custom_target(depend-clean COMMAND rm -rf ${DEPEND_SRC})
 endif ()
@@ -35,22 +38,41 @@ endif ()
 set(LIBTIMER_HRD ${PROJ_ROOT_PATH}
                  ${LIBBASE_SRC_TOP}
                  ${LIBLOG_SRC_TOP}
+                 ${LIBUTIL_SRC_TOP}
+                 ${LIBCONTAINER_SRC_TOP}
+                 ${LIBSIGNAL_SRC_TOP}
                  ${LIBIO_SRC_TOP}
+                 ${LIBTHREAD_SRC_TOP}
                  )
 set(LIBTIMER_SRC timer_fd.cc
+                 timer_schedue.cc
+                 timer_schedue_cronrule.cc
+                 timer_clock_pump_handler.cc
                  )
 
 set(LIBTIMER_TARGETS)
 if(BUILD_SHARED_LIBS)
     add_library(libtimer.so SHARED ${LIBTIMER_SRC})
-    target_include_directories(libtimer.so PRIVATE ${LIBTIMER_HRD})
+    list(LENGTH DEPEND_PROJECTS DEPEND_PROJECTS_NUM)
+    if (${DEPEND_PROJECTS_NUM})
+        add_dependencies(libtimer.so ${DEPEND_PROJECTS})
+    endif()
+    target_include_directories(libtimer.so PRIVATE ${LIBTIMER_HRD} ${DEPEND_INCLUDE_DIR})
+    target_link_directories(libtimer.so PRIVATE ${CMAKE_BINARY_DIR} ${DEPEND_LIB_DIR})
+    target_link_libraries(libtimer.so util io thread)
     set_target_properties(libtimer.so PROPERTIES OUTPUT_NAME "timer" CLEAN_DIRECT_OUTPUT 1)
     list(APPEND LIBTIMER_TARGETS libtimer.so)
 endif()
 
 if(BUILD_STATIC_LIBS)
     add_library(libtimer.a STATIC ${LIBTIMER_SRC})
-    target_include_directories(libtimer.a PRIVATE ${LIBTIMER_HRD})
+    list(LENGTH DEPEND_PROJECTS DEPEND_PROJECTS_NUM)
+    if (${DEPEND_PROJECTS_NUM})
+        add_dependencies(libtimer.a ${DEPEND_PROJECTS})
+    endif()
+    target_include_directories(libtimer.a PRIVATE ${LIBTIMER_HRD} ${DEPEND_INCLUDE_DIR})
+    target_link_directories(libtimer.a PRIVATE ${CMAKE_BINARY_DIR} ${DEPEND_LIB_DIR})
+    target_link_libraries(libtimer.a util io thread)
     set_target_properties(libtimer.a PROPERTIES OUTPUT_NAME "timer" CLEAN_DIRECT_OUTPUT 1)
     list(APPEND LIBTIMER_TARGETS libtimer.a)
 endif()

@@ -1,6 +1,8 @@
 #ifndef __IO_SELECT_H__
 #define __IO_SELECT_H__
 
+#include <vector>
+
 #include "object.h"
 #include "signal_set.h"
 #include "timer_time.h"

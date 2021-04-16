@@ -8,11 +8,6 @@ EpollFD::EpollFD() : FD() { }
 EpollFD::EpollFD(int flags)
 {
     fd_ = epoll_create1(flags);
-    if (fd_ == -1) {
-        init_flag_ = false;
-    } else {
-        init_flag_ = true;
-    }
 }
 
 EpollFD::EpollFD(unsigned int fd, bool auto_close)
@@ -21,17 +16,15 @@ EpollFD::EpollFD(unsigned int fd, bool auto_close)
     struct stat fd_stat;
     if (fstat(fd, &fd_stat)) {
         temp_errno = errno;
-        IO_ERROR("%s", strerror(temp_errno));
-        init_flag_ = false;
+        Log::Error(strerror(temp_errno));
     }   
-    init_flag_ = true;
 }
 
 EpollFD::EpollFD(EpollFD& other) : FD(other) { }
 
 EpollFD::~EpollFD()
 {
-    if (init_flag_ && auto_close_) {
+    if (Valid() && auto_close_) {
         close(fd_);
     }
 }
@@ -39,7 +32,7 @@ EpollFD::~EpollFD()
 //Inherited from class FD.
 Return EpollFD::SetFD(unsigned int fd, bool auto_close)
 {
-    if (fd_ > 0 && init_flag_ && auto_close_) {
+    if (Valid() && auto_close_) {
         close(fd_);
         fd_ = 0;
     }
@@ -47,12 +40,10 @@ Return EpollFD::SetFD(unsigned int fd, bool auto_close)
     struct stat fd_stat;
     if (fstat(fd, &fd_stat)) {
         temp_errno = errno;
-        IO_ERROR("%s", strerror(temp_errno));
-        init_flag_ = false;
+        Log::Error(strerror(temp_errno));
         return temp_errno;
     }
     fd_ = fd;
-    init_flag_ = true;
     auto_close_ = auto_close;
     return Return::SUCCESS;
 }
@@ -64,7 +55,7 @@ Return EpollFD::Dup(io::FD& new_fd)
 
 io::FD* EpollFD::Clone()
 {
-    return alloc_.Allocate<EpollFD>(*this);
+    return NULL;
 }
 
 void EpollFD::Close()
@@ -94,7 +85,7 @@ Return EpollFD::AddEvent(FD& fd, int events)
     ep_event.data.fd = fd.GetFD();
     if (epoll_ctl(fd_, EPOLL_CTL_ADD, fd.GetFD(), &ep_event) == -1) {
         int tmp_errno = errno;
-        IO_ERROR("Epoll add fd[%d] error %s", ep_event.data.fd, strerror(tmp_errno));
+        Log::Error("Epoll add fd ", ep_event.data.fd, " error ", strerror(tmp_errno));
         return tmp_errno;
     }
     return Return::SUCCESS;
@@ -116,7 +107,7 @@ Return EpollFD::ModEvent(FD& fd, int events)
     ep_event.data.fd = fd.GetFD();
     if (epoll_ctl(fd_, EPOLL_CTL_MOD, fd.GetFD(), &ep_event) == -1) {
         int tmp_errno = errno;
-        IO_ERROR("Epoll add fd error %s", strerror(tmp_errno));
+        Log::Error("Epoll add fd error ", strerror(tmp_errno));
         return tmp_errno;
     }
     return Return::SUCCESS;
@@ -131,7 +122,7 @@ Return EpollFD::DelEvent(FD& fd)
 {
     if (epoll_ctl(fd_, EPOLL_CTL_DEL, fd.GetFD(), NULL) == -1) {
         int tmp_errno = errno;
-        IO_ERROR("Epoll add fd error %s", strerror(tmp_errno));
+        Log::Error("Epoll add fd error ", strerror(tmp_errno));
         return tmp_errno;
     }
     return Return::SUCCESS;

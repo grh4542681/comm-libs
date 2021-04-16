@@ -99,7 +99,7 @@ void FD::Close()
 
 ssize_t FD::Write(const void* data, size_t datalen)
 {
-    if (!Available()) {
+    if (!Valid()) {
         return 0;
     }
     return fwrite(data, datalen, 1, ffd_);
@@ -107,7 +107,7 @@ ssize_t FD::Write(const void* data, size_t datalen)
 
 ssize_t FD::Read(void* data, size_t datalen)
 {
-    if (!Available()) {
+    if (!Valid()) {
         return 0;
     }
     return fread(data, datalen, 1, ffd_);

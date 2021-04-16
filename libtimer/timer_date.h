@@ -5,6 +5,8 @@
 
 #include <time.h>
 
+#include "timer_time.h"
+
 namespace infra::timer {
 
 class Date : virtual public base::Object {

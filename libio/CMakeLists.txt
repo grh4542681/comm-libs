@@ -26,6 +26,7 @@ if (BUILD_DEPEND_LIBS STREQUAL ON)
     set(DEPEND_PROJECTS)
 
     include(liblog)
+    include(libsignal)
 
     add_custom_target(depend-clean COMMAND rm -rf ${DEPEND_SRC})
 endif ()
@@ -41,23 +42,33 @@ set(LIBIO_HRD ${PROJ_ROOT_PATH}
               )
 
 set(LIBIO_SRC io_select.cc
-              io_auto_select.cc
-              io_select_item.cc
               io_epoll_fd.cc
               )
 
 set(LIBIO_TARGETS)
 if(BUILD_SHARED_LIBS)
     add_library(libio.so SHARED ${LIBIO_SRC})
+    list(LENGTH DEPEND_PROJECTS DEPEND_PROJECTS_NUM)
+    if (${DEPEND_PROJECTS_NUM})
+        add_dependencies(libio.so ${DEPEND_PROJECTS})
+    endif()
+    target_include_directories(libio.so PRIVATE ${LIBIO_HRD} ${DEPEND_INCLUDE_DIR})
+    target_link_directories(libio.so PRIVATE ${CMAKE_BINARY_DIR} ${DEPEND_LIB_DIR})
+    target_link_libraries(libio.so signal)
     set_target_properties(libio.so PROPERTIES OUTPUT_NAME "io" CLEAN_DIRECT_OUTPUT 1)
-    target_include_directories(libio.so PRIVATE ${LIBIO_HRD})
     list(APPEND LIBIO_TARGETS libio.so)
 endif()
 
 if(BUILD_STATIC_LIBS)
     add_library(libio.a STATIC ${LIBIO_SRC})
+    list(LENGTH DEPEND_PROJECTS DEPEND_PROJECTS_NUM)
+    if (${DEPEND_PROJECTS_NUM})
+        add_dependencies(libio.a ${DEPEND_PROJECTS})
+    endif()
+    target_include_directories(libio.a PRIVATE ${LIBIO_HRD} ${DEPEND_INCLUDE_DIR})
+    target_link_directories(libio.a PRIVATE ${CMAKE_BINARY_DIR} ${DEPEND_LIB_DIR})
+    target_link_libraries(libio.a signal)
     set_target_properties(libio.a PROPERTIES OUTPUT_NAME "io" CLEAN_DIRECT_OUTPUT 1)
-    target_include_directories(libio.a PRIVATE ${LIBIO_HRD})
     list(APPEND LIBIO_TARGETS libio.a)
 endif()
 

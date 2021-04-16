@@ -16,6 +16,7 @@ namespace infra::thread {
 template <typename H, typename F>
 class Template : virtual public ::infra::base::Object {
 public:
+    Template() : name_(""), cur_count_(0), max_count_(0) { }
     Template(H* host, F func) :
             host_(host), func_(func), name_("") {
         cur_count_ = 0;
@@ -26,7 +27,23 @@ public:
         cur_count_ = 0;
         max_count_ = 0;
     }
+    Template(const Template& other) {
+        host_ = other.host_;
+        func_ = other.func_;
+        name_ = other.name_;
+        cur_count_ = other.cur_count_;
+        max_count_ = other.max_count_;
+    }
     ~Template() { }
+
+    Template& operator=(const Template& other) {
+        host_ = other.host_;
+        func_ = other.func_;
+        name_ = other.name_;
+        cur_count_ = other.cur_count_;
+        max_count_ = other.max_count_;
+        return *this;
+    }
 
     Template<H, F>& SetName(std::string name) {
         name_ = name;

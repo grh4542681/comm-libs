@@ -31,6 +31,7 @@ endif ()
 #project
 INSTALL(FILES container_log.h
               container_return.h
+              container_bitmap.h
               container_union_weak_key.h
               container_union_strong_key.h
         TYPE INCLUDE
