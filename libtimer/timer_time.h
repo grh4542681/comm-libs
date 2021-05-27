@@ -16,6 +16,7 @@
 #include <string>
 
 #include "object.h"
+#include "timer_date.h"
 
 namespace infra::timer {
 
@@ -24,6 +25,7 @@ namespace infra::timer {
 */
 class Time : virtual public base::Object {
 public:
+    friend class Date;
     enum class Unit {
         Second,
         Millisecond,
@@ -35,6 +37,9 @@ public:
         second_ = 0;
         nanosecond_ = 0;
     };
+    Time(Date&& date) {
+        second_ = mktime(&date.date_);
+    }
     Time(const Time& other) {
         second_ = other.second_;
         nanosecond_ = other.nanosecond_;
@@ -288,7 +293,7 @@ public:
         char buff[1024];
         memset(buff, 0, sizeof(buff));
 
-        if (!strftime(buff, sizeof(buff), format.c_str(), localtime(&second_))) {
+        if (!strftime(buff, sizeof(buff), format.c_str(), gmtime(&second_))) {
             memset(buff, 0, sizeof(buff));
         }
         str.assign(buff);

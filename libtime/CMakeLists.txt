@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
-project(libtimer VERSION 1.0.0
-        DESCRIPTION "common timer library")
+project(libtime VERSION 1.0.0
+        DESCRIPTION "common time library")
 
 if(DEFINED ENV{REPOTOP})
     include($ENV{REPOTOP}/comm-libs.cmake)
@@ -26,16 +26,12 @@ if (BUILD_DEPEND_LIBS STREQUAL ON)
     set(DEPEND_PROJECTS)
 
     include(liblog)
-    include(libutil)
-    include(libio)
-    include(libcontainer)
-    include(libthread)
 
     add_custom_target(depend-clean COMMAND rm -rf ${DEPEND_SRC})
 endif ()
 
 #project
-set(LIBTIMER_HRD ${PROJ_ROOT_PATH}
+set(LIBTIME_HRD ${PROJ_ROOT_PATH}
                  ${LIBBASE_SRC_TOP}
                  ${LIBLOG_SRC_TOP}
                  ${LIBUTIL_SRC_TOP}
@@ -44,64 +40,62 @@ set(LIBTIMER_HRD ${PROJ_ROOT_PATH}
                  ${LIBIO_SRC_TOP}
                  ${LIBTHREAD_SRC_TOP}
                  )
-set(LIBTIMER_SRC timer_fd.cc
-                 timer_schedue.cc
-                 timer_schedue_crontab.cc
-                 timer_clock_pump_handler.cc
-                 )
+set(LIBTIME_SRC time_point.cc
+                time_duration.cc
+                )
 
-set(LIBTIMER_TARGETS)
+set(LIBTIME_TARGETS)
 if(BUILD_SHARED_LIBS)
-    add_library(libtimer.so SHARED ${LIBTIMER_SRC})
+    add_library(libtime.so SHARED ${LIBTIME_SRC})
     list(LENGTH DEPEND_PROJECTS DEPEND_PROJECTS_NUM)
     if (${DEPEND_PROJECTS_NUM})
-        add_dependencies(libtimer.so ${DEPEND_PROJECTS})
+        add_dependencies(libtime.so ${DEPEND_PROJECTS})
     endif()
-    target_include_directories(libtimer.so PRIVATE ${LIBTIMER_HRD} ${DEPEND_INCLUDE_DIR})
-    target_link_directories(libtimer.so PRIVATE ${CMAKE_BINARY_DIR} ${DEPEND_LIB_DIR})
-    target_link_libraries(libtimer.so util io thread)
-    set_target_properties(libtimer.so PROPERTIES OUTPUT_NAME "timer" CLEAN_DIRECT_OUTPUT 1)
-    list(APPEND LIBTIMER_TARGETS libtimer.so)
+    target_include_directories(libtime.so PRIVATE ${LIBTIME_HRD} ${DEPEND_INCLUDE_DIR})
+    target_link_directories(libtime.so PRIVATE ${CMAKE_BINARY_DIR} ${DEPEND_LIB_DIR})
+    target_link_libraries(libtime.so "")
+    set_target_properties(libtime.so PROPERTIES OUTPUT_NAME "time" CLEAN_DIRECT_OUTPUT 1)
+    list(APPEND LIBTIME_TARGETS libtime.so)
 endif()
 
 if(BUILD_STATIC_LIBS)
-    add_library(libtimer.a STATIC ${LIBTIMER_SRC})
+    add_library(libtime.a STATIC ${LIBTIME_SRC})
     list(LENGTH DEPEND_PROJECTS DEPEND_PROJECTS_NUM)
     if (${DEPEND_PROJECTS_NUM})
-        add_dependencies(libtimer.a ${DEPEND_PROJECTS})
+        add_dependencies(libtime.a ${DEPEND_PROJECTS})
     endif()
-    target_include_directories(libtimer.a PRIVATE ${LIBTIMER_HRD} ${DEPEND_INCLUDE_DIR})
-    target_link_directories(libtimer.a PRIVATE ${CMAKE_BINARY_DIR} ${DEPEND_LIB_DIR})
-    target_link_libraries(libtimer.a util io thread)
-    set_target_properties(libtimer.a PROPERTIES OUTPUT_NAME "timer" CLEAN_DIRECT_OUTPUT 1)
-    list(APPEND LIBTIMER_TARGETS libtimer.a)
+    target_include_directories(libtime.a PRIVATE ${LIBTIME_HRD} ${DEPEND_INCLUDE_DIR})
+    target_link_directories(libtime.a PRIVATE ${CMAKE_BINARY_DIR} ${DEPEND_LIB_DIR})
+    target_link_libraries(libtime.a "")
+    set_target_properties(libtime.a PROPERTIES OUTPUT_NAME "time" CLEAN_DIRECT_OUTPUT 1)
+    list(APPEND LIBTIME_TARGETS libtime.a)
 endif()
 
 add_custom_target(lib)
-add_dependencies(lib ${LIBTIMER_TARGETS})
+add_dependencies(lib ${LIBTIME_TARGETS})
 
-INSTALL(FILES timer_time.h timer_date.h timer_fd.h timer_return.h
+INSTALL(FILES time_point.h
         TYPE INCLUDE
         )
 
-INSTALL(TARGETS ${LIBTIMER_TARGETS}
+INSTALL(TARGETS ${LIBTIME_TARGETS}
         LIBRARY DESTINATION "${CMAKE_INSTALL_PREFIX}/lib"
         ARCHIVE DESTINATION "${CMAKE_INSTALL_PREFIX}/lib"
        )
 
 include(CMakePackageConfigHelpers)
-set(LIBTIMER_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/include")
-set(LIBTIMER_LIBRARY_DIR "${CMAKE_INSTALL_PREFIX}/lib")
+set(LIBTIME_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/include")
+set(LIBTIME_LIBRARY_DIR "${CMAKE_INSTALL_PREFIX}/lib")
 
-configure_package_config_file(cmake/libtimerConfig.cmake.in
-  ${CMAKE_CURRENT_BINARY_DIR}/libtimerConfig.cmake
+configure_package_config_file(cmake/libtimeConfig.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/libtimeConfig.cmake
   INSTALL_DESTINATION ${CMAKE_INSTALL_PREFIX}/cmake
-  PATH_VARS LIBTIMER_INCLUDE_DIR LIBTIMER_LIBRARY_DIR)
+  PATH_VARS LIBTIME_INCLUDE_DIR LIBTIME_LIBRARY_DIR)
 #write_basic_package_version_file(
 #  ${CMAKE_CURRENT_BINARY_DIR}/FooConfigVersion.cmake
 #  VERSION 1.2.3
 #  COMPATIBILITY SameMajorVersion )
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libtimerConfig.cmake
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libtimeConfig.cmake
         DESTINATION ${CMAKE_INSTALL_PREFIX}/cmake)
 
 #test

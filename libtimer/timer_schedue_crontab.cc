@@ -5,17 +5,17 @@
 
 #include "timer_log.h"
 #include "timer_return.h"
-#include "timer_schedue_cronrule.h"
+#include "timer_schedue_crontab.h"
 
 namespace infra::timer {
 
-std::regex CronRule::SubRule::RegexSyntax("([0-9]|[\\/]|[\\*]|[\\-]|[\\,])*");
-std::regex CronRule::SubRule::RegexRuleFrequency("(\\*)");
-std::regex CronRule::SubRule::RegexRuleFrequencyRange("\\*[\\/]([0-9]+)");
-std::regex CronRule::SubRule::RegexRuleRange("[0-9]+\\-[0-9]+");
-std::regex CronRule::SubRule::RegexRuleValue("[0-9]+(\\,[0-9]+)*");
+std::regex Crontab::SubRule::RegexSyntax("([0-9]|[\\/]|[\\*]|[\\-]|[\\,])*");
+std::regex Crontab::SubRule::RegexRuleFrequency("(\\*)");
+std::regex Crontab::SubRule::RegexRuleFrequencyRange("\\*[\\/]([0-9]+)");
+std::regex Crontab::SubRule::RegexRuleRange("[0-9]+\\-[0-9]+");
+std::regex Crontab::SubRule::RegexRuleValue("[0-9]+(\\,[0-9]+)*");
 
-CronRule::SubRule::SubRule(Field&& field, std::string sub_rule)
+Crontab::SubRule::SubRule(Field&& field, std::string sub_rule)
         : field_(field), sub_rule_(sub_rule), type_(static_cast<int>(Type::Fault) + 1)
 {
 
@@ -31,9 +31,9 @@ CronRule::SubRule::SubRule(Field&& field, std::string sub_rule)
     }
 }
 
-CronRule::SubRule::~SubRule() { }
+Crontab::SubRule::~SubRule() { }
 
-Return CronRule::SubRule::Next(int curr, int& next)
+Return Crontab::SubRule::Next(int curr, int& next)
 {
     bool buckle_flag = false;
     if (!Valid()) {
@@ -75,7 +75,7 @@ Return CronRule::SubRule::Next(int curr, int& next)
                 }
                 break;
             case Field::Minute:
-                if (next > 60) {
+                if (next >= 60) {
                     buckle_flag = true;
                     next %= 60;
                 }
@@ -105,12 +105,12 @@ Return CronRule::SubRule::Next(int curr, int& next)
     return (buckle_flag ? Return::TIMER_SCHEDUE_RULE_BUCKLE : Return::SUCCESS);
 }
 
-bool CronRule::SubRule::Valid()
+bool Crontab::SubRule::Valid()
 {
     return (value_vec_.size() != 0 || frequency_vec_.size() != 0);
 }
 
-bool CronRule::SubRule::_parse_sub_rule()
+bool Crontab::SubRule::_parse_sub_rule()
 {
     if (!sub_rule_.size()) {
         return false;
@@ -243,23 +243,29 @@ bool CronRule::SubRule::_parse_sub_rule()
     return true;
 }
 
-CronRule::CronRule(std::string rule) : rule_(rule)
+Crontab::Crontab(std::string rule) : rule_(rule),
+        skip_DayOfMonth_(false), skip_DayOfWeek_(false),
+        skip_Month_(false), skip_Week_(false)
 {
     _parse_rule();
 }
 
-CronRule::~CronRule() { }
+Crontab::~Crontab() { }
 
-bool CronRule::Valid() {
+bool Crontab::Valid() {
     return (sub_rule_vec_.size() == (static_cast<int>(Field::Second) + 1));
 }
 
-Return CronRule::Next(Date&& curr, Date& next) {
+Return Crontab::Next(Date&& curr, Date& next) {
     if (!Valid()) {
         return Return::TIMER_SCHEDUE_RULE_INVALID;
     }
     next = curr;
-    for (int i = static_cast<int>(Field::Second); i>= static_cast<int>(Field::Year); i++) {
+    for (int i = static_cast<int>(Field::Second); i>= static_cast<int>(Field::Year); i--) {
+        if (i == static_cast<int>(Field::Week) && skip_Week_) continue;
+        if (i == static_cast<int>(Field::Month) && skip_Month_) continue;
+        if (i == static_cast<int>(Field::DayOfWeek) && skip_DayOfWeek_) continue;
+        if (i == static_cast<int>(Field::DayOfMonth) && skip_DayOfMonth_) continue;
         int next_value;
         auto ret = sub_rule_vec_[i].Next(next.Get(_field2date(static_cast<Field>(i))), next_value);
         next.Set(next_value, _field2date(std::move(static_cast<Field>(i))));
@@ -274,7 +280,7 @@ Return CronRule::Next(Date&& curr, Date& next) {
     return Return::SUCCESS;
 }
 
-Date::Unit CronRule::_field2date(Field&& field)
+Date::Unit Crontab::_field2date(Field&& field)
 {
     switch (field) {
         case Field::Year:
@@ -298,13 +304,35 @@ Date::Unit CronRule::_field2date(Field&& field)
     }
 }
 
-bool CronRule::_parse_rule()
+bool Crontab::_parse_rule()
 {
     infra::util::String::Trim(rule_);
     std::vector<std::string> rule_field_vec;
     infra::util::String::Split(rule_, " ", rule_field_vec);
     if (rule_field_vec.size() != (static_cast<int>(Field::Second) + 1)) {
         Log::Error("Wrong number of cron rule fields");
+        return false;
+    }
+    if (rule_field_vec[static_cast<int>(Field::Week)] == "*" &&
+        rule_field_vec[static_cast<int>(Field::Month)] == "*") {
+        skip_Week_ = true;
+    } else if (rule_field_vec[static_cast<int>(Field::Month)] == "*") {
+        skip_Month_ = true;
+    } else if (rule_field_vec[static_cast<int>(Field::Week)] == "*") {
+        skip_Week_ = true;
+    } else {
+        Log::Error("Both define Month and Week");
+        return false;
+    }
+    if (rule_field_vec[static_cast<int>(Field::DayOfWeek)] == "*" &&
+        rule_field_vec[static_cast<int>(Field::DayOfMonth)] == "*") {
+        skip_DayOfWeek_ = true;
+    } else if (rule_field_vec[static_cast<int>(Field::DayOfMonth)] == "*") {
+        skip_DayOfMonth_ = true;
+    } else if (rule_field_vec[static_cast<int>(Field::DayOfWeek)] == "*") {
+        skip_DayOfWeek_ = true;
+    } else {
+        Log::Error("Both define DayofMonth and DayofWeek");
         return false;
     }
     int loop = 0;
@@ -317,6 +345,41 @@ bool CronRule::_parse_rule()
         loop++;
     }
     return true;
+}
+
+std::string Crontab::FieldToString(Crontab::Field&& field)
+{
+    std::string str;
+    switch (field) {
+        case Crontab::Field::Year:
+            str = "Year";
+            break;
+        case Crontab::Field::Month:
+            str = "Month";
+            break;
+        case Crontab::Field::DayOfMonth:
+            str = "DayOfMonth";
+            break;
+        case Crontab::Field::Week:
+            str = "Week";
+            break;
+        case Crontab::Field::DayOfWeek:
+            str = "DayOfWeek";
+            break;
+        case Crontab::Field::Hour:
+            str = "Hour";
+            break;
+        case Crontab::Field::Minute:
+            str = "Minute";
+            break;
+        case Crontab::Field::Second:
+            str = "Second";
+            break;
+        default:
+            str = "";
+            break;
+    }
+    return str;
 }
 
 }

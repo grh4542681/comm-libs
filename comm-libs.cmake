@@ -1,7 +1,7 @@
 #complate arguments
 set(CMAKE "/home/ezgaoro/workspace/tools/cmake-3.17.3/bin/cmake")
-set(CMAKE_C_COMPILER "/home/ezgaoro/workspace/gcc-10.1.0/bin/gcc")
-set(CMAKE_CXX_COMPILER "/home/ezgaoro/workspace/gcc-10.1.0/bin/g++")
+set(CMAKE_C_COMPILER "/home/ezgaoro/workspace/gcc-11.1.0/bin/gcc")
+set(CMAKE_CXX_COMPILER "/home/ezgaoro/workspace/gcc-11.1.0/bin/g++")
 
 set(COMPILE_WARNINGS "-Wall")
 set(COMPILE_OPTIMIZATION "-Wl,--as-needed -O2")
@@ -38,6 +38,7 @@ set(LIBLOG_SRC_TOP "${COMM_LIBS_PROJ_TOP}/liblog")
 set(LIBUTIL_SRC_TOP "${COMM_LIBS_PROJ_TOP}/libutil")
 set(LIBIO_SRC_TOP "${COMM_LIBS_PROJ_TOP}/libio")
 set(LIBFILE_SRC_TOP "${COMM_LIBS_PROJ_TOP}/libfile")
+set(LIBTIME_SRC_TOP "${COMM_LIBS_PROJ_TOP}/libtime")
 set(LIBTIMER_SRC_TOP "${COMM_LIBS_PROJ_TOP}/libtimer")
 set(LIBSIGNAL_SRC_TOP "${COMM_LIBS_PROJ_TOP}/libsignal")
 set(LIBPROCESS_SRC_TOP "${COMM_LIBS_PROJ_TOP}/libprocess")

@@ -5,14 +5,14 @@
 
 #include <time.h>
 
-#include "timer_time.h"
-
 namespace infra::timer {
 
+class Time;
 class Date : virtual public base::Object {
 public:
+    friend class Time;
     enum class Unit {
-        Year,
+        Year = 0,
         Month,
         Week,
         DayOfMonth,
@@ -66,6 +66,10 @@ public:
     Date() {
         memset(&date_, 0, sizeof(struct tm));
     };
+    Date(time_t sec) {
+        gmtime_r(&sec, &date_);
+        date_.tm_isdst = -1;
+    }
     Date(const Date& other) {
         memcpy(&date_, &other.date_, sizeof(struct tm));
     }
@@ -128,13 +132,13 @@ public:
         }
         switch(unit) {
             case Unit::Year:
-                date_.tm_year = value;
+                date_.tm_year = value - 1900;
                 break;
             case Unit::Month:
                 if (value >= 12) {
                     return *this;
                 }
-                date_.tm_mon = value;
+                date_.tm_mon = value - 1;
                 break;
             case Unit::Week:
                 break;
@@ -142,19 +146,19 @@ public:
                 if (value >= 7) {
                     return *this;
                 }
-                date_.tm_yday = (date_.tm_yday / 7) + value;
+                date_.tm_yday = (date_.tm_yday / 7) + value - 1;
                 break;
             case Unit::DayOfMonth:
                 if (value > 31) {
                     return *this;
                 }
-                date_.tm_mon = value;
+                date_.tm_mday = value;
                 break;
             case Unit::DayOfYear:
                 if (value >= 366) {
                     return *this;
                 }
-                date_.tm_yday = value;
+                date_.tm_yday = value - 1;
                 break;
             case Unit::Hour:
                 if (value >= 24) {
@@ -180,18 +184,32 @@ public:
         return *this;
     }
 
+    std::string Format(std::string format) {
+        std::string str;
+        char buff[1024];
+        memset(buff, 0, sizeof(buff));
+
+        if (!strftime(buff, sizeof(buff), format.c_str(), &date_)) {
+            memset(buff, 0, sizeof(buff));
+        }
+        str.assign(buff);
+        return str;
+    }
+
     static Date Now() {
         time_t sec = time(NULL);
-        return Date(localtime(&sec));
+        return Date(gmtime(&sec));
     }
+    struct tm date_;
 private:
     Date(struct tm* date) {
         if (!date) {
             return;
         }
+        std::cout << "--grh--" << date->tm_isdst << std::endl;
         memcpy(&date_, date, sizeof(struct tm));
+        date_.tm_isdst = -1;
     }
-    struct tm date_;
 };
 
 }

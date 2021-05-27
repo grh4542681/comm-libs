@@ -15,4 +15,24 @@ bool Schedue::Vaild()
     return (rule_ != nullptr);
 }
 
+Return Schedue::Next(Date& next)
+{
+    return Next(Date::Now(), next);
+}
+
+Return Schedue::Next(Date&& curr, Date& next)
+{
+    return rule_->Next(std::move(curr), next);
+}
+
+Return Schedue::Next(Time& next)
+{
+
+}
+
+Return Schedue::Next(Time&& curr, Time& next)
+{
+
+}
+
 }

@@ -8,17 +8,23 @@
 
 #include "container_bitmap.h"
 
-#include "timer_date.h"
+#include "timer_time.h"
 #include "timer_schedue.h"
 
 namespace infra::timer {
 
-class CronRule : virtual public infra::base::Object, public Schedue::Rule {
+/**
+* @brief - Crontab rule class
+*   Example:
+*       * * * *  *  * * *
+*       Y M D WM WD H M S
+*/
+class Crontab : virtual public infra::base::Object, public Schedue::Rule {
 public:
-    enum class Field : int {
+    enum Field : int {
         Year = 0,
-        Month,
-        DayOfMonth,
+        Month = 1,
+        DayOfMonth = 2,
         Week,
         DayOfWeek,
         Hour,
@@ -56,18 +62,26 @@ public:
         static std::regex RegexRuleValue;
     };
 public:
-    CronRule(std::string rule);
-    ~CronRule();
+    Crontab(std::string rule);
+    ~Crontab();
 
     bool Valid();
     Return Next(Date&& curr_time, Date& next_time);
+
+    static std::string FieldToString(Field&& field);
+
 private:
     bool _parse_rule();
     Date::Unit _field2date(Field&& field);
 
     std::string rule_;
     std::vector<SubRule> sub_rule_vec_;
+    bool skip_DayOfMonth_;
+    bool skip_DayOfWeek_;
+    bool skip_Month_;
+    bool skip_Week_;
 };
+
 
 }
 

@@ -12,6 +12,11 @@ add_executable(test_time ${TEST_TIME_SRC})
 target_include_directories(test_time PRIVATE ${TEST_HRD})
 list(APPEND TEST_TARGETS test_time)
 
+set(TEST_DATE_SRC test_date.cc)
+add_executable(test_date ${TEST_DATE_SRC})
+target_include_directories(test_date PRIVATE ${TEST_HRD})
+list(APPEND TEST_TARGETS test_date)
+
 set(TEST_TIMER_SCHEDUE_SRC test_timer_schedue.cc)
 add_executable(test_timer_schedue ${TEST_TIMER_SCHEDUE_SRC})
 target_include_directories(test_timer_schedue PRIVATE ${TEST_HRD})
